@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PearlFox</title>
+<meta name="description" content="PearlFox — makers of Eagle View, a desktop sidebar widget for staying on top of mail, meetings, and more.">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+  :root{
+    --pearl-light:#FBF6EF;
+    --pearl-cream:#F5DFC9;
+    --pearl-warm:#EDC9A9;
+    --pearl-deep:#C98F63;
+    --fox-bright:#FFB245;
+    --fox-orange:#FC8215;
+    --fox-amber:#F45A08;
+    --fox-deep:#D92802;
+    --fox-dark:#8A1204;
+    --bg-dark:#0B0B0B;
+    --text-dark:#222222;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg-dark);
+    color:var(--pearl-light);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px;}
+
+  /* ---- nav ---- */
+  nav{
+    position:sticky;top:0;z-index:10;
+    background:rgba(11,11,11,0.85);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid rgba(255,255,255,0.08);
+  }
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;letter-spacing:-0.2px;}
+  .brand img{height:32px;width:auto;}
+  .brand .pearl{color:var(--pearl-light);}
+  .brand .fox{background:linear-gradient(135deg,var(--fox-bright),var(--fox-deep));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  nav a.cta{
+    background:linear-gradient(135deg,var(--fox-bright),var(--fox-orange));
+    color:#1a0e04;font-weight:700;font-size:14px;
+    padding:9px 18px;border-radius:999px;text-decoration:none;
+    box-shadow:0 2px 10px rgba(252,130,21,0.35);
+  }
+
+  /* ---- hero ---- */
+  header.hero{padding:88px 0 64px;text-align:center;}
+  header.hero img{width:200px;max-width:60vw;height:auto;filter:drop-shadow(0 8px 30px rgba(252,130,21,0.25));margin-bottom:28px;}
+  header.hero h1{font-size:44px;line-height:1.15;margin:0 0 16px;letter-spacing:-0.5px;}
+  header.hero h1 .fox{background:linear-gradient(135deg,var(--fox-bright),var(--fox-deep));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  header.hero p.lead{font-size:18px;color:var(--pearl-cream);max-width:560px;margin:0 auto 32px;opacity:0.85;}
+  .btn-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+  .btn-primary{
+    background:linear-gradient(135deg,var(--fox-bright),var(--fox-orange));
+    color:#1a0e04;font-weight:700;font-size:15px;padding:14px 28px;border-radius:999px;
+    text-decoration:none;box-shadow:0 4px 18px rgba(252,130,21,0.35);
+  }
+  .btn-secondary{
+    border:1px solid rgba(255,255,255,0.25);color:var(--pearl-light);
+    font-weight:600;font-size:15px;padding:13px 27px;border-radius:999px;text-decoration:none;
+  }
+
+  /* ---- product section ---- */
+  section.product{padding:64px 0;border-top:1px solid rgba(255,255,255,0.08);}
+  .product-inner{
+    display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;
+  }
+  .product-card{
+    background:linear-gradient(160deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02));
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:20px;padding:40px;
+  }
+  .eyebrow{font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--fox-bright);margin-bottom:10px;}
+  .product h2{font-size:28px;margin:0 0 14px;}
+  .product p{color:var(--pearl-cream);opacity:0.85;line-height:1.6;font-size:15px;}
+  .feature-list{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:12px;}
+  .feature-list li{display:flex;gap:10px;font-size:14.5px;color:var(--pearl-light);opacity:0.9;}
+  .feature-list li::before{content:"●";color:var(--fox-orange);font-size:10px;line-height:1.8;}
+
+  /* ---- about ---- */
+  section.about{padding:64px 0;border-top:1px solid rgba(255,255,255,0.08);text-align:center;}
+  section.about h2{font-size:26px;margin:0 0 14px;}
+  section.about p{max-width:600px;margin:0 auto;color:var(--pearl-cream);opacity:0.85;line-height:1.7;font-size:15px;}
+
+  /* ---- footer ---- */
+  footer{padding:40px 0;border-top:1px solid rgba(255,255,255,0.08);}
+  footer .wrap{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+  footer .copy{font-size:13px;color:var(--pearl-cream);opacity:0.6;}
+  footer a{color:var(--pearl-cream);opacity:0.8;text-decoration:none;font-size:13px;}
+  footer a:hover{opacity:1;}
+  .footer-links{display:flex;gap:22px;}
+
+  @media (max-width:720px){
+    .product-inner{grid-template-columns:1fr;}
+    header.hero h1{font-size:32px;}
+    header.hero p.lead{font-size:16px;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand"><img src="apple-touch-icon.png" alt="PearlFox"><span class="pearl">Pearl</span><span class="fox">Fox</span></div>
+    <a class="cta" href="mailto:dev@pearlfox.io">Contact</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <img src="hero-logo.png" alt="PearlFox logo">
+    <h1><span class="pearl" style="color:var(--pearl-light)">Pearl</span><span class="fox">Fox</span></h1>
+    <p class="lead">A small software company building focused, well-crafted tools — starting with Eagle View, a desktop companion that keeps mail, meetings, and your day in one glance.</p>
+    <div class="btn-row">
+      <a class="btn-primary" href="https://newmantech.in" target="_blank" rel="noopener">Get Eagle View ↗</a>
+      <a class="btn-secondary" href="mailto:dev@pearlfox.io">Get in touch</a>
+    </div>
+  </div>
+</header>
+
+<section class="product">
+  <div class="wrap">
+    <div class="product-inner">
+      <div>
+        <div class="eyebrow">Flagship Product</div>
+        <h2>Eagle View</h2>
+        <p>A lightweight desktop sidebar widget that keeps your Outlook and Gmail mail, meetings, and to-dos refreshed in real time — without ever needing to open your inbox.</p>
+        <ul class="feature-list">
+          <li>Live Mail, To Do, and Meetings rows with a refresh interval you control</li>
+          <li>Works with both Microsoft Outlook and Gmail accounts</li>
+          <li>Five polished themes, built for a native, unobtrusive feel</li>
+          <li>Checklist, World Clock, Currency, and more built-in utilities</li>
+        </ul>
+      </div>
+      <div class="product-card">
+        <div class="eyebrow" style="margin-bottom:16px;">Why Eagle View</div>
+        <p style="margin:0 0 18px;">Built for people who live in their calendar and inbox all day, but don't want either one taking over their screen. Eagle View sits quietly at the edge, always current, never in the way.</p>
+        <a class="btn-secondary" style="display:inline-block;" href="https://newmantech.in" target="_blank" rel="noopener">Learn more ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="about">
+  <div class="wrap">
+    <h2>About PearlFox</h2>
+    <p>PearlFox is a software studio focused on building small, dependable tools done right — no bloat, no unnecessary complexity, just software that quietly does its job well.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="copy">© 2026 PearlFox. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="mailto:dev@pearlfox.io">dev@pearlfox.io</a>
+      <a href="https://newmantech.in" target="_blank" rel="noopener">Eagle View</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
