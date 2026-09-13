@@ -8,143 +8,234 @@
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<style>
-  :root{
-    --pearl-light:#FBF6EF;
-    --pearl-cream:#F5DFC9;
-    --pearl-warm:#EDC9A9;
-    --pearl-deep:#C98F63;
-    --fox-bright:#FFB245;
-    --fox-orange:#FC8215;
-    --fox-amber:#F45A08;
-    --fox-deep:#D92802;
-    --fox-dark:#8A1204;
-    --bg-dark:#0B0B0B;
-    --text-dark:#222222;
-  }
-  *{box-sizing:border-box;}
-  body{
-    margin:0;
-    background:var(--bg-dark);
-    color:var(--pearl-light);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    -webkit-font-smoothing:antialiased;
-  }
-  .wrap{max-width:1040px;margin:0 auto;padding:0 24px;}
-
-  /* ---- nav ---- */
-  nav{
-    position:sticky;top:0;z-index:10;
-    background:rgba(11,11,11,0.85);
-    backdrop-filter:blur(8px);
-    border-bottom:1px solid rgba(255,255,255,0.08);
-  }
-  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;}
-  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;letter-spacing:-0.2px;}
-  .brand img{height:32px;width:auto;}
-  .brand .pearl{color:var(--pearl-light);}
-  .brand .fox{background:linear-gradient(135deg,var(--fox-bright),var(--fox-deep));-webkit-background-clip:text;background-clip:text;color:transparent;}
-  nav a.cta{
-    background:linear-gradient(135deg,var(--fox-bright),var(--fox-orange));
-    color:#1a0e04;font-weight:700;font-size:14px;
-    padding:9px 18px;border-radius:999px;text-decoration:none;
-    box-shadow:0 2px 10px rgba(252,130,21,0.35);
-  }
-
-  /* ---- hero ---- */
-  header.hero{padding:88px 0 64px;text-align:center;}
-  header.hero img{width:200px;max-width:60vw;height:auto;filter:drop-shadow(0 8px 30px rgba(252,130,21,0.25));margin-bottom:28px;}
-  header.hero h1{font-size:44px;line-height:1.15;margin:0 0 16px;letter-spacing:-0.5px;}
-  header.hero h1 .fox{background:linear-gradient(135deg,var(--fox-bright),var(--fox-deep));-webkit-background-clip:text;background-clip:text;color:transparent;}
-  header.hero p.lead{font-size:18px;color:var(--pearl-cream);max-width:560px;margin:0 auto 32px;opacity:0.85;}
-  .btn-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
-  .btn-primary{
-    background:linear-gradient(135deg,var(--fox-bright),var(--fox-orange));
-    color:#1a0e04;font-weight:700;font-size:15px;padding:14px 28px;border-radius:999px;
-    text-decoration:none;box-shadow:0 4px 18px rgba(252,130,21,0.35);
-  }
-  .btn-secondary{
-    border:1px solid rgba(255,255,255,0.25);color:var(--pearl-light);
-    font-weight:600;font-size:15px;padding:13px 27px;border-radius:999px;text-decoration:none;
-  }
-
-  /* ---- product section ---- */
-  section.product{padding:64px 0;border-top:1px solid rgba(255,255,255,0.08);}
-  .product-inner{
-    display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;
-  }
-  .product-card{
-    background:linear-gradient(160deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02));
-    border:1px solid rgba(255,255,255,0.08);
-    border-radius:20px;padding:40px;
-  }
-  .eyebrow{font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--fox-bright);margin-bottom:10px;}
-  .product h2{font-size:28px;margin:0 0 14px;}
-  .product p{color:var(--pearl-cream);opacity:0.85;line-height:1.6;font-size:15px;}
-  .feature-list{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:12px;}
-  .feature-list li{display:flex;gap:10px;font-size:14.5px;color:var(--pearl-light);opacity:0.9;}
-  .feature-list li::before{content:"●";color:var(--fox-orange);font-size:10px;line-height:1.8;}
-
-  /* ---- about ---- */
-  section.about{padding:64px 0;border-top:1px solid rgba(255,255,255,0.08);text-align:center;}
-  section.about h2{font-size:26px;margin:0 0 14px;}
-  section.about p{max-width:600px;margin:0 auto;color:var(--pearl-cream);opacity:0.85;line-height:1.7;font-size:15px;}
-
-  /* ---- footer ---- */
-  footer{padding:40px 0;border-top:1px solid rgba(255,255,255,0.08);}
-  footer .wrap{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
-  footer .copy{font-size:13px;color:var(--pearl-cream);opacity:0.6;}
-  footer a{color:var(--pearl-cream);opacity:0.8;text-decoration:none;font-size:13px;}
-  footer a:hover{opacity:1;}
-  .footer-links{display:flex;gap:22px;}
-
-  @media (max-width:720px){
-    .product-inner{grid-template-columns:1fr;}
-    header.hero h1{font-size:32px;}
-    header.hero p.lead{font-size:16px;}
-  }
-</style>
+<link rel="stylesheet" href="shared.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <nav>
   <div class="wrap">
-    <div class="brand"><img src="apple-touch-icon.png" alt="PearlFox"><span class="pearl">Pearl</span><span class="fox">Fox</span></div>
-    <a class="cta" href="mailto:dev@pearlfox.io">Contact</a>
+    <a href="index.html" class="nav-logo-target" aria-label="PearlFox">
+      <span class="nav-logo-target-icon"></span>
+      <span class="nav-logo-target-word"></span>
+    </a>
+    <div class="navlinks">
+      <a href="index.html#company">Company</a>
+      <a href="index.html#products">Products</a>
+      <a href="security.html">Security</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+    </div>
   </div>
 </nav>
 
-<header class="hero">
-  <div class="wrap">
-    <img src="hero-logo.png" alt="PearlFox logo">
-    <h1><span class="pearl" style="color:var(--pearl-light)">Pearl</span><span class="fox">Fox</span></h1>
-    <p class="lead">A small software company building focused, well-crafted tools — starting with Eagle View, a desktop companion that keeps mail, meetings, and your day in one glance.</p>
-    <div class="btn-row">
-      <a class="btn-primary" href="https://eagleview.pearlfox.io" target="_blank" rel="noopener">Get Eagle View ↗</a>
-      <a class="btn-secondary" href="mailto:dev@pearlfox.io">Get in touch</a>
-    </div>
+<header class="hero hero-scenic hero-photo-mode">
+  <div class="hero-bg" aria-hidden="true">
+    <img src="hero-wide.webp" alt="" class="hero-photo">
+    <div class="hero-fade"></div>
+  </div>
+  <div class="hero-tagline">
+    <h2><span>Work</span><span class="tagline-dot">.</span><span>Focus</span><span class="tagline-dot">.</span><span>Relax</span></h2>
   </div>
 </header>
 
-<section class="product">
+<section class="brand-mark" id="company">
   <div class="wrap">
-    <div class="product-inner">
-      <div>
-        <div class="eyebrow">Flagship Product</div>
-        <h2>Eagle View</h2>
-        <p>A lightweight desktop sidebar widget that keeps your Outlook and Gmail mail, meetings, and to-dos refreshed in real time — without ever needing to open your inbox.</p>
-        <ul class="feature-list">
-          <li>Live Mail, To Do, and Meetings rows with a refresh interval you control</li>
-          <li>Works with both Microsoft Outlook and Gmail accounts</li>
-          <li>Five polished themes, built for a native, unobtrusive feel</li>
-          <li>Checklist, World Clock, Currency, and more built-in utilities</li>
-        </ul>
+    <div class="brand-mark-logo">
+      <img src="apple-touch-icon.png" alt="PearlFox" class="brand-mark-icon">
+      <img src="wordmark.webp" alt="PearlFox" class="brand-mark-word">
+    </div>
+    <p class="lead">A small software company building focused, well-crafted tools — starting with Eagle View, a desktop companion that keeps mail, meetings, and your day in one glance.</p>
+    <div class="btn-row">
+      <a class="btn-secondary" href="contact.html">Get in touch</a>
+    </div>
+    <div class="brand-mark-next">Products</div>
+  </div>
+</section>
+
+<section class="app-preview" id="products">
+  <div class="wrap ap-grid">
+    <div class="ap-text">
+      <div class="eyebrow">
+        <svg width="40" height="40" viewBox="0 0 100 100" fill="none" class="eyebrow-icon">
+          <defs>
+            <linearGradient id="eyeb-eagle-body" x1="50" y1="15" x2="50" y2="85" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#FFFFFF"/>
+              <stop offset="100%" stop-color="#B8E8E4"/>
+            </linearGradient>
+          </defs>
+          <polygon points="50,8 67,40 50,35 33,40" fill="url(#eyeb-eagle-body)"/>
+          <polygon points="50,35 10,25 20,50 38,50" fill="url(#eyeb-eagle-body)" opacity="0.9"/>
+          <polygon points="50,35 90,25 80,50 62,50" fill="url(#eyeb-eagle-body)" opacity="0.9"/>
+          <polygon points="38,50 20,60 30,72 50,65" fill="url(#eyeb-eagle-body)" opacity="0.8"/>
+          <polygon points="62,50 80,60 70,72 50,65" fill="url(#eyeb-eagle-body)" opacity="0.8"/>
+          <polygon points="50,65 44,85 50,80 56,85" fill="url(#eyeb-eagle-body)" opacity="0.75"/>
+        </svg>
+        Eagle View
       </div>
-      <div class="product-card">
-        <div class="eyebrow" style="margin-bottom:16px;">Why Eagle View</div>
-        <p style="margin:0 0 18px;">Built for people who live in their calendar and inbox all day, but don't want either one taking over their screen. Eagle View sits quietly at the edge, always current, never in the way.</p>
-        <a class="btn-secondary" style="display:inline-block;" href="https://eagleview.pearlfox.io" target="_blank" rel="noopener">Learn more ↗</a>
+      <h2>All your work, always in view.</h2>
+      <p>Eagle View brings the parts of your workday you check constantly into one quiet, always-current sidebar.</p>
+      <ul class="ap-list">
+        <li>
+          <span class="ap-ico ap-ico-stack">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <defs>
+                <linearGradient id="li-mail-bg" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#42A5F5"/>
+                  <stop offset="100%" stop-color="#1565C0"/>
+                </linearGradient>
+              </defs>
+              <rect x="0" y="2" width="24" height="20" rx="2.5" fill="url(#li-mail-bg)"/>
+              <path d="M0 5.5 L12 14.5 L24 5.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M0 21 L8 13.5" stroke="white" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>
+              <path d="M24 21 L16 13.5" stroke="white" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>
+              <text x="6" y="19" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="12" font-weight="bold" font-family="Arial, sans-serif" opacity="0.95">O</text>
+            </svg>
+            <svg width="20" height="20" viewBox="52 42 88 66" fill="none">
+              <rect x="52" y="48" width="88" height="60" rx="4" fill="white"/>
+              <path d="M52 59 L72 74 L72 108 L52 108 Z" fill="#4285F4"/>
+              <path d="M120 74 L140 59 L140 108 L120 108 Z" fill="#34A853"/>
+              <path d="M72 48 L96 66 L120 48 L120 74 L96 92 L72 74 Z" fill="#EA4335"/>
+              <path d="M120 48 L120 74 L140 59 L140 48 Z" fill="#FBBC04"/>
+              <path d="M72 48 L72 74 L52 59 L52 48 Z" fill="#C5221F"/>
+            </svg>
+          </span>
+          <div><strong>Live Mail &amp; To Do</strong><span>Real-time rows for mail and flagged items, refreshed on your own schedule.</span></div>
+        </li>
+        <li>
+          <span class="ap-ico ap-ico-stack">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <defs>
+                <linearGradient id="li-cal-hdr" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#FFC878"/>
+                  <stop offset="50%" stop-color="#E87722"/>
+                  <stop offset="100%" stop-color="#B85400"/>
+                </linearGradient>
+                <linearGradient id="li-cal-body" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#FFFFFF"/>
+                  <stop offset="100%" stop-color="#EDE9DF"/>
+                </linearGradient>
+                <linearGradient id="li-cal-peg" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#FFA040"/>
+                  <stop offset="100%" stop-color="#7A3200"/>
+                </linearGradient>
+              </defs>
+              <rect x="0.5" y="3" width="23" height="20.5" rx="3" fill="url(#li-cal-body)"/>
+              <rect x="0.5" y="3" width="23" height="6" rx="3" fill="url(#li-cal-hdr)"/>
+              <rect x="0.5" y="7" width="23" height="2" fill="url(#li-cal-hdr)"/>
+              <rect x="6" y="0.5" width="2.5" height="5.5" rx="1.25" fill="url(#li-cal-peg)"/>
+              <rect x="15.5" y="0.5" width="2.5" height="5.5" rx="1.25" fill="url(#li-cal-peg)"/>
+              <text id="ap-cal-day" x="12" y="20.5" text-anchor="middle" font-size="11" font-weight="900" fill="#7A3200" font-family="-apple-system, BlinkMacSystemFont, sans-serif" letter-spacing="-0.5">13</text>
+            </svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <defs>
+                <linearGradient id="li-flag-fill" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#FF6B6B"/>
+                  <stop offset="100%" stop-color="#C0392B"/>
+                </linearGradient>
+              </defs>
+              <line x1="5" y1="2.5" x2="5" y2="21.5" stroke="rgba(240,220,190,0.85)" stroke-width="2" stroke-linecap="round"/>
+              <path d="M5 3.5 L20 7.5 L5 13 Z" fill="url(#li-flag-fill)"/>
+              <circle cx="5" cy="21.5" r="1.2" fill="rgba(240,220,190,0.7)"/>
+            </svg>
+          </span>
+          <div><strong>Meetings &amp; To Do, always current</strong><span>Your next meeting, join link, and flagged items — without opening a calendar app or digging through mail.</span></div>
+        </li>
+        <li>
+          <span class="ap-ico ap-ico-stack ap-ico-stack-wide">
+            <svg width="20" height="20" viewBox="4 4 36 38" fill="none">
+              <path fill="#7B83DB" d="M21.9999 20h12c3.3137 0 6 2.6863 6 6v10c0 3.3137-2.6863 6-6 6s-6-2.6863-6-6V26c0-3.3137-2.6863-6-6-6"/>
+              <path fill="#5B5EA6" d="M7.99988 24c0-3.3137 2.68632-6 6.00002-6h8c3.3137 0 6 2.6863 6 6v12c0 3.3137 2.6863 6 6 6l-16.0001-.0001c-5.5228 0-9.99992-4.4771-9.99992-10z"/>
+              <circle cx="32.9999" cy="13" r="5" fill="#9EA4DE"/>
+              <circle cx="17.9999" cy="10" r="6" fill="#7B83DB"/>
+              <rect width="16" height="16" x="4" y="23" rx="3.25" fill="#464EB8"/>
+              <path fill="white" d="M15.4792 28.1054h-2.4471v7.466h-2.0648v-7.466H8.52014v-1.6768h6.95906z"/>
+            </svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <rect x="6.5" y="12.6" width="5" height="11.4" rx="2.5" fill="#E01E5A"/>
+              <circle cx="2.6" cy="15.1" r="2.5" fill="#E01E5A"/>
+              <rect x="0" y="6.3" width="11.4" height="5" rx="2.5" fill="#36C5F0"/>
+              <circle cx="8.9" cy="2.6" r="2.5" fill="#36C5F0"/>
+              <rect x="12.5" y="0" width="5" height="11.4" rx="2.5" fill="#2EB67D"/>
+              <circle cx="21.4" cy="8.9" r="2.5" fill="#2EB67D"/>
+              <rect x="12.6" y="12.5" width="11.4" height="5" rx="2.5" fill="#ECB22E"/>
+              <circle cx="15.1" cy="21.4" r="2.5" fill="#ECB22E"/>
+            </svg>
+          </span>
+          <div><strong>Teams &amp; Slack, right in your sidebar</strong><span>Recent chats and channel activity from both — unread counts, previews, and one click through to the conversation.</span></div>
+        </li>
+        <li>
+          <span class="ap-ico ap-ico-stack ap-ico-stack-lg">
+            <svg width="20" height="20" viewBox="0 0 128 128" fill="none">
+              <defs>
+                <linearGradient id="li-jira-g1" gradientUnits="userSpaceOnUse" x1="88.136" y1="39.092" x2="68.472" y2="59.368">
+                  <stop offset="0.176" stop-color="#0052CC"/>
+                  <stop offset="1" stop-color="#2684FF"/>
+                </linearGradient>
+                <linearGradient id="li-jira-g2" gradientUnits="userSpaceOnUse" x1="66.564" y1="62.256" x2="43.828" y2="84.376">
+                  <stop offset="0.176" stop-color="#0052CC"/>
+                  <stop offset="1" stop-color="#2684FF"/>
+                </linearGradient>
+              </defs>
+              <path d="M108.023 16H61.805c0 11.52 9.324 20.848 20.847 20.848h8.5v8.226c0 11.52 9.328 20.848 20.848 20.848V19.977A3.98 3.98 0 00108.023 16z" fill="#2684FF"/>
+              <path d="M85.121 39.04H38.902c0 11.519 9.325 20.847 20.844 20.847h8.504v8.226c0 11.52 9.328 20.848 20.848 20.848V43.016a3.983 3.983 0 00-3.977-3.977z" fill="url(#li-jira-g1)"/>
+              <path d="M62.219 62.078H16c0 11.524 9.324 20.848 20.848 20.848h8.5v8.23c0 11.52 9.328 20.844 20.847 20.844V66.059a3.984 3.984 0 00-3.976-3.98z" fill="url(#li-jira-g2)"/>
+            </svg>
+            <svg width="20" height="20" viewBox="0 0 34 35" fill="none">
+              <defs>
+                <linearGradient id="li-az-grad" x1="17" y1="35" x2="17" y2="0" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#0078D4"/>
+                  <stop offset="0.16" stop-color="#1380DA"/>
+                  <stop offset="0.53" stop-color="#3C91E5"/>
+                  <stop offset="0.82" stop-color="#559CEC"/>
+                  <stop offset="1" stop-color="#5EA0EF"/>
+                </linearGradient>
+              </defs>
+              <path fill="url(#li-az-grad)" d="M34 6.375V27.0725L25.5 34.0425L12.325 29.24V34L4.86625 24.2462L26.605 25.9463V7.31L34 6.375ZM26.7538 7.41625L14.5562 0V4.86625L3.3575 8.16L0 12.4737V22.27L4.8025 24.395V11.8363L26.7538 7.41625Z"/>
+            </svg>
+          </span>
+          <div><strong>Jira &amp; Azure Boards</strong><span>Assigned tickets and work items with status pills — update transitions right from the sidebar, no browser needed.</span></div>
+        </li>
+      </ul>
+      <a class="btn-secondary" style="display:inline-block;align-self:flex-start;margin-top:-24px;padding:9px 27px" href="https://eagleview.pearlfox.io" target="_blank" rel="noopener">Explore more →</a>
+    </div>
+
+    <div class="ap-visual">
+      <div class="ap-ring ap-ring1" aria-hidden="true"></div>
+      <div class="ap-ring ap-ring2" aria-hidden="true"></div>
+
+      <div class="ap-chip ap-chip1" aria-hidden="true">
+        <div class="ap-chip-l">Unread mails</div>
+        <div class="ap-chip-v">15 new today</div>
+        <div class="ap-chip-s">↑ Just synced</div>
       </div>
+      <div class="ap-chip ap-chip2" aria-hidden="true">
+        <div class="ap-chip-l">Next meeting</div>
+        <div class="ap-chip-v ap-red">● in 12 min</div>
+        <div class="ap-chip-s">Team standup</div>
+      </div>
+      <div class="ap-chip ap-chip3" aria-hidden="true">
+        <div class="ap-chip-l">Checklist</div>
+        <div class="ap-chip-v">1 due today</div>
+        <div class="ap-chip-s">Reply to client</div>
+      </div>
+
+      <div class="ap-panel" aria-hidden="true">
+        <img src="app-screenshot.webp" alt="" class="ap-panel-shot">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="wrap">
+    <div class="stat-grid">
+      <div><div class="num">[—]</div><div class="lbl">Active users<span class="placeholder-tag">needs real data</span></div></div>
+      <div><div class="num">[—]</div><div class="lbl">Releases shipped<span class="placeholder-tag">needs real data</span></div></div>
+      <div><div class="num">[—]</div><div class="lbl">Platforms supported<span class="placeholder-tag">needs real data</span></div></div>
+      <div><div class="num">[—]</div><div class="lbl">App rating<span class="placeholder-tag">needs real data</span></div></div>
     </div>
   </div>
 </section>
@@ -153,18 +244,46 @@
   <div class="wrap">
     <h2>About PearlFox</h2>
     <p>PearlFox is a software studio focused on building small, dependable tools done right — no bloat, no unnecessary complexity, just software that quietly does its job well.</p>
+    <div class="btn-row" style="margin-top:20px">
+      <a class="btn-secondary" href="company.html">More about PearlFox →</a>
+    </div>
   </div>
 </section>
 
-<footer>
+<footer class="footer-big">
   <div class="wrap">
-    <div class="copy">© 2026 PearlFox. All rights reserved.</div>
-    <div class="footer-links">
+    <div class="fcols">
+      <div class="fcol">
+        <div class="fbrand"><img src="apple-touch-icon.png" alt="PearlFox"><span class="pearl" style="color:var(--pearl-light)">Pearl</span><span class="fox">Fox</span></div>
+        <p class="ftagline">Small, dependable software tools, built to quietly do their job well.</p>
+      </div>
+      <div class="fcol">
+        <h4>Product</h4>
+        <a href="products.html">Products</a>
+        <a href="https://eagleview.pearlfox.io" target="_blank" rel="noopener">Eagle View ↗</a>
+      </div>
+      <div class="fcol">
+        <h4>Company</h4>
+        <a href="company.html">Company</a>
+        <a href="security.html">Security</a>
+      </div>
+      <div class="fcol">
+        <h4>Support</h4>
+        <a href="faq.html">FAQ</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="fcol">
+        <h4>Legal</h4>
+        <a href="https://eagleview.pearlfox.io/privacy.html" target="_blank" rel="noopener">Privacy Policy ↗</a>
+      </div>
+    </div>
+    <div class="fbottom">
+      <div class="copy">© 2026 PearlFox. All rights reserved.</div>
       <a href="mailto:dev@pearlfox.io">dev@pearlfox.io</a>
-      <a href="https://eagleview.pearlfox.io" target="_blank" rel="noopener">Eagle View</a>
     </div>
   </div>
 </footer>
 
+<script src="shared.js"></script>
 </body>
 </html>

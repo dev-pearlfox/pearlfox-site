@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+<symbol id="mail-outlook" viewBox="0 0 24 24" fill="none">
+  <defs>
+    <linearGradient id="mo-bg" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#42A5F5"/>
+      <stop offset="100%" stop-color="#1565C0"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="2" width="24" height="20" rx="2.5" fill="url(#mo-bg)"/>
+  <path d="M0 5.5 L12 14.5 L24 5.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M0 21 L8 13.5" stroke="white" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>
+  <path d="M24 21 L16 13.5" stroke="white" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>
+  <text x="6" y="19" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="12" font-weight="bold" font-family="Arial, sans-serif" opacity="0.95">O</text>
+</symbol>
+
+<symbol id="mail-gmail" viewBox="52 42 88 66" fill="none">
+  <rect x="52" y="48" width="88" height="60" rx="4" fill="white"/>
+  <path d="M52 59 L72 74 L72 108 L52 108 Z" fill="#4285F4"/>
+  <path d="M120 74 L140 59 L140 108 L120 108 Z" fill="#34A853"/>
+  <path d="M72 48 L96 66 L120 48 L120 74 L96 92 L72 74 Z" fill="#EA4335"/>
+  <path d="M120 48 L120 74 L140 59 L140 48 Z" fill="#FBBC04"/>
+  <path d="M72 48 L72 74 L52 59 L52 48 Z" fill="#C5221F"/>
+</symbol>
+
+<symbol id="meeting-cal" viewBox="0 0 24 24" fill="none">
+  <defs>
+    <linearGradient id="mc-hdr" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFC878"/>
+      <stop offset="50%" stop-color="#E87722"/>
+      <stop offset="100%" stop-color="#B85400"/>
+    </linearGradient>
+    <linearGradient id="mc-body" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#EDE9DF"/>
+    </linearGradient>
+    <linearGradient id="mc-peg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFA040"/>
+      <stop offset="100%" stop-color="#7A3200"/>
+    </linearGradient>
+  </defs>
+  <rect x="0.5" y="3" width="23" height="20.5" rx="3" fill="url(#mc-body)"/>
+  <rect x="0.5" y="3" width="23" height="6" rx="3" fill="url(#mc-hdr)"/>
+  <rect x="0.5" y="7" width="23" height="2" fill="url(#mc-hdr)"/>
+  <rect x="6" y="0.5" width="2.5" height="5.5" rx="1.25" fill="url(#mc-peg)"/>
+  <rect x="15.5" y="0.5" width="2.5" height="5.5" rx="1.25" fill="url(#mc-peg)"/>
+  <text id="ap-cal-day" x="12" y="20.5" text-anchor="middle" font-size="11" font-weight="900" fill="#7A3200" font-family="-apple-system, BlinkMacSystemFont, sans-serif" letter-spacing="-0.5">13</text>
+</symbol>
+
+<symbol id="meeting-flag" viewBox="0 0 24 24" fill="none">
+  <defs>
+    <linearGradient id="mf-fill" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF6B6B"/>
+      <stop offset="100%" stop-color="#C0392B"/>
+    </linearGradient>
+  </defs>
+  <line x1="5" y1="2.5" x2="5" y2="21.5" stroke="rgba(240,220,190,0.85)" stroke-width="2" stroke-linecap="round"/>
+  <path d="M5 3.5 L20 7.5 L5 13 Z" fill="url(#mf-fill)"/>
+  <circle cx="5" cy="21.5" r="1.2" fill="rgba(240,220,190,0.7)"/>
+</symbol>
+
+<symbol id="teams" viewBox="4 4 36 38" fill="none">
+  <path fill="#7B83DB" d="M21.9999 20h12c3.3137 0 6 2.6863 6 6v10c0 3.3137-2.6863 6-6 6s-6-2.6863-6-6V26c0-3.3137-2.6863-6-6-6"/>
+  <path fill="#5B5EA6" d="M7.99988 24c0-3.3137 2.68632-6 6.00002-6h8c3.3137 0 6 2.6863 6 6v12c0 3.3137 2.6863 6 6 6l-16.0001-.0001c-5.5228 0-9.99992-4.4771-9.99992-10z"/>
+  <circle cx="32.9999" cy="13" r="5" fill="#9EA4DE"/>
+  <circle cx="17.9999" cy="10" r="6" fill="#7B83DB"/>
+  <rect width="16" height="16" x="4" y="23" rx="3.25" fill="#464EB8"/>
+  <path fill="white" d="M15.4792 28.1054h-2.4471v7.466h-2.0648v-7.466H8.52014v-1.6768h6.95906z"/>
+</symbol>
+
+<symbol id="slack" viewBox="0 0 24 24" fill="none">
+  <rect x="6.5" y="12.6" width="5" height="11.4" rx="2.5" fill="#E01E5A"/>
+  <circle cx="2.6" cy="15.1" r="2.5" fill="#E01E5A"/>
+  <rect x="0" y="6.3" width="11.4" height="5" rx="2.5" fill="#36C5F0"/>
+  <circle cx="8.9" cy="2.6" r="2.5" fill="#36C5F0"/>
+  <rect x="12.5" y="0" width="5" height="11.4" rx="2.5" fill="#2EB67D"/>
+  <circle cx="21.4" cy="8.9" r="2.5" fill="#2EB67D"/>
+  <rect x="12.6" y="12.5" width="11.4" height="5" rx="2.5" fill="#ECB22E"/>
+  <circle cx="15.1" cy="21.4" r="2.5" fill="#ECB22E"/>
+</symbol>
+
+<symbol id="jira" viewBox="0 0 128 128" fill="none">
+  <defs>
+    <linearGradient id="ji-g1" gradientUnits="userSpaceOnUse" x1="88.136" y1="39.092" x2="68.472" y2="59.368">
+      <stop offset="0.176" stop-color="#0052CC"/>
+      <stop offset="1" stop-color="#2684FF"/>
+    </linearGradient>
+    <linearGradient id="ji-g2" gradientUnits="userSpaceOnUse" x1="66.564" y1="62.256" x2="43.828" y2="84.376">
+      <stop offset="0.176" stop-color="#0052CC"/>
+      <stop offset="1" stop-color="#2684FF"/>
+    </linearGradient>
+  </defs>
+  <path d="M108.023 16H61.805c0 11.52 9.324 20.848 20.847 20.848h8.5v8.226c0 11.52 9.328 20.848 20.848 20.848V19.977A3.98 3.98 0 00108.023 16z" fill="#2684FF"/>
+  <path d="M85.121 39.04H38.902c0 11.519 9.325 20.847 20.844 20.847h8.504v8.226c0 11.52 9.328 20.848 20.848 20.848V43.016a3.983 3.983 0 00-3.977-3.977z" fill="url(#ji-g1)"/>
+  <path d="M62.219 62.078H16c0 11.524 9.324 20.848 20.848 20.848h8.5v8.23c0 11.52 9.328 20.844 20.847 20.844V66.059a3.984 3.984 0 00-3.976-3.98z" fill="url(#ji-g2)"/>
+</symbol>
+
+<symbol id="azure" viewBox="0 0 34 35" fill="none">
+  <defs>
+    <linearGradient id="az-grad" x1="17" y1="35" x2="17" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0078D4"/>
+      <stop offset="0.16" stop-color="#1380DA"/>
+      <stop offset="0.53" stop-color="#3C91E5"/>
+      <stop offset="0.82" stop-color="#559CEC"/>
+      <stop offset="1" stop-color="#5EA0EF"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#az-grad)" d="M34 6.375V27.0725L25.5 34.0425L12.325 29.24V34L4.86625 24.2462L26.605 25.9463V7.31L34 6.375ZM26.7538 7.41625L14.5562 0V4.86625L3.3575 8.16L0 12.4737V22.27L4.8025 24.395V11.8363L26.7538 7.41625Z"/>
+</symbol>
+</svg>

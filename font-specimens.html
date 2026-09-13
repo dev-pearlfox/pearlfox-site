@@ -1,0 +1,148 @@
+<!doctype html>
+<title>Tagline Type Specimens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Fraunces:opsz,wght@72,600&family=Cormorant+Garamond:wght@600&family=DM+Serif+Display&family=Libre+Baskerville:wght@700&family=Marcellus&family=Italiana&family=Poppins:wght@700&family=Outfit:wght@700&family=Montserrat:wght@800&family=Inter:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#120D09;
+    --surface:#1C150F;
+    --border:rgba(245,223,201,0.10);
+    --text:#FBF6EF;
+    --muted:#B9A793;
+    --accent:#FC8215;
+    --accent-soft:#FFB245;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 500px at 15% -10%, rgba(252,130,21,0.10), transparent 60%),
+      var(--bg);
+    color:var(--text);
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    padding-block:56px 80px;
+  }
+  .wrap{max-width:840px;margin:0 auto;padding:0 24px;}
+
+  header{margin-bottom:48px;}
+  .eyebrow{
+    font-size:12px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;
+    color:var(--accent-soft);margin:0 0 14px;
+  }
+  h1{
+    font-size:clamp(28px,4vw,38px);
+    margin:0 0 12px;letter-spacing:-0.3px;line-height:1.15;
+    text-wrap:balance;
+  }
+  header p{
+    margin:0;color:var(--muted);font-size:15.5px;line-height:1.6;max-width:56ch;
+  }
+
+  .specimen{
+    border-top:1px solid var(--border);
+    padding:30px 0;
+    display:grid;
+    grid-template-columns:150px 1fr;
+    gap:24px;
+    align-items:center;
+  }
+  .specimen:last-child{border-bottom:1px solid var(--border);}
+
+  .meta{display:flex;flex-direction:column;gap:6px;}
+  .meta .num{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;letter-spacing:0.5px;}
+  .meta .name{font-size:14.5px;font-weight:600;color:var(--text);}
+  .meta .kind{font-size:12px;color:var(--muted);}
+
+  .sample{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:26px 28px;
+    display:flex;align-items:center;justify-content:center;
+    text-align:center;
+    min-height:104px;
+  }
+  .tagline{
+    margin:0;
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px;
+    font-size:clamp(22px,3.4vw,32px);
+    color:var(--text);
+    letter-spacing:-0.3px;
+  }
+  .dot{color:var(--accent-soft);transform:translateY(-0.28em);}
+
+  .f1{font-family:'Playfair Display',Georgia,serif;font-weight:700;}
+  .f2{font-family:'Fraunces',Georgia,serif;font-weight:600;}
+  .f3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:clamp(26px,4vw,38px);}
+  .f4{font-family:'DM Serif Display',Georgia,serif;font-weight:400;}
+  .f5{font-family:'Libre Baskerville',Georgia,serif;font-weight:700;font-size:clamp(19px,3vw,26px);}
+  .f6{font-family:'Marcellus',Georgia,serif;font-weight:400;letter-spacing:0.5px;}
+  .f7{font-family:'Italiana',Georgia,serif;font-weight:400;letter-spacing:0.5px;}
+  .f8{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-0.5px;}
+  .f9{font-family:'Outfit',sans-serif;font-weight:700;letter-spacing:-0.5px;}
+  .f10{font-family:'Montserrat',sans-serif;font-weight:800;letter-spacing:-0.3px;}
+
+  @media (max-width:640px){
+    .specimen{grid-template-columns:1fr;gap:12px;}
+    .meta{flex-direction:row;align-items:baseline;gap:10px;}
+  }
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">PearlFox — Hero Tagline</p>
+    <h1>Ten fonts for "Work . Relax . Peaceful"</h1>
+    <p>Same dark hero ground and dot treatment as the live page, so the comparison is apples-to-apples. Pick a number and I'll wire it into <code>shared.css</code>.</p>
+  </header>
+
+  <div class="specimen">
+    <div class="meta"><span class="num">01</span><span class="name">Playfair Display</span><span class="kind">serif · high contrast</span></div>
+    <div class="sample"><h2 class="tagline f1">Work<span class="dot">.</span>Relax<span class="dot">.</span>Peaceful</h2></div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta"><span class="num">02</span><span class="name">Fraunces</span><span class="kind">serif · warm, soft</span></div>
+    <div class="sample"><h2 class="tagline f2">Work<span class="dot">.</span>Relax<span class="dot">.</span>Peaceful</h2></div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta"><span class="num">03</span><span class="name">Cormorant Garamond</span><span class="kind">serif · delicate</span></div>
+    <div class="sample"><h2 class="tagline f3">Work<span class="dot">.</span>Relax<span class="dot">.</span>Peaceful</h2></div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta"><span class="num">04</span><span class="name">DM Serif Display</span><span class="kind">serif · clean editorial</span></div>
+    <div class="sample"><h2 class="tagline f4">Work<span class="dot">.</span>Relax<span class="dot">.</span>Peaceful</h2></div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta"><span class="num">05</span><span class="name">Libre Baskerville</span><span class="kind">serif · classic, readable</span></div>
+    <div class="sample"><h2 class="tagline f5">Work<span class="dot">.</span>Relax<span class="dot">.</span>Peaceful</h2></div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta"><span class="num">06</span><span class="name">Marcellus</span><span class="kind">serif · refined caps</span></div>
+    <div class="sample"><h2 class="tagline f6">Work<span class="dot">.</span>Relax<span class="dot">.</span>Peaceful</h2></div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta"><span class="num">07</span><span class="name">Italiana</span><span class="kind">serif · ultra thin, elegant</span></div>
+    <div class="sample"><h2 class="tagline f7">Work<span class="dot">.</span>Relax<span class="dot">.</span>Peaceful</h2></div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta"><span class="num">08</span><span class="name">Poppins</span><span class="kind">sans · geometric, bold</span></div>
+    <div class="sample"><h2 class="tagline f8">Work<span class="dot">.</span>Relax<span class="dot">.</span>Peaceful</h2></div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta"><span class="num">09</span><span class="name">Outfit</span><span class="kind">sans · modern, clean</span></div>
+    <div class="sample"><h2 class="tagline f9">Work<span class="dot">.</span>Relax<span class="dot">.</span>Peaceful</h2></div>
+  </div>
+
+  <div class="specimen">
+    <div class="meta"><span class="num">10</span><span class="name">Montserrat</span><span class="kind">sans · versatile, strong</span></div>
+    <div class="sample"><h2 class="tagline f10">Work<span class="dot">.</span>Relax<span class="dot">.</span>Peaceful</h2></div>
+  </div>
+</div>

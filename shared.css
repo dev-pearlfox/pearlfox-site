@@ -1,0 +1,443 @@
+:root{
+  /* brand swatches — constant across all themes, used for the Fox gradient/wordmark */
+  --pearl-light:#FBF6EF;
+  --pearl-cream:#F5DFC9;
+  --pearl-warm:#EDC9A9;
+  --pearl-deep:#C98F63;
+  --fox-bright:#FFB245;
+  --fox-orange:#FC8215;
+  --fox-amber:#F45A08;
+  --fox-deep:#D92802;
+  --fox-dark:#8A1204;
+
+  /* semantic tokens — these are what actually change per theme below */
+  --bg:#0B0B0B;
+  --text:#FBF6EF;
+  --text-muted:#F5DFC9;
+  --surface-a:rgba(255,255,255,0.05);
+  --surface-b:rgba(255,255,255,0.02);
+  --border:rgba(255,255,255,0.08);
+  --border-strong:rgba(255,255,255,0.25);
+  --nav-bg:rgba(11,11,11,0.85);
+}
+
+/* ---- Bright theme ---- */
+:root[data-theme="bright"]{
+  --bg:#FFFFFF;
+  --text:#1A1310;
+  --text-muted:#5A4E44;
+  --surface-a:rgba(20,10,0,0.035);
+  --surface-b:rgba(20,10,0,0.012);
+  --border:rgba(20,10,0,0.10);
+  --border-strong:rgba(20,10,0,0.22);
+  --nav-bg:rgba(255,255,255,0.85);
+}
+
+/* ---- Grey theme ---- */
+:root[data-theme="grey"]{
+  --bg:#E7E3DD;
+  --text:#221E1A;
+  --text-muted:#5C5750;
+  --surface-a:rgba(20,15,5,0.05);
+  --surface-b:rgba(20,15,5,0.02);
+  --border:rgba(20,15,5,0.12);
+  --border-strong:rgba(20,15,5,0.28);
+  --nav-bg:rgba(231,227,221,0.85);
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
+/* Nav "Company"/"Products" links jump to these two sections on the home
+   page — offset by the sticky nav's height so the section isn't hidden
+   underneath it when scrolled to. */
+#company,#products{scroll-margin-top:64px;}
+/* Scroll-snap for the first three sections only (hero -> company -> products):
+   proximity, not mandatory — mandatory fights the user on sections taller
+   than the viewport (a well-known scroll-snap trap: it keeps re-snapping
+   before you can scroll further into/past a tall section). Only these three
+   elements carry scroll-snap-align, so nothing past #products participates —
+   scrolling continues completely normally into stats/about/footer. */
+html{scroll-snap-type:y proximity;}
+@media (prefers-reduced-motion:reduce){html{scroll-snap-type:none;}}
+header.hero.hero-scenic,
+#company,
+#products{scroll-snap-align:center;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  transition:background 0.2s ease,color 0.2s ease;
+}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px;}
+
+/* ---- theme switcher ---- */
+.theme-switch{display:inline-flex;align-items:center;gap:2px;background:var(--surface-a);border:1px solid var(--border);border-radius:999px;padding:3px;}
+.theme-switch button{
+  border:none;background:none;cursor:pointer;
+  font-size:12px;font-weight:700;letter-spacing:0.2px;
+  color:var(--text-muted);padding:6px 12px;border-radius:999px;
+}
+.theme-switch button.active{background:linear-gradient(135deg,var(--fox-bright),var(--fox-orange));color:#1a0e04;}
+
+/* ---- nav ---- */
+nav{
+  position:sticky;top:0;z-index:10;
+  background:transparent;
+  backdrop-filter:none;
+  border-bottom:1px solid transparent;
+  transition:background 0.25s ease,backdrop-filter 0.25s ease,border-color 0.25s ease;
+}
+nav.nav-solid{
+  background:var(--nav-bg);
+  backdrop-filter:blur(8px);
+  border-bottom-color:var(--border);
+}
+nav .wrap{display:flex;align-items:center;position:relative;height:64px;gap:16px;}
+/* Nav logo target — invisible boxes marking where the flying icon and
+   wordmark should each land, side by side (icon left, word next to it) even
+   though in section 2 they're stacked (icon on top, word below). The real
+   section-2 images are the exact elements that travel here — each gets its
+   own transform every scroll frame in shared.js (updateLogoHandoff), so the
+   arrangement itself morphs from stacked to inline during the flight rather
+   than jumping. Stays clickable (as a home link) once they've arrived. */
+.nav-logo-target{display:flex;align-items:center;gap:0;width:244px;height:50px;visibility:hidden;}
+.nav-logo-target-icon{width:47px;height:47px;flex-shrink:0;}
+.nav-logo-target-word{width:188px;height:31px;margin-left:-34px;}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;letter-spacing:-0.2px;text-decoration:none;}
+.brand img{height:32px;width:auto;}
+/* Nav text is hardcoded bright white (not theme-aware) since it always floats
+   over the hero photo — same "always fixed" exception as the hero's own text. */
+.brand .pearl{color:#FFFFFF;text-shadow:0 2px 6px rgba(0,0,0,0.55);}
+.brand .fox{background:linear-gradient(135deg,var(--fox-bright),var(--fox-deep));-webkit-background-clip:text;background-clip:text;color:transparent;}
+/* Centered independent of the brand's width, via absolute positioning within
+   the relatively-positioned nav wrap, rather than flex space-between. */
+.navlinks{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;gap:20px;}
+.navlinks a{color:#FFFFFF;text-decoration:none;font-size:14.5px;font-weight:600;opacity:0.9;text-shadow:0 1px 2px rgba(0,0,0,0.85),0 4px 14px rgba(0,0,0,0.7);}
+.navlinks a:hover{opacity:1;}
+
+/* ---- brand mark (logo, moved below the hero photo for more presence) ---- */
+.brand-mark{
+  min-height:1000px;display:flex;align-items:center;justify-content:center;
+  position:relative;text-align:center;
+}
+.brand-mark > .wrap{width:100%;}
+.brand-mark-logo{display:inline-block;}
+/* These are the actual elements that fly to the nav (see shared.js) — each
+   gets its own translate/scale every scroll frame, computed independently
+   from its own center point to its own nav-logo-target-icon/-word center
+   point, which is what lets the pair morph from stacked (here) to inline
+   (at the nav) during the flight. z-index lifts each above the nav bar
+   (z-index:10) once the handoff carries it up there; position:relative
+   gives each its own stacking context for that z-index to apply. */
+.brand-mark-icon{
+  position:relative;z-index:50;will-change:transform;
+  width:220px;max-width:46vw;height:auto;filter:drop-shadow(0 18px 46px rgba(252,130,21,0.4));margin-bottom:-24px;
+}
+.brand-mark-word{
+  position:relative;z-index:50;will-change:transform;
+  width:280px;max-width:60vw;height:auto;display:block;margin:0 auto 28px;
+}
+.brand-mark p.lead{font-size:18px;color:var(--text-muted);max-width:560px;margin:0 auto 32px;opacity:0.9;}
+.brand-mark-next{position:absolute;left:0;right:0;bottom:0;font-size:42px;font-weight:700;letter-spacing:0.6px;color:#FFFFFF;text-align:center;}
+@media (max-width:720px){
+  .brand-mark{min-height:auto;padding:40px 0 60px;}
+  .brand-mark-icon{width:150px;margin-bottom:-16px;}
+  .brand-mark-word{width:190px;margin-bottom:20px;}
+  .brand-mark p.lead{font-size:16px;}
+  .brand-mark-next{font-size:32px;}
+}
+
+/* ---- hero ---- */
+header.hero{padding:88px 0 64px;text-align:center;position:relative;}
+header.hero img{width:200px;max-width:60vw;height:auto;filter:drop-shadow(0 8px 30px rgba(252,130,21,0.25));margin-bottom:28px;}
+header.hero h1{font-size:44px;line-height:1.15;margin:0 0 16px;letter-spacing:-0.5px;}
+header.hero h1 .fox{background:linear-gradient(135deg,var(--fox-bright),var(--fox-deep));-webkit-background-clip:text;background-clip:text;color:transparent;}
+header.hero p.lead{font-size:18px;color:var(--text-muted);max-width:560px;margin:0 auto 32px;opacity:0.9;}
+
+/* Scenic hero — a fixed dark illustrated background regardless of the page's
+   Dark/Bright/Grey theme, same "always-fixed" exception pattern as Eagle View's
+   own Welcome screen gradient. Text here is deliberately hardcoded light, not
+   var(--text), since it must stay legible against the fixed-dark image, not
+   flip to dark text when the Bright theme is active. */
+header.hero.hero-scenic{padding:0;overflow:hidden;margin-top:-64px;}
+.hero-bg{position:absolute;top:0;left:0;right:0;bottom:0;z-index:0;}
+.hero-bg svg{width:100%;height:100%;display:block;}
+.hero-bg img.hero-photo{width:100%;height:100%;max-width:none;object-fit:contain;object-position:center;display:block;margin-bottom:0;filter:none;}
+.hero-fade{position:absolute;left:0;right:0;bottom:0;height:40%;background:linear-gradient(to bottom,rgba(11,11,11,0),var(--bg));}
+.hero-content{position:relative;z-index:1;padding:150px 24px 90px;}
+.hero-scenic .hero-content h1,
+.hero-scenic .hero-content .pearl{color:#FBF6EF;}
+.hero-scenic .hero-content p.lead{color:#F5DFC9;opacity:0.92;}
+@media (max-width:720px){
+  .hero-content{padding:110px 24px 64px;}
+}
+
+/* Photo hero variant — full width like before, but the image's own height is
+   never cropped: the image sits in normal flow at its natural aspect ratio
+   (width:100%, height:auto) and drives the header's height, instead of being
+   stretched/cover-cropped to fill a height set independently by the text. */
+.hero-photo-mode{position:relative;min-height:420px;}
+.hero-photo-mode .hero-bg{position:relative;top:auto;left:auto;right:auto;bottom:auto;height:auto;}
+.hero-photo-mode .hero-bg img.hero-photo{width:100%;height:auto;max-width:none;object-fit:unset;object-position:unset;display:block;margin-bottom:0;filter:none;}
+.hero-photo-mode .hero-content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;}
+.hero-tagline{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;transform:translateY(-150px);}
+.hero-tagline h2{margin:0;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px;font-family:'Marcellus',Georgia,serif;font-weight:400;font-size:56px;letter-spacing:0.5px;color:#FFFFFF;text-shadow:0 2px 14px rgba(0,0,0,0.5);}
+.hero-tagline .tagline-dot{color:#FFFFFF;font-weight:800;line-height:1;transform:translateY(-0.28em);}
+@media (max-width:720px){
+  .hero-photo-mode{min-height:360px;}
+  .hero-photo-mode .hero-content{padding:32px 20px;}
+  .hero-tagline h2{font-size:30px;gap:8px;}
+}
+.btn-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.btn-primary{
+  background:linear-gradient(135deg,var(--fox-bright),var(--fox-orange));
+  color:#1a0e04;font-weight:700;font-size:15px;padding:14px 28px;border-radius:999px;
+  text-decoration:none;box-shadow:0 4px 18px rgba(252,130,21,0.35);
+}
+.btn-secondary{
+  border:1px solid var(--border-strong);color:var(--text);
+  font-weight:600;font-size:15px;padding:13px 27px;border-radius:999px;text-decoration:none;
+}
+
+/* ---- generic page header (Products / Contact) ---- */
+header.pagehead{padding:56px 0 40px;text-align:center;border-bottom:1px solid var(--border);}
+header.pagehead img{width:88px;max-width:30vw;height:auto;filter:drop-shadow(0 6px 20px rgba(252,130,21,0.22));margin-bottom:20px;}
+header.pagehead h1{font-size:36px;margin:0 0 12px;letter-spacing:-0.4px;}
+header.pagehead p.lead{font-size:16px;color:var(--text-muted);max-width:520px;margin:0 auto;opacity:0.9;}
+
+/* ---- product section ---- */
+section.product{padding:64px 0;border-top:1px solid var(--border);}
+section.product:first-of-type{border-top:none;}
+.product-inner{
+  display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;
+}
+.product-card{
+  background:linear-gradient(160deg,var(--surface-a),var(--surface-b));
+  border:1px solid var(--border);
+  border-radius:20px;padding:40px;
+}
+.eyebrow{font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--fox-orange);margin-bottom:10px;}
+.product h2{font-size:28px;margin:0 0 14px;}
+.product p{color:var(--text-muted);opacity:0.9;line-height:1.6;font-size:15px;}
+.feature-list{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:12px;}
+.feature-list li{display:flex;gap:10px;font-size:14.5px;color:var(--text);opacity:0.92;}
+.feature-list li::before{content:"●";color:var(--fox-orange);font-size:10px;line-height:1.8;}
+
+/* ---- about ---- */
+section.about{padding:64px 0;border-top:1px solid var(--border);text-align:center;}
+section.about h2{font-size:26px;margin:0 0 14px;}
+section.about p{max-width:600px;margin:0 auto;color:var(--text-muted);opacity:0.9;line-height:1.7;font-size:15px;}
+
+/* ---- contact ---- */
+section.contact{padding:64px 0;text-align:center;}
+.contact-card{
+  max-width:480px;margin:0 auto;
+  background:linear-gradient(160deg,var(--surface-a),var(--surface-b));
+  border:1px solid var(--border);
+  border-radius:20px;padding:48px 32px;
+}
+.contact-card p{color:var(--text-muted);opacity:0.9;line-height:1.6;font-size:15px;margin:0 0 24px;}
+.contact-email{
+  display:inline-block;font-size:20px;font-weight:700;color:var(--text);
+  text-decoration:none;margin-bottom:24px;
+}
+.contact-email .fox{background:linear-gradient(135deg,var(--fox-bright),var(--fox-deep));-webkit-background-clip:text;background-clip:text;color:transparent;}
+
+/* ---- feature grid (4-up value prop cards) ---- */
+section.feature-grid{padding:64px 0;border-top:1px solid var(--border);}
+.fg-head{text-align:center;max-width:600px;margin:0 auto 44px;}
+.fg-head h2{font-size:30px;margin:0 0 12px;letter-spacing:-0.3px;}
+.fg-head p{color:var(--text-muted);opacity:0.9;font-size:15.5px;margin:0;}
+.fg-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+.fg-card{background:linear-gradient(160deg,var(--surface-a),var(--surface-b));border:1px solid var(--border);border-radius:16px;padding:26px 22px;}
+.fg-card .fg-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--fox-bright),var(--fox-orange));display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:16px;}
+.fg-card h3{font-size:15.5px;margin:0 0 8px;color:var(--text);}
+.fg-card p{font-size:13.5px;color:var(--text-muted);opacity:0.9;line-height:1.55;margin:0;}
+
+/* ---- app preview (left: feature text, right: animated app mock-up) ---- */
+section.app-preview{
+  padding:88px 0;border-top:1px solid var(--border);overflow:hidden;position:relative;
+  background:url('forest-table.webp') center/cover no-repeat;
+}
+/* Fade at the top, mirroring the hero's own fade at its bottom — transitions
+   from the previous section's solid background into the photo. */
+section.app-preview::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:220px;
+  background:linear-gradient(to bottom,var(--bg),rgba(11,11,11,0));
+  pointer-events:none;
+}
+.ap-grid{position:relative;}
+.ap-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
+/* Height matched to .ap-panel's own rendered height (190px wide × the real
+   screenshot's 416:1298 aspect ≈ 593px), and vertically centered the same
+   way .ap-visual centers the panel, so the two line up as a pair. */
+.ap-text{background:rgba(0,0,0,0.7);border-radius:20px;padding:36px;height:593px;margin-top:-100px;display:flex;flex-direction:column;justify-content:center;box-sizing:border-box;}
+.ap-text .eyebrow{display:flex;align-items:center;gap:10px;font-size:24px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--fox-orange);margin-bottom:14px;}
+.ap-text .eyebrow-icon{flex-shrink:0;}
+.ap-text h2{font-size:30px;margin:0 0 12px;letter-spacing:-0.3px;}
+.ap-text > p{color:var(--text-muted);opacity:0.9;font-size:15.5px;line-height:1.6;margin:0 0 30px;}
+.ap-list{list-style:none;margin:0 0 32px;padding:0;display:flex;flex-direction:column;gap:20px;}
+.ap-list li{display:flex;align-items:flex-start;gap:14px;}
+.ap-ico{flex-shrink:0;width:24px;height:24px;display:flex;align-items:center;justify-content:center;}
+.ap-ico-stack{flex-direction:column;width:26px;height:48px;gap:4px;}
+.ap-ico-stack svg{width:22px;height:22px;flex-shrink:0;}
+.ap-ico-stack-wide{gap:10px;height:54px;}
+.ap-ico-stack-lg{width:30px;}
+.ap-ico-stack-lg svg{width:26px;height:26px;}
+.ap-list li > div{display:flex;flex-direction:column;gap:2px;}
+.ap-list strong{font-size:15px;color:var(--text);}
+.ap-list span{font-size:13.5px;color:var(--text-muted);opacity:0.9;line-height:1.5;}
+
+.ap-visual{position:relative;min-height:640px;display:flex;align-items:center;justify-content:center;}
+.ap-ring{position:absolute;border-radius:50%;border:1px solid var(--border);pointer-events:none;}
+.ap-ring1{top:50%;left:50%;width:340px;height:340px;margin:-170px 0 0 -170px;animation:apPulseRing 4s ease-in-out infinite;}
+.ap-ring2{top:50%;left:50%;width:400px;height:400px;margin:-200px 0 0 -200px;animation:apPulseRing 4s 1.5s ease-in-out infinite;}
+
+.ap-panel{
+  position:relative;z-index:1;width:190px;margin-top:-100px;
+  background:linear-gradient(160deg,#1A1410,#0B0704);
+  border:1px solid var(--border-strong);border-radius:18px;overflow:hidden;
+  box-shadow:0 40px 80px rgba(0,0,0,0.55),0 0 60px rgba(252,130,21,0.08);
+}
+.ap-panel-shot{width:100%;height:auto;display:block;}
+.ap-panel::before{
+  content:'';position:absolute;left:0;right:0;height:2px;z-index:2;
+  background:linear-gradient(90deg,transparent,var(--fox-bright) 40%,var(--fox-bright) 60%,transparent);
+  box-shadow:0 0 16px var(--fox-bright),0 0 32px rgba(252,130,21,0.5);
+  animation:apScanDown 5s linear infinite;
+}
+.ap-panel-head{display:flex;align-items:center;gap:10px;padding:16px 16px 14px;}
+.ap-panel-icon{width:26px;height:26px;border-radius:7px;}
+.ap-panel-title{font-size:13.5px;font-weight:800;color:var(--pearl-light);letter-spacing:0.2px;}
+.ap-panel-sub{font-size:8px;font-weight:700;color:var(--fox-bright);letter-spacing:1.4px;text-transform:uppercase;opacity:0.85;}
+.ap-rows{background:rgba(0,0,0,0.18);}
+.ap-row{display:flex;align-items:center;gap:10px;padding:8px 16px;border-bottom:1px solid rgba(255,255,255,0.05);}
+.ap-row-ico{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10.5px;color:#fff;font-weight:800;flex-shrink:0;}
+.ap-row-l{font-size:12px;color:var(--pearl-cream);opacity:0.85;flex:1;}
+.ap-row-b{font-size:11px;font-weight:700;color:var(--pearl-cream);opacity:0.6;}
+.ap-row-b.ap-orange{color:var(--fox-bright);opacity:1;}
+.ap-row-b.ap-warn{color:#FFD166;opacity:1;}
+.ap-panel-footer{
+  display:flex;align-items:center;gap:6px;padding:10px 16px;
+  background:rgba(0,0,0,0.15);border-top:1px solid rgba(255,255,255,0.05);
+  font-size:10px;color:var(--pearl-cream);opacity:0.55;font-variant-numeric:tabular-nums;
+}
+.ap-status-dot{width:5px;height:5px;border-radius:50%;background:#4ADE80;box-shadow:0 0 6px #4ADE80;animation:apPulseDot 2s ease-in-out infinite;}
+
+.ap-chip{
+  position:absolute;z-index:2;background:rgba(0,0,0,0.7);
+  border:1px solid var(--border-strong);border-radius:12px;padding:10px 14px;
+  backdrop-filter:blur(10px);box-shadow:0 14px 36px rgba(0,0,0,0.4);
+  font-size:11px;white-space:nowrap;
+}
+.ap-chip-l{color:var(--text-muted);opacity:0.7;font-size:10px;}
+.ap-chip-v{color:var(--pearl-light);font-weight:700;font-size:12px;margin-top:2px;}
+.ap-chip-v.ap-red{color:#FF6B5A;}
+.ap-chip-s{color:var(--text-muted);opacity:0.6;font-size:10px;margin-top:2px;}
+.ap-chip-top{display:flex;align-items:center;gap:6px;}
+.ap-chip-dot{width:5px;height:5px;border-radius:50%;background:var(--fox-bright);box-shadow:0 0 6px var(--fox-bright);animation:apPulseDot 1.6s ease-in-out infinite;}
+.ap-chip3 .ap-chip-v{color:var(--fox-bright);font-size:10px;letter-spacing:1px;}
+.ap-chip1{top:14%;left:2%;margin-top:-50px;animation:apFloat2 5s ease-in-out infinite;}
+/* chip2/chip3 are bottom-anchored (top:auto) — margin-top is a no-op there,
+   since the browser just re-solves the auto top to keep the bottom-anchored
+   position fixed, cancelling the margin out. Folding the offset into the
+   bottom value itself (increasing bottom moves the box up) is what actually
+   works for a bottom-anchored element. */
+.ap-chip2{bottom:calc(26% + 150px);right:0%;animation:apFloat1 6s ease-in-out infinite;}
+.ap-chip3{bottom:calc(6% + 100px);left:calc(-6% + 40px);animation:apFloat3 5.5s ease-in-out infinite;}
+
+@keyframes apFloat1{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+@keyframes apFloat2{0%,100%{transform:translateY(0);}50%{transform:translateY(12px);}}
+@keyframes apFloat3{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+@keyframes apPulseRing{0%,100%{transform:scale(1);opacity:0.5;}50%{transform:scale(1.04);opacity:0.9;}}
+@keyframes apPulseDot{0%,100%{opacity:1;}50%{opacity:0.35;}}
+@keyframes apScanDown{0%{top:0%;opacity:0;}10%{opacity:1;}90%{opacity:1;}100%{top:100%;opacity:0;}}
+
+@media (prefers-reduced-motion:reduce){
+  .ap-ring,.ap-panel,.ap-panel::before,.ap-chip,.ap-status-dot,.ap-chip-dot{animation:none!important;}
+}
+
+@media (max-width:900px){
+  .ap-grid{grid-template-columns:1fr;gap:56px;}
+  .ap-visual{min-height:520px;}
+}
+@media (max-width:480px){
+  .ap-chip{display:none;}
+}
+
+/* ---- alternating showcase blocks ---- */
+section.showcase{padding:72px 0;border-top:1px solid var(--border);}
+.showcase-row{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;}
+.showcase-row.no-visual{grid-template-columns:1fr;max-width:640px;margin:0 auto;text-align:center;}
+.showcase-row.reverse .showcase-text{order:2;}
+.showcase-row.reverse .showcase-visual{order:1;}
+.showcase-text h2{font-size:26px;margin:0 0 14px;letter-spacing:-0.3px;}
+.showcase-text p{color:var(--text-muted);opacity:0.9;line-height:1.65;font-size:15px;margin:0 0 18px;}
+.visual-placeholder{
+  aspect-ratio:16/10;border-radius:18px;
+  border:1.5px dashed rgba(252,130,21,0.4);
+  background:linear-gradient(160deg,var(--surface-a),var(--surface-b));
+  display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;
+}
+.visual-placeholder span{font-size:13px;font-weight:700;color:var(--fox-orange);opacity:0.85;letter-spacing:0.3px;}
+
+/* ---- stat strip ---- */
+section.stats{padding:56px 0;border-top:1px solid var(--border);}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center;}
+.stat-grid .num{font-size:32px;font-weight:800;letter-spacing:-0.5px;background:linear-gradient(135deg,var(--fox-bright),var(--fox-deep));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.stat-grid .lbl{font-size:13px;color:var(--text-muted);opacity:0.85;margin-top:6px;}
+.stat-grid .placeholder-tag{display:block;font-size:10px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:var(--fox-orange);opacity:0.7;margin-top:4px;}
+
+/* ---- multi-column footer ---- */
+footer{padding:40px 0;border-top:1px solid var(--border);}
+footer .wrap{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+footer .copy{font-size:13px;color:var(--text-muted);opacity:0.75;}
+footer a{color:var(--text-muted);opacity:0.9;text-decoration:none;font-size:13px;}
+footer a:hover{opacity:1;}
+.footer-links{display:flex;gap:22px;}
+
+footer.footer-big{padding:56px 0 32px;}
+.footer-big .fcols{display:grid;grid-template-columns:1.4fr repeat(4,1fr);gap:24px;margin-bottom:40px;}
+.footer-big .fcol h4{font-size:12px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:var(--text-muted);opacity:0.65;margin:0 0 14px;}
+.footer-big .fcol a{display:block;font-size:14px;color:var(--text-muted);opacity:0.9;text-decoration:none;margin-bottom:10px;}
+.footer-big .fcol a:hover{opacity:1;color:var(--fox-orange);}
+.footer-big .fbrand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:16px;margin-bottom:10px;}
+.footer-big .fbrand img{height:24px;width:auto;}
+.footer-big .ftagline{font-size:13px;color:var(--text-muted);opacity:0.75;max-width:220px;line-height:1.5;}
+.footer-big .fbottom{border-top:1px solid var(--border);padding-top:24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+
+@media (max-width:900px){
+  .fg-grid{grid-template-columns:1fr 1fr;}
+  .footer-big .fcols{grid-template-columns:1fr 1fr;}
+}
+@media (max-width:720px){
+  .product-inner{grid-template-columns:1fr;}
+  header.hero h1{font-size:32px;}
+  header.hero p.lead{font-size:16px;}
+  nav .wrap{height:auto;flex-direction:column;padding-block:14px;gap:10px;}
+  .navlinks{position:static;transform:none;gap:14px;flex-wrap:wrap;justify-content:center;}
+  header.hero.hero-scenic{margin-top:-132px;}
+  header.pagehead h1{font-size:28px;}
+  .fg-grid{grid-template-columns:1fr;}
+  .showcase-row{grid-template-columns:1fr;gap:28px;}
+  .showcase-row.reverse .showcase-text{order:1;}
+  .showcase-row.reverse .showcase-visual{order:2;}
+  .stat-grid{grid-template-columns:1fr 1fr;gap:28px 16px;}
+  .footer-big .fcols{grid-template-columns:1fr;gap:28px;}
+}
+
+/* ============================================================
+   TEMP — section boundary markers, for layout reference only.
+   Currently disabled (commented out) — uncomment to bring them back.
+   ============================================================ */
+/*
+body > header, body > section, body > footer{
+  border-top:2px solid red;
+}
+section.app-preview{
+  border-top:4px solid red;
+}
+*/

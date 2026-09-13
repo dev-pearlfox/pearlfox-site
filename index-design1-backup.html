@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PearlFox</title>
+<meta name="description" content="PearlFox — makers of Eagle View, a desktop sidebar widget for staying on top of mail, meetings, and more.">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="shared.css">
+<script>
+// Anti-flash: apply saved theme before first paint, not after shared.js loads.
+(function(){try{var t=localStorage.getItem('pf-theme');if(t&&t!=='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="apple-touch-icon.png" alt="PearlFox"><span class="pearl">Pearl</span><span class="fox">Fox</span></a>
+    <div class="navlinks">
+      <a href="products.html">Products</a>
+      <a href="company.html">Company</a>
+      <a href="security.html">Security</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+      <div class="theme-switch">
+        <button data-theme="dark">Dark</button>
+        <button data-theme="bright">Bright</button>
+        <button data-theme="grey">Grey</button>
+      </div>
+      <a class="cta" href="https://eagleview.pearlfox.io" target="_blank" rel="noopener">Get Eagle View ↗</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero hero-scenic">
+  <div class="hero-bg" aria-hidden="true">
+    <svg viewBox="0 0 1600 700" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3A2410"/>
+          <stop offset="38%" stop-color="#7A3200"/>
+          <stop offset="68%" stop-color="#C98F63"/>
+          <stop offset="100%" stop-color="#0B0B0B"/>
+        </linearGradient>
+        <radialGradient id="sun" cx="50%" cy="30%" r="45%">
+          <stop offset="0%" stop-color="#FFC178" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#FFC178" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect x="0" y="0" width="1600" height="700" fill="url(#sky)"/>
+      <ellipse cx="800" cy="230" rx="500" ry="260" fill="url(#sun)"/>
+      <!-- back mountains -->
+      <polygon points="0,420 100,340 220,400 340,300 480,380 620,320 760,390 900,310 1040,370 1180,300 1320,380 1460,330 1600,400 1600,700 0,700" fill="#C98F63" opacity="0.30"/>
+      <!-- mist band -->
+      <rect x="0" y="400" width="1600" height="60" fill="#FBF6EF" opacity="0.06"/>
+      <!-- mid mountains -->
+      <polygon points="0,480 150,420 300,470 450,400 600,460 750,410 900,470 1050,400 1200,460 1350,410 1600,460 1600,700 0,700" fill="#8A1204" opacity="0.45"/>
+      <!-- mist band -->
+      <rect x="0" y="470" width="1600" height="50" fill="#FBF6EF" opacity="0.05"/>
+      <!-- front rolling hill -->
+      <path d="M0,560 C200,520 400,600 600,560 C800,520 1000,600 1200,560 C1400,530 1500,570 1600,555 L1600,700 L0,700 Z" fill="#0B0B0B" opacity="0.92"/>
+      <!-- desk + laptop silhouette -->
+      <g opacity="0.9">
+        <rect x="772" y="553" width="96" height="7" rx="2" fill="#0B0B0B"/>
+        <rect x="780" y="560" width="6" height="42" fill="#0B0B0B"/>
+        <rect x="854" y="560" width="6" height="42" fill="#0B0B0B"/>
+        <path d="M796,553 L796,540 L844,540 L844,553 Z" fill="#0B0B0B"/>
+        <path d="M796,540 L804,505 L836,505 L844,540 Z" fill="#0B0B0B"/>
+        <rect x="806" y="510" width="28" height="18" fill="#FFB245" opacity="0.55"/>
+      </g>
+      <!-- fireflies -->
+      <circle cx="420" cy="360" r="2.4" fill="#FFC178" opacity="0.8"/>
+      <circle cx="1180" cy="330" r="2" fill="#FFC178" opacity="0.6"/>
+      <circle cx="980" cy="420" r="1.8" fill="#FFC178" opacity="0.7"/>
+      <circle cx="300" cy="440" r="1.6" fill="#FFC178" opacity="0.55"/>
+    </svg>
+    <div class="hero-fade"></div>
+  </div>
+  <div class="wrap hero-content">
+    <img src="hero-logo.png" alt="PearlFox logo">
+    <h1><span class="pearl">Pearl</span><span class="fox">Fox</span></h1>
+    <p class="lead">A small software company building focused, well-crafted tools — starting with Eagle View, a desktop companion that keeps mail, meetings, and your day in one glance.</p>
+    <div class="btn-row">
+      <a class="btn-primary" href="https://eagleview.pearlfox.io" target="_blank" rel="noopener">Get Eagle View ↗</a>
+      <a class="btn-secondary" href="contact.html">Get in touch</a>
+    </div>
+  </div>
+</header>
+
+<section class="feature-grid">
+  <div class="wrap">
+    <div class="fg-head">
+      <h2>Everything your day needs, in one glance</h2>
+      <p>Eagle View brings the parts of your workday you check constantly into one quiet, always-current sidebar.</p>
+    </div>
+    <div class="fg-grid">
+      <div class="fg-card">
+        <div class="fg-icon">✉</div>
+        <h3>Live Mail &amp; To Do</h3>
+        <p>Real-time rows for mail and flagged items, refreshed on your own schedule.</p>
+      </div>
+      <div class="fg-card">
+        <div class="fg-icon">📅</div>
+        <h3>Meetings, always current</h3>
+        <p>Your next meeting and join link, without opening a calendar app.</p>
+      </div>
+      <div class="fg-card">
+        <div class="fg-icon">🎨</div>
+        <h3>Five polished themes</h3>
+        <p>Built to feel native and unobtrusive, not like a browser tab pinned to your desktop.</p>
+      </div>
+      <div class="fg-card">
+        <div class="fg-icon">🧰</div>
+        <h3>Built-in utilities</h3>
+        <p>Checklist, World Clock, Currency &amp; Units converters, and more, included.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="showcase">
+  <div class="wrap">
+    <div class="showcase-row">
+      <div class="showcase-text">
+        <div class="eyebrow">Mail &amp; Meetings</div>
+        <h2>Your inbox, without opening your inbox</h2>
+        <p>Mail, To Do, and Meetings rows update on the interval you choose — Outlook or Gmail, both supported natively. Glance, don't dig.</p>
+        <a class="btn-secondary" style="display:inline-block" href="products.html">See all features →</a>
+      </div>
+      <div class="showcase-visual">
+        <div class="visual-placeholder"><span>[ Screenshot placeholder — Mail / To Do / Meetings rows ]</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="showcase">
+  <div class="wrap">
+    <div class="showcase-row reverse">
+      <div class="showcase-text">
+        <div class="eyebrow">Themes</div>
+        <h2>Looks native, wherever you work</h2>
+        <p>Five built-in themes, from light to dark, so Eagle View fits your setup instead of standing out from it.</p>
+      </div>
+      <div class="showcase-visual">
+        <div class="visual-placeholder"><span>[ Screenshot placeholder — theme gallery ]</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="showcase">
+  <div class="wrap">
+    <div class="showcase-row">
+      <div class="showcase-text">
+        <div class="eyebrow">Utilities</div>
+        <h2>The small tools you reach for daily</h2>
+        <p>Checklist with reminders, World Clock, Currency &amp; Units converters — built in, so you don't need five other apps open.</p>
+      </div>
+      <div class="showcase-visual">
+        <div class="visual-placeholder"><span>[ Screenshot placeholder — Checklist / utilities ]</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="wrap">
+    <div class="stat-grid">
+      <div><div class="num">[—]</div><div class="lbl">Active users<span class="placeholder-tag">needs real data</span></div></div>
+      <div><div class="num">[—]</div><div class="lbl">Releases shipped<span class="placeholder-tag">needs real data</span></div></div>
+      <div><div class="num">[—]</div><div class="lbl">Platforms supported<span class="placeholder-tag">needs real data</span></div></div>
+      <div><div class="num">[—]</div><div class="lbl">App rating<span class="placeholder-tag">needs real data</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="about">
+  <div class="wrap">
+    <h2>About PearlFox</h2>
+    <p>PearlFox is a software studio focused on building small, dependable tools done right — no bloat, no unnecessary complexity, just software that quietly does its job well.</p>
+    <div class="btn-row" style="margin-top:20px">
+      <a class="btn-secondary" href="company.html">More about PearlFox →</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer-big">
+  <div class="wrap">
+    <div class="fcols">
+      <div class="fcol">
+        <div class="fbrand"><img src="apple-touch-icon.png" alt="PearlFox"><span class="pearl" style="color:var(--pearl-light)">Pearl</span><span class="fox">Fox</span></div>
+        <p class="ftagline">Small, dependable software tools, built to quietly do their job well.</p>
+      </div>
+      <div class="fcol">
+        <h4>Product</h4>
+        <a href="products.html">Products</a>
+        <a href="https://eagleview.pearlfox.io" target="_blank" rel="noopener">Eagle View ↗</a>
+      </div>
+      <div class="fcol">
+        <h4>Company</h4>
+        <a href="company.html">Company</a>
+        <a href="security.html">Security</a>
+      </div>
+      <div class="fcol">
+        <h4>Support</h4>
+        <a href="faq.html">FAQ</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="fcol">
+        <h4>Legal</h4>
+        <a href="https://eagleview.pearlfox.io/privacy.html" target="_blank" rel="noopener">Privacy Policy ↗</a>
+      </div>
+    </div>
+    <div class="fbottom">
+      <div class="copy">© 2026 PearlFox. All rights reserved.</div>
+      <a href="mailto:dev@pearlfox.io">dev@pearlfox.io</a>
+    </div>
+  </div>
+</footer>
+
+<script src="shared.js"></script>
+</body>
+</html>

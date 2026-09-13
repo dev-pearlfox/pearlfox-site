@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security & Privacy — PearlFox</title>
+<meta name="description" content="How Eagle View handles your data — what it reads, what it never touches, and where things are stored.">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="shared.css">
+<style>
+  .sec-block{padding:0 0 56px;}
+  .sec-block h2{font-size:20px;margin:0 0 12px;}
+  .sec-block p{color:var(--pearl-cream);opacity:0.85;line-height:1.65;font-size:15px;margin:0 0 14px;}
+  .sec-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:8px;}
+  .sec-card{background:linear-gradient(160deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:26px 28px;}
+  .sec-card .tag{font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;display:inline-block;padding:3px 10px;border-radius:999px;}
+  .tag.yes{color:#7BE0A0;background:rgba(123,224,160,0.12);}
+  .tag.no{color:#FF9B9B;background:rgba(255,155,155,0.12);}
+  .sec-card ul{margin:10px 0 0;padding-left:18px;color:var(--pearl-cream);opacity:0.85;font-size:14.5px;line-height:1.7;}
+  @media (max-width:720px){.sec-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="navlinks">
+      <a href="index.html#company">Company</a>
+      <a href="index.html#products">Products</a>
+      <a href="security.html">Security</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="pagehead">
+  <div class="wrap">
+    <img src="hero-logo.png" alt="PearlFox logo">
+    <h1>Security &amp; Privacy</h1>
+    <p class="lead">What Eagle View actually reads from your mailbox, and what it never touches — stated plainly, not buried in a policy document.</p>
+  </div>
+</header>
+
+<section class="sec-block">
+  <div class="wrap" style="padding-top:48px">
+    <div class="sec-grid">
+      <div class="sec-card">
+        <span class="tag yes">What Eagle View reads</span>
+        <ul>
+          <li>Subject line, sender, and date/time of each message</li>
+          <li>Read / flagged / starred status</li>
+          <li>Calendar meeting details needed to show your day and join a call (including extracting a Teams join link when present)</li>
+        </ul>
+      </div>
+      <div class="sec-card">
+        <span class="tag no">What Eagle View never touches</span>
+        <ul>
+          <li>The body or content of any email — not stored, not sent anywhere, not even requested from Outlook or Gmail's APIs</li>
+          <li>Attachments</li>
+          <li>Anything beyond the metadata above, by design — not a setting you have to turn off</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec-block">
+  <div class="wrap">
+    <h2>Where your account access lives</h2>
+    <p>Eagle View connects directly to Microsoft Graph or Google's Gmail API using your own sign-in — your mail provider handles authentication, and Eagle View never sees or stores your password. Everything it does read is fetched live and used only to show it back to you in the app; it isn't collected into a separate database of your mail activity.</p>
+  </div>
+</section>
+
+<section class="sec-block">
+  <div class="wrap">
+    <h2>License &amp; trial data</h2>
+    <p>To run your trial and validate a license key, Eagle View sends your email address, a device identifier, and (for license checks) a locally-computed key — nothing about your mail account itself. This is handled over HTTPS by our backend infrastructure.</p>
+  </div>
+</section>
+
+<section class="about" style="border-top:1px solid rgba(255,255,255,0.08)">
+  <div class="wrap">
+    <h2>Full Privacy Policy</h2>
+    <p>For the complete legal privacy policy, including your rights under GDPR/DPDP and how to request data deletion, see Eagle View's full policy.</p>
+    <div class="btn-row" style="margin-top:20px">
+      <a class="btn-secondary" href="https://eagleview.pearlfox.io/privacy.html" target="_blank" rel="noopener">Read the Privacy Policy ↗</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="copy">© 2026 PearlFox. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="company.html">Company</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
