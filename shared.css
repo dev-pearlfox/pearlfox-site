@@ -52,17 +52,18 @@ html{scroll-behavior:smooth;}
    page — offset by the sticky nav's height so the section isn't hidden
    underneath it when scrolled to. */
 #company,#products{scroll-margin-top:64px;}
-/* Scroll-snap for the first three sections only (hero -> company -> products):
-   proximity, not mandatory — mandatory fights the user on sections taller
-   than the viewport (a well-known scroll-snap trap: it keeps re-snapping
-   before you can scroll further into/past a tall section). Only these three
-   elements carry scroll-snap-align, so nothing past #products participates —
-   scrolling continues completely normally into stats/about/footer. */
+/* Scroll-snap for the hero only. #company and #products used to carry
+   scroll-snap-align too, but that's exactly the zone the flying logo
+   animates across (see the Heart Logic section in CLAUDE.md) — even
+   "proximity" mode could tug the scroll position while scrolling through,
+   fighting the scroll-position-driven flight and making it feel stuck.
+   Removed 2026-09-14 once that was reported and diagnosed; flight
+   smoothness wins this tradeoff. proximity (not mandatory) is still used
+   here since mandatory fights the user on sections taller than the
+   viewport. */
 html{scroll-snap-type:y proximity;}
 @media (prefers-reduced-motion:reduce){html{scroll-snap-type:none;}}
-header.hero.hero-scenic,
-#company,
-#products{scroll-snap-align:center;}
+header.hero.hero-scenic{scroll-snap-align:center;}
 body{
   margin:0;
   background:var(--bg);
