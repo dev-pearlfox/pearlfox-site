@@ -123,6 +123,14 @@
         updateLogoHandoff();
       };
       onResize();
+      // Safety net: re-measure once every resource (images included) has
+      // definitely finished loading. The width/height attributes on the
+      // <img> tags already fix the root cause (a real-network image load
+      // being slower than the initial measure() call, which only showed up
+      // live, not locally where the image was instant/cached) — this catches
+      // any other later-loading cause of the same class of bug (e.g. a web
+      // font swap shifting layout) without needing to diagnose it by name.
+      window.addEventListener('load', onResize);
       window.addEventListener('scroll', onScroll, { passive: true });
       window.addEventListener('resize', onResize);
     }
