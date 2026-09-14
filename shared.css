@@ -92,20 +92,28 @@ nav{
 }
 nav.nav-solid{
   background:var(--nav-bg);
-  backdrop-filter:blur(8px);
   border-bottom-color:var(--border);
 }
 nav .wrap{display:flex;align-items:center;position:relative;height:64px;gap:16px;}
-/* Nav logo target — invisible boxes marking where the flying icon and
-   wordmark should each land, side by side (icon left, word next to it) even
-   though in section 2 they're stacked (icon on top, word below). The real
-   section-2 images are the exact elements that travel here — each gets its
-   own transform every scroll frame in shared.js (updateLogoHandoff), so the
-   arrangement itself morphs from stacked to inline during the flight rather
-   than jumping. Stays clickable (as a home link) once they've arrived. */
-.nav-logo-target{display:flex;align-items:center;gap:0;width:244px;height:50px;visibility:hidden;}
+/* Nav logo target — doubles as two things:
+   1. The landing-page logo: a separate, standalone copy of the icon+word-
+      mark (via the <img class="nav-landing-img"> children), visible only at
+      the very top of the page (scrollY = 0) and hidden the instant you
+      scroll even 1px — see nav.nav-scrolled below, toggled in shared.js.
+      This is entirely independent from section 2's icon/wordmark.
+   2. The landing spot for section 2's flying icon+wordmark to fly into and
+      dock — same box, same position, just not visible at the same time as
+      #1 (the landing logo is long gone by the time the flight lands here).
+   opacity, not visibility:hidden or display:none — this <a> must stay
+   clickable (home link) at all times regardless of which state it's in;
+   visibility:hidden/display:none would remove it from hit-testing. No
+   transition on purpose — the landing logo must vanish INSTANTLY on the
+   first pixel of scroll, not fade. */
+.nav-logo-target{display:flex;align-items:center;gap:0;width:244px;height:50px;opacity:1;}
+nav.nav-scrolled .nav-logo-target{opacity:0;}
 .nav-logo-target-icon{width:47px;height:47px;flex-shrink:0;}
 .nav-logo-target-word{width:188px;height:31px;margin-left:-34px;}
+.nav-landing-img{display:block;width:100%;height:100%;object-fit:contain;}
 .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;letter-spacing:-0.2px;text-decoration:none;}
 .brand img{height:32px;width:auto;}
 /* Nav text is hardcoded bright white (not theme-aware) since it always floats
@@ -123,25 +131,54 @@ nav .wrap{display:flex;align-items:center;position:relative;height:64px;gap:16px
   min-height:1000px;display:flex;align-items:center;justify-content:center;
   position:relative;text-align:center;
 }
-.brand-mark > .wrap{width:100%;}
+/* No z-index here on purpose — position:relative alone doesn't create a
+   stacking context, so .brand-mark-icon/.brand-mark-word's own z-index:9999
+   (see below) can compete directly against the nav's z-index:10 at the top
+   level. Giving THIS element its own z-index would trap their high z-index
+   inside it instead, capping them at whatever this element's z-index is —
+   exactly the bug that kept the flying logo rendering behind the nav. */
+.brand-mark > .wrap{width:100%;position:relative;}
+/* Faint circuit-board pattern behind the section 2 content — many small
+   scattered component clusters (not a few long traces), each node given its
+   own animation-delay inline (see the SVG) so they breathe out of sync —
+   at any given moment several are near peak brightness together, several
+   are dim, which is what makes multiple dots read as visible at once
+   instead of one uniform pulse. Brand orange rather than the usual PCB-
+   photo cyan, kept mild/subtle overall since it's a background texture,
+   not the focal point. Purely decorative (aria-hidden) — never competes
+   with the logo/wordmark/text above it. */
+.brand-mark-bg{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.brand-mark-circuit{width:100%;height:100%;display:block;}
+.brand-mark-circuit .circuit-lines path{opacity:0.15;}
+.brand-mark-circuit .circuit-nodes circle{opacity:0.25;animation:circuitBreathe 4s ease-in-out infinite;}
+.brand-mark-circuit .circuit-pulses circle{opacity:0.85;}
+@keyframes circuitBreathe{0%,100%{opacity:0.2;}50%{opacity:0.75;}}
+@media (prefers-reduced-motion:reduce){
+  .brand-mark-circuit .circuit-pulses{display:none;}
+  .brand-mark-circuit .circuit-nodes circle{animation:none;opacity:0.4;}
+}
 .brand-mark-logo{display:inline-block;}
 /* These are the actual elements that fly to the nav (see shared.js) — each
    gets its own translate/scale every scroll frame, computed independently
    from its own center point to its own nav-logo-target-icon/-word center
    point, which is what lets the pair morph from stacked (here) to inline
-   (at the nav) during the flight. z-index lifts each above the nav bar
-   (z-index:10) once the handoff carries it up there; position:relative
-   gives each its own stacking context for that z-index to apply. */
+   (at the nav) during the flight. z-index:9999 keeps each on top of
+   absolutely everything else on the page — the nav (z-index:10) included —
+   for the whole flight, not just once docked; position:relative gives each
+   its own stacking context for that z-index to apply. pointer-events:none
+   lets clicks pass through to whatever's underneath — namely the real
+   .nav-logo-target link once docked, which should be the only thing that
+   actually receives the click here. */
 .brand-mark-icon{
-  position:relative;z-index:50;will-change:transform;
+  position:relative;z-index:9999;will-change:transform;pointer-events:none;
   width:220px;max-width:46vw;height:auto;filter:drop-shadow(0 18px 46px rgba(252,130,21,0.4));margin-bottom:-24px;
 }
 .brand-mark-word{
-  position:relative;z-index:50;will-change:transform;
+  position:relative;z-index:9999;will-change:transform;pointer-events:none;
   width:280px;max-width:60vw;height:auto;display:block;margin:0 auto 28px;
 }
 .brand-mark p.lead{font-size:18px;color:var(--text-muted);max-width:560px;margin:0 auto 32px;opacity:0.9;}
-.brand-mark-next{position:absolute;left:0;right:0;bottom:0;font-size:42px;font-weight:700;letter-spacing:0.6px;color:#FFFFFF;text-align:center;}
+.brand-mark-next{position:absolute;left:0;right:0;top:0;z-index:1;font-family:'Marcellus',Georgia,serif;font-weight:400;font-size:42px;letter-spacing:0.6px;color:#FFFFFF;text-align:center;}
 @media (max-width:720px){
   .brand-mark{min-height:auto;padding:40px 0 60px;}
   .brand-mark-icon{width:150px;margin-bottom:-16px;}
@@ -371,7 +408,6 @@ section.app-preview::before{
 /* ---- alternating showcase blocks ---- */
 section.showcase{padding:72px 0;border-top:1px solid var(--border);}
 .showcase-row{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;}
-.showcase-row.no-visual{grid-template-columns:1fr;max-width:640px;margin:0 auto;text-align:center;}
 .showcase-row.reverse .showcase-text{order:2;}
 .showcase-row.reverse .showcase-visual{order:1;}
 .showcase-text h2{font-size:26px;margin:0 0 14px;letter-spacing:-0.3px;}
@@ -419,6 +455,9 @@ footer.footer-big{padding:56px 0 32px;}
   header.hero p.lead{font-size:16px;}
   nav .wrap{height:auto;flex-direction:column;padding-block:14px;gap:10px;}
   .navlinks{position:static;transform:none;gap:14px;flex-wrap:wrap;justify-content:center;}
+  .nav-logo-target{width:165px;height:36px;}
+  .nav-logo-target-icon{width:33px;height:33px;}
+  .nav-logo-target-word{width:132px;height:22px;margin-left:-24px;}
   header.hero.hero-scenic{margin-top:-132px;}
   header.pagehead h1{font-size:28px;}
   .fg-grid{grid-template-columns:1fr;}

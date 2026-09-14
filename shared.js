@@ -1,32 +1,16 @@
-// Theme switcher — Dark / Bright / Grey. Applied via data-theme on <html>,
-// persisted so it carries across pages/visits.
 (function () {
-  function setTheme(name) {
-    if (name === 'dark') {
-      document.documentElement.removeAttribute('data-theme');
-    } else {
-      document.documentElement.setAttribute('data-theme', name);
-    }
-    try { localStorage.setItem('pf-theme', name); } catch (e) {}
-    document.querySelectorAll('.theme-switch button').forEach(function (b) {
-      b.classList.toggle('active', b.dataset.theme === name);
-    });
-  }
-
   document.addEventListener('DOMContentLoaded', function () {
-    var current = 'dark';
-    try { current = localStorage.getItem('pf-theme') || 'dark'; } catch (e) {}
-    document.querySelectorAll('.theme-switch button').forEach(function (b) {
-      b.classList.toggle('active', b.dataset.theme === current);
-      b.addEventListener('click', function () { setTheme(b.dataset.theme); });
-    });
-
     // Nav starts fully transparent (so the hero image shows through on top);
     // gains a solid background once scrolled past the top so it stays readable.
+    // Separately (and at a much smaller threshold): nav-scrolled marks the
+    // instant scrolling starts at all — that's what hides the landing-page
+    // logo (see .nav-landing-img in shared.css), independent of the nav
+    // background/solid state.
     var nav = document.querySelector('nav');
     if (nav) {
       var updateNav = function () {
         nav.classList.toggle('nav-solid', window.scrollY > 40);
+        nav.classList.toggle('nav-scrolled', window.scrollY > 0);
       };
       updateNav();
       window.addEventListener('scroll', updateNav, { passive: true });
@@ -40,7 +24,11 @@
     // cache its rest position/size and its own nav target's position/size
     // once, then every scroll frame interpolate a transform between them.
     var brandMark = document.querySelector('.brand-mark');
-    var NAV_H = 64;
+    var navEl = document.querySelector('nav');
+    // Measured from the real nav each time (not hardcoded), since the nav
+    // wraps to multiple rows and is taller than the desktop 64px on mobile —
+    // a hardcoded value here was silently wrong on phones.
+    var getNavH = function () { return navEl ? navEl.getBoundingClientRect().height : 64; };
 
     var makeFlyer = function (el, targetEl) {
       if (!el || !targetEl) return null;
@@ -115,7 +103,7 @@
         // viewport (it starts to scroll into view), 1 = it has reached the
         // nav (section 2 fully crossed) — both should have arrived by then.
         var lineY = brandMark.getBoundingClientRect().bottom;
-        var zone = window.innerHeight - NAV_H;
+        var zone = window.innerHeight - getNavH();
         var progress = (window.innerHeight - lineY) / zone;
         progress = Math.max(0, Math.min(1, progress));
 
@@ -137,16 +125,6 @@
       onResize();
       window.addEventListener('scroll', onScroll, { passive: true });
       window.addEventListener('resize', onResize);
-    }
-
-    // Section 3 app mock-up: live "Updated HH:MM:SS" readout, for authenticity.
-    var apClock = document.getElementById('ap-clock');
-    if (apClock) {
-      var tick = function () {
-        apClock.textContent = new Date().toLocaleTimeString('en-GB');
-      };
-      tick();
-      setInterval(tick, 1000);
     }
 
     // Section 3 feature-list calendar icon: shows today's actual date, same

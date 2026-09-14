@@ -18,8 +18,8 @@
 <nav>
   <div class="wrap">
     <a href="index.html" class="nav-logo-target" aria-label="PearlFox">
-      <span class="nav-logo-target-icon"></span>
-      <span class="nav-logo-target-word"></span>
+      <span class="nav-logo-target-icon"><img src="apple-touch-icon.png" alt="" class="nav-landing-img"></span>
+      <span class="nav-logo-target-word"><img src="wordmark.webp" alt="" class="nav-landing-img"></span>
     </a>
     <div class="navlinks">
       <a href="index.html#company">Company</a>
@@ -42,20 +42,97 @@
 </header>
 
 <section class="brand-mark" id="company">
+  <div class="brand-mark-bg" aria-hidden="true">
+    <svg class="brand-mark-circuit" viewBox="0 0 800 1000" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="node-glow" x="-200%" y="-200%" width="500%" height="500%">
+          <feGaussianBlur stdDeviation="3" result="blur"/>
+          <feMerge>
+            <feMergeNode in="blur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+      </defs>
+      <!-- Scattered small component clusters instead of a few long traces —
+           same circuit-board concept, denser and more evenly spread, so many
+           nodes are on screen (and breathing at different phases) together. -->
+      <g class="circuit-lines" fill="none" stroke="var(--fox-bright)" stroke-width="1.3" stroke-linejoin="round">
+        <path d="M20 60 H90 L130 100 H90 L130 140"/>
+        <path d="M250 30 V90 L290 130 V190"/>
+        <path d="M430 70 H500 L540 110 H610"/>
+        <path d="M660 40 L700 80 V150 L740 190"/>
+        <path d="M60 220 L100 260 H170 L210 300"/>
+        <path d="M330 240 H400 L440 280 V340"/>
+        <path d="M560 250 V310 L600 350 H660"/>
+        <path d="M40 380 H110 L150 420 H40"/>
+        <path d="M260 400 L300 440 H370"/>
+        <path d="M500 400 H570 L610 440 V500"/>
+        <path d="M700 380 V450 L660 490"/>
+        <path d="M120 520 H190 L230 560 H300"/>
+        <path d="M380 540 V600 L420 640"/>
+        <path d="M540 560 L580 600 H650 L690 640"/>
+        <path d="M30 620 L70 660 V720"/>
+        <path d="M230 680 H300 L340 720 H410"/>
+        <path d="M460 700 V760 L500 800"/>
+        <path d="M610 700 H680 L720 740"/>
+        <path d="M80 780 H150 L190 820 V880"/>
+        <path d="M330 820 L370 860 H440"/>
+        <path d="M540 830 V890 L580 930"/>
+        <path d="M660 850 H730 L770 890"/>
+        <path d="M180 920 H250 L290 960"/>
+        <path d="M400 900 H470 L510 940 H580"/>
+      </g>
+      <g class="circuit-nodes" filter="url(#node-glow)">
+        <circle cx="130" cy="140" r="3.6" style="animation-delay:-0.2s"/>
+        <circle cx="290" cy="190" r="3.6" style="animation-delay:-2.6s"/>
+        <circle cx="610" cy="110" r="3.6" style="animation-delay:-1.1s"/>
+        <circle cx="740" cy="190" r="3.6" style="animation-delay:-3.4s"/>
+        <circle cx="210" cy="300" r="3.6" style="animation-delay:-0.8s"/>
+        <circle cx="440" cy="340" r="3.6" style="animation-delay:-2.1s"/>
+        <circle cx="660" cy="350" r="3.6" style="animation-delay:-3.9s"/>
+        <circle cx="40" cy="420" r="3.6" style="animation-delay:-1.6s"/>
+        <circle cx="370" cy="440" r="3.6" style="animation-delay:-0.5s"/>
+        <circle cx="610" cy="500" r="3.6" style="animation-delay:-2.9s"/>
+        <circle cx="660" cy="490" r="3.6" style="animation-delay:-1.3s"/>
+        <circle cx="300" cy="560" r="3.6" style="animation-delay:-3.2s"/>
+        <circle cx="420" cy="640" r="3.6" style="animation-delay:-0.1s"/>
+        <circle cx="690" cy="640" r="3.6" style="animation-delay:-2.4s"/>
+        <circle cx="70" cy="720" r="3.6" style="animation-delay:-1.9s"/>
+        <circle cx="410" cy="720" r="3.6" style="animation-delay:-3.6s"/>
+        <circle cx="500" cy="800" r="3.6" style="animation-delay:-0.6s"/>
+        <circle cx="720" cy="740" r="3.6" style="animation-delay:-2.2s"/>
+        <circle cx="190" cy="880" r="3.6" style="animation-delay:-1.4s"/>
+        <circle cx="440" cy="860" r="3.6" style="animation-delay:-3.1s"/>
+        <circle cx="580" cy="930" r="3.6" style="animation-delay:-0.9s"/>
+        <circle cx="770" cy="890" r="3.6" style="animation-delay:-2.7s"/>
+        <circle cx="290" cy="960" r="3.6" style="animation-delay:-1.7s"/>
+        <circle cx="580" cy="940" r="3.6" style="animation-delay:-3.8s"/>
+      </g>
+      <g class="circuit-pulses" fill="var(--fox-bright)" filter="url(#node-glow)">
+        <circle r="3"><animateMotion dur="6s" repeatCount="indefinite" path="M20 60 H90 L130 100 H90 L130 140"/></circle>
+        <circle r="3"><animateMotion dur="7s" begin="1s" repeatCount="indefinite" path="M660 40 L700 80 V150 L740 190"/></circle>
+        <circle r="3"><animateMotion dur="6.5s" begin="2s" repeatCount="indefinite" path="M60 220 L100 260 H170 L210 300"/></circle>
+        <circle r="3"><animateMotion dur="8s" begin="0.5s" repeatCount="indefinite" path="M500 400 H570 L610 440 V500"/></circle>
+        <circle r="3"><animateMotion dur="7.5s" begin="3s" repeatCount="indefinite" path="M540 560 L580 600 H650 L690 640"/></circle>
+        <circle r="3"><animateMotion dur="6.8s" begin="1.5s" repeatCount="indefinite" path="M80 780 H150 L190 820 V880"/></circle>
+        <circle r="3"><animateMotion dur="7.2s" begin="2.5s" repeatCount="indefinite" path="M400 900 H470 L510 940 H580"/></circle>
+      </g>
+    </svg>
+  </div>
   <div class="wrap">
     <div class="brand-mark-logo">
       <img src="apple-touch-icon.png" alt="PearlFox" class="brand-mark-icon">
       <img src="wordmark.webp" alt="PearlFox" class="brand-mark-word">
     </div>
-    <p class="lead">A small software company building focused, well-crafted tools — starting with Eagle View, a desktop companion that keeps mail, meetings, and your day in one glance.</p>
+    <p class="lead">PearlFox builds focused, well-crafted software — starting with Eagle View, a desktop companion that keeps mail, meetings, and your day in one glance.</p>
     <div class="btn-row">
       <a class="btn-secondary" href="contact.html">Get in touch</a>
     </div>
-    <div class="brand-mark-next">Products</div>
   </div>
 </section>
 
 <section class="app-preview" id="products">
+  <div class="brand-mark-next">Products</div>
   <div class="wrap ap-grid">
     <div class="ap-text">
       <div class="eyebrow">
