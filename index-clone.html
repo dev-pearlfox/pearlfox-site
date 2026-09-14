@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PearlFox — Makers of Eagle View · Focused Software Studio</title>
+<meta name="description" content="PearlFox — makers of Eagle View, a desktop sidebar widget for staying on top of mail, meetings, and more.">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://pearlfox.io/">
+
+<!-- Open Graph (Facebook, LinkedIn, Slack, WhatsApp, iMessage, Discord) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PearlFox">
+<meta property="og:url" content="https://pearlfox.io/">
+<meta property="og:title" content="PearlFox — Makers of Eagle View">
+<meta property="og:description" content="PearlFox builds focused, well-crafted software — starting with Eagle View, a desktop companion for mail, meetings, and your day at a glance.">
+<meta property="og:image" content="https://pearlfox.io/social-card.png">
+<meta property="og:image:width" content="1080">
+<meta property="og:image:height" content="1080">
+<meta property="og:image:alt" content="PearlFox logo — fox curled around a luminous pearl">
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PearlFox — Makers of Eagle View">
+<meta name="twitter:description" content="Focused, well-crafted software. Eagle View keeps mail, meetings, and your day in one glance.">
+<meta name="twitter:image" content="https://pearlfox.io/social-card.png">
+<meta name="twitter:image:alt" content="PearlFox logo — fox curled around a luminous pearl">
+
+<!-- Structured data (schema.org / JSON-LD) for rich search results -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "PearlFox",
+  "url": "https://pearlfox.io/",
+  "logo": "https://pearlfox.io/social-card.png",
+  "description": "PearlFox is a software studio focused on building small, dependable tools done right — no bloat, no unnecessary complexity, just software that quietly does its job well.",
+  "email": "dev@pearlfox.io"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Eagle View",
+  "url": "https://eagleview.pearlfox.io/",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "macOS, Windows",
+  "description": "A desktop sidebar widget for staying on top of mail, meetings, tasks, and daily events in one always-current view.",
+  "image": "https://pearlfox.io/app-screenshot.webp",
+  "publisher": {
+    "@type": "Organization",
+    "name": "PearlFox",
+    "url": "https://pearlfox.io/"
+  },
+  "offers": {
+    "@type": "Offer",
+    "url": "https://eagleview.pearlfox.io/"
+  }
+}
+</script>
+
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="shared.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
+
+<!-- Fix #3: proper heading hierarchy support (h1 + footer h3) -->
+<style>
+  /* WCAG-standard visually-hidden pattern: element is invisible on screen but
+     available to screen readers and search engines for structure/SEO. */
+  .sr-only{
+    position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+    clip:rect(0,0,0,0);white-space:nowrap;border:0;
+  }
+  /* Footer column headings — renamed h4 -> h3 for proper heading cascade.
+     Duplicates the shared.css .fcol h4 styling until we promote back. */
+  .footer-big .fcol h3{
+    font-size:12px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;
+    color:var(--text-muted);opacity:0.65;margin:0 0 14px;
+  }
+
+  /* Fix #4: pull inline style attributes out of the HTML into real classes. */
+
+  /* Perf hint: paint containment on the section-2 background wrapper. */
+  .brand-mark-bg{contain:paint;}
+
+  /* "Explore more" CTA in Section 3 — layout variant of .btn-secondary. */
+  .btn-explore{display:inline-block;align-self:flex-start;margin-top:-24px;padding:9px 27px;}
+
+  /* About-section CTA row — small spacing tweak. */
+  .about-cta{margin-top:20px;}
+
+  /* Footer brand wordmark: use pearl-light for the "Pearl" span here. */
+  .footer-big .fbrand .pearl{color:var(--pearl-light);}
+</style>
+</head>
+<body>
+
+<!-- Primary page heading (visually hidden, present for accessibility + SEO) -->
+<h1 class="sr-only">PearlFox — Makers of Eagle View, a focused desktop companion for mail, meetings, and daily tasks.</h1>
+
+<nav>
+  <div class="wrap">
+    <a href="index.html" class="nav-logo-target" aria-label="PearlFox">
+      <span class="nav-logo-target-icon"><img src="apple-touch-icon.png" alt="" class="nav-landing-img"></span>
+      <span class="nav-logo-target-word"><img src="wordmark.webp" alt="" class="nav-landing-img"></span>
+    </a>
+    <div class="navlinks">
+      <a href="index.html#company">Company</a>
+      <a href="index.html#products">Products</a>
+      <a href="security.html">Security</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero hero-scenic hero-photo-mode">
+  <div class="hero-bg" aria-hidden="true">
+    <img src="hero-wide.webp" alt="" class="hero-photo" width="1915" height="821">
+    <div class="hero-fade"></div>
+  </div>
+  <div class="hero-tagline">
+    <h2><span>Work</span><span class="tagline-dot">.</span><span>Focus</span><span class="tagline-dot">.</span><span>Relax</span></h2>
+  </div>
+</header>
+
+<section class="brand-mark" id="company">
+  <div class="brand-mark-bg" aria-hidden="true">
+    <svg class="brand-mark-pcb-dense" viewBox="0 0 800 1000" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <style>
+          .tr-base{fill:none;stroke:var(--fox-bright);opacity:0.22;stroke-linecap:round;}
+          .tr-flow{fill:none;stroke:var(--fox-bright);stroke-linecap:round;opacity:1;}
+          @keyframes trFlow{0%{stroke-dashoffset:0;}100%{stroke-dashoffset:-100;}}
+          .via{fill:var(--fox-bright);opacity:0.4;}
+          .pad{fill:var(--fox-bright);opacity:0.35;stroke:var(--fox-bright);stroke-width:0.6;stroke-opacity:0.7;}
+          .tp-outer{fill:none;stroke:var(--fox-bright);stroke-width:0.7;opacity:0.45;}
+          .tp-inner{fill:var(--fox-bright);opacity:0.6;}
+          .pv-res{fill:rgba(20,10,4,0.75);stroke:var(--fox-bright);stroke-width:0.7;opacity:0.55;}
+          .pv-plate{stroke:var(--fox-bright);stroke-width:1.5;opacity:0.6;}
+          .pv-lead{stroke:var(--fox-bright);stroke-width:0.7;opacity:0.45;}
+          @media (prefers-reduced-motion:reduce){
+            .tr-flow{animation:none;stroke-dasharray:none;opacity:0.32;}
+          }
+        </style>
+      </defs>
+
+      <!-- Base trace network (all static) -->
+      <g shape-rendering="geometricPrecision"><path d="M0 80 L270 80 A10 10 0 0 1 280 90 L280 250 A10 10 0 0 0 290 260 L800 260" class="tr-base" style="stroke-width:1.5" pathLength="100"/><path d="M0 460 L190 460 A10 10 0 0 1 200 470 L200 650 A10 10 0 0 0 210 660 L800 660" class="tr-base" style="stroke-width:1.5" pathLength="100"/><path d="M0 920 L350 920 A10 10 0 0 0 360 910 L360 790 A10 10 0 0 1 370 780 L800 780" class="tr-base" style="stroke-width:1.5" pathLength="100"/><path d="M120 0 L120 190 A10 10 0 0 0 130 200 L490 200 A10 10 0 0 1 500 210 L500 460" class="tr-base" style="stroke-width:1.5" pathLength="100"/><path d="M680 0 L680 170 A10 10 0 0 1 670 180 L570 180 A10 10 0 0 0 560 190 L560 460" class="tr-base" style="stroke-width:1.5" pathLength="100"/><path d="M400 1000 L400 830 A10 10 0 0 0 390 820 L150 820 A10 10 0 0 1 140 810 L140 640" class="tr-base" style="stroke-width:1.5" pathLength="100"/><path d="M760 1000 L760 870 A10 10 0 0 0 750 860 L630 860 A10 10 0 0 1 620 850 L620 720" class="tr-base" style="stroke-width:1.5" pathLength="100"/><path d="M0 340 L90 340 A10 10 0 0 1 100 350 L100 490 A10 10 0 0 0 110 500 L280 500" class="tr-base" style="stroke-width:1.5" pathLength="100"/><path d="M800 380 L710 380 A10 10 0 0 0 700 390 L700 510 A10 10 0 0 1 690 520 L540 520" class="tr-base" style="stroke-width:1.5" pathLength="100"/><path d="M0 720 L50 720 A10 10 0 0 1 60 730 L60 890 A10 10 0 0 0 70 900 L200 900" class="tr-base" style="stroke-width:1.5" pathLength="100"/><path d="M0 160 L50 160 A10 10 0 0 0 60 150 L60 50 A10 10 0 0 1 70 40 L240 40" class="tr-base" style="stroke-width:1.5" pathLength="100"/><path d="M800 60 L730 60 A10 10 0 0 0 720 70 L720 130 A10 10 0 0 1 710 140 L600 140" class="tr-base" style="stroke-width:1.5" pathLength="100"/><path d="M600 740 L600 590 A10 10 0 0 1 610 580 L690 580 A10 10 0 0 0 700 570 L700 400" class="tr-base" style="stroke-width:1.2" pathLength="100"/><path d="M260 160 L260 250 A10 10 0 0 0 270 260 L410 260 A10 10 0 0 1 420 270 L420 420" class="tr-base" style="stroke-width:1.2" pathLength="100"/><path d="M540 600 L730 600 A10 10 0 0 1 740 610 L740 680" class="tr-base" style="stroke-width:1.2" pathLength="100"/><path d="M80 280 L270 280 A10 10 0 0 0 280 270 L280 160" class="tr-base" style="stroke-width:1.2" pathLength="100"/><path d="M600 780 L430 780 A10 10 0 0 1 420 770 L420 640" class="tr-base" style="stroke-width:1.2" pathLength="100"/><path d="M40 880 L40 710 A10 10 0 0 0 30 700 L20 700" class="tr-base" style="stroke-width:1.2" pathLength="100"/><path d="M740 140 L740 330 A10 10 0 0 0 750 340 L770 340 A10 10 0 0 0 780 330 L780 260" class="tr-base" style="stroke-width:1.2" pathLength="100"/><path d="M120 760 L120 690 A10 10 0 0 0 110 680 L20 680" class="tr-base" style="stroke-width:1.2" pathLength="100"/><path d="M120 60 L30 60 A10 10 0 0 0 20 70 L20 200" class="tr-base" style="stroke-width:1.2" pathLength="100"/><path d="M520 940 L520 870 A10 10 0 0 1 530 860 L710 860 A10 10 0 0 0 720 850 L720 740" class="tr-base" style="stroke-width:1.2" pathLength="100"/><path d="M140 420 L270 420 A10 10 0 0 1 280 430 L280 510 A10 10 0 0 0 290 520 L460 520" class="tr-base" style="stroke-width:1.2" pathLength="100"/><path d="M160 40 L160 30 A10 10 0 0 0 150 20 L60 20" class="tr-base" style="stroke-width:1.2" pathLength="100"/><path d="M740 280 L570 280 A10 10 0 0 0 560 290 L560 410 A10 10 0 0 1 550 420 L480 420" class="tr-base" style="stroke-width:1.2" pathLength="100"/><path d="M540 560 L650 560 A10 10 0 0 0 660 550 L660 480" class="tr-base" style="stroke-width:1.2" pathLength="100"/><path d="M300 260 L370 260 A10 10 0 0 1 380 270 L380 350 A10 10 0 0 1 370 360 L260 360" class="tr-base" style="stroke-width:1.2" pathLength="100"/><path d="M40 820 L40 950 A10 10 0 0 0 50 960 L110 960 A10 10 0 0 1 120 970 L120 980" class="tr-base" style="stroke-width:1.2" pathLength="100"/><path d="M780 840 L780 960" class="tr-base" style="stroke-width:1.2" pathLength="100"/><path d="M620 200 L430 200 A10 10 0 0 1 420 190 L420 110 A10 10 0 0 1 430 100 L540 100" class="tr-base" style="stroke-width:1.2" pathLength="100"/></g>
+
+      <!-- Edge solder pads -->
+      <g><rect x="776.5" y="836.5" width="7" height="7" rx="1" class="pad"/><rect x="-3.5" y="456.5" width="7" height="7" rx="1" class="pad"/><rect x="116.5" y="976.5" width="7" height="7" rx="1" class="pad"/><rect x="796.5" y="256.5" width="7" height="7" rx="1" class="pad"/><rect x="16.5" y="196.5" width="7" height="7" rx="1" class="pad"/><rect x="776.5" y="256.5" width="7" height="7" rx="1" class="pad"/><rect x="16.5" y="696.5" width="7" height="7" rx="1" class="pad"/><rect x="-3.5" y="916.5" width="7" height="7" rx="1" class="pad"/><rect x="396.5" y="996.5" width="7" height="7" rx="1" class="pad"/><rect x="116.5" y="-3.5" width="7" height="7" rx="1" class="pad"/><rect x="-3.5" y="336.5" width="7" height="7" rx="1" class="pad"/><rect x="-3.5" y="156.5" width="7" height="7" rx="1" class="pad"/><rect x="-3.5" y="76.5" width="7" height="7" rx="1" class="pad"/><rect x="796.5" y="776.5" width="7" height="7" rx="1" class="pad"/><rect x="796.5" y="56.5" width="7" height="7" rx="1" class="pad"/><rect x="776.5" y="956.5" width="7" height="7" rx="1" class="pad"/><rect x="756.5" y="996.5" width="7" height="7" rx="1" class="pad"/><rect x="796.5" y="376.5" width="7" height="7" rx="1" class="pad"/><rect x="16.5" y="676.5" width="7" height="7" rx="1" class="pad"/><rect x="-3.5" y="716.5" width="7" height="7" rx="1" class="pad"/><rect x="676.5" y="-3.5" width="7" height="7" rx="1" class="pad"/><rect x="56.5" y="16.5" width="7" height="7" rx="1" class="pad"/><rect x="796.5" y="656.5" width="7" height="7" rx="1" class="pad"/></g>
+
+      <!-- Vias -->
+      <g><circle cx="0" cy="460" r="2.2" class="via"/><circle cx="700" cy="380" r="2.2" class="via"/><circle cx="200" cy="460" r="2.2" class="via"/><circle cx="480" cy="420" r="2.2" class="via"/><circle cx="280" cy="160" r="2.2" class="via"/><circle cx="120" cy="760" r="2.2" class="via"/><circle cx="600" cy="140" r="2.2" class="via"/><circle cx="420" cy="200" r="2.2" class="via"/><circle cx="140" cy="820" r="2.2" class="via"/><circle cx="280" cy="260" r="2.2" class="via"/><circle cx="460" cy="520" r="2.2" class="via"/><circle cx="520" cy="940" r="2.2" class="via"/><circle cx="120" cy="680" r="2.2" class="via"/><circle cx="140" cy="420" r="2.2" class="via"/><circle cx="600" cy="780" r="2.2" class="via"/><circle cx="620" cy="200" r="2.2" class="via"/><circle cx="560" cy="280" r="2.2" class="via"/><circle cx="0" cy="80" r="2.2" class="via"/><circle cx="540" cy="100" r="2.2" class="via"/><circle cx="760" cy="860" r="2.2" class="via"/><circle cx="80" cy="280" r="2.2" class="via"/><circle cx="120" cy="60" r="2.2" class="via"/><circle cx="520" cy="860" r="2.2" class="via"/><circle cx="280" cy="500" r="2.2" class="via"/><circle cx="720" cy="140" r="2.2" class="via"/><circle cx="720" cy="860" r="2.2" class="via"/><circle cx="20" cy="680" r="2.2" class="via"/><circle cx="0" cy="720" r="2.2" class="via"/><circle cx="680" cy="180" r="2.2" class="via"/><circle cx="40" cy="820" r="2.2" class="via"/><circle cx="380" cy="260" r="2.2" class="via"/><circle cx="780" cy="340" r="2.2" class="via"/><circle cx="720" cy="60" r="2.2" class="via"/><circle cx="280" cy="420" r="2.2" class="via"/><circle cx="60" cy="160" r="2.2" class="via"/><circle cx="740" cy="340" r="2.2" class="via"/><circle cx="20" cy="200" r="2.2" class="via"/><circle cx="780" cy="260" r="2.2" class="via"/><circle cx="20" cy="700" r="2.2" class="via"/><circle cx="260" cy="160" r="2.2" class="via"/><circle cx="620" cy="860" r="2.2" class="via"/><circle cx="420" cy="780" r="2.2" class="via"/><circle cx="300" cy="260" r="2.2" class="via"/><circle cx="260" cy="260" r="2.2" class="via"/><circle cx="0" cy="160" r="2.2" class="via"/><circle cx="60" cy="720" r="2.2" class="via"/><circle cx="740" cy="680" r="2.2" class="via"/><circle cx="240" cy="40" r="2.2" class="via"/><circle cx="160" cy="20" r="2.2" class="via"/><circle cx="700" cy="400" r="2.2" class="via"/><circle cx="560" cy="460" r="2.2" class="via"/><circle cx="120" cy="960" r="2.2" class="via"/><circle cx="740" cy="280" r="2.2" class="via"/><circle cx="660" cy="480" r="2.2" class="via"/><circle cx="540" cy="600" r="2.2" class="via"/><circle cx="740" cy="600" r="2.2" class="via"/><circle cx="280" cy="280" r="2.2" class="via"/><circle cx="60" cy="20" r="2.2" class="via"/><circle cx="200" cy="900" r="2.2" class="via"/><circle cx="100" cy="340" r="2.2" class="via"/><circle cx="540" cy="520" r="2.2" class="via"/><circle cx="20" cy="60" r="2.2" class="via"/><circle cx="800" cy="660" r="2.2" class="via"/><circle cx="600" cy="580" r="2.2" class="via"/><circle cx="780" cy="840" r="2.2" class="via"/><circle cx="620" cy="720" r="2.2" class="via"/><circle cx="420" cy="640" r="2.2" class="via"/><circle cx="800" cy="260" r="2.2" class="via"/><circle cx="380" cy="360" r="2.2" class="via"/><circle cx="40" cy="700" r="2.2" class="via"/><circle cx="280" cy="520" r="2.2" class="via"/><circle cx="400" cy="820" r="2.2" class="via"/><circle cx="120" cy="0" r="2.2" class="via"/><circle cx="0" cy="340" r="2.2" class="via"/><circle cx="60" cy="900" r="2.2" class="via"/><circle cx="100" cy="500" r="2.2" class="via"/><circle cx="660" cy="560" r="2.2" class="via"/><circle cx="740" cy="140" r="2.2" class="via"/><circle cx="700" cy="580" r="2.2" class="via"/><circle cx="200" cy="660" r="2.2" class="via"/><circle cx="360" cy="920" r="2.2" class="via"/><circle cx="600" cy="740" r="2.2" class="via"/><circle cx="260" cy="360" r="2.2" class="via"/><circle cx="160" cy="40" r="2.2" class="via"/><circle cx="500" cy="200" r="2.2" class="via"/><circle cx="720" cy="740" r="2.2" class="via"/><circle cx="120" cy="980" r="2.2" class="via"/><circle cx="420" cy="100" r="2.2" class="via"/><circle cx="40" cy="880" r="2.2" class="via"/><circle cx="700" cy="520" r="2.2" class="via"/><circle cx="420" cy="420" r="2.2" class="via"/><circle cx="0" cy="920" r="2.2" class="via"/><circle cx="400" cy="1000" r="2.2" class="via"/><circle cx="60" cy="40" r="2.2" class="via"/><circle cx="560" cy="180" r="2.2" class="via"/><circle cx="280" cy="80" r="2.2" class="via"/><circle cx="140" cy="640" r="2.2" class="via"/><circle cx="360" cy="780" r="2.2" class="via"/><circle cx="800" cy="780" r="2.2" class="via"/><circle cx="800" cy="60" r="2.2" class="via"/><circle cx="420" cy="260" r="2.2" class="via"/><circle cx="560" cy="420" r="2.2" class="via"/><circle cx="780" cy="960" r="2.2" class="via"/><circle cx="120" cy="200" r="2.2" class="via"/><circle cx="760" cy="1000" r="2.2" class="via"/><circle cx="800" cy="380" r="2.2" class="via"/><circle cx="500" cy="460" r="2.2" class="via"/><circle cx="540" cy="560" r="2.2" class="via"/><circle cx="680" cy="0" r="2.2" class="via"/><circle cx="40" cy="960" r="2.2" class="via"/></g>
+
+      <!-- Test points -->
+      <g><circle cx="380" cy="500" r="4" class="tp-outer"/><circle cx="380" cy="500" r="1.6" class="tp-inner"/><circle cx="720" cy="80" r="4" class="tp-outer"/><circle cx="720" cy="80" r="1.6" class="tp-inner"/><circle cx="640" cy="360" r="4" class="tp-outer"/><circle cx="640" cy="360" r="1.6" class="tp-inner"/><circle cx="120" cy="260" r="4" class="tp-outer"/><circle cx="120" cy="260" r="1.6" class="tp-inner"/><circle cx="200" cy="520" r="4" class="tp-outer"/><circle cx="200" cy="520" r="1.6" class="tp-inner"/><circle cx="660" cy="360" r="4" class="tp-outer"/><circle cx="660" cy="360" r="1.6" class="tp-inner"/><circle cx="540" cy="740" r="4" class="tp-outer"/><circle cx="540" cy="740" r="1.6" class="tp-inner"/><circle cx="180" cy="780" r="4" class="tp-outer"/><circle cx="180" cy="780" r="1.6" class="tp-inner"/></g>
+
+      <!-- Passive components -->
+      <g><g><line x1="357" y1="794" x2="357" y2="806" class="pv-plate"/><line x1="363" y1="794" x2="363" y2="806" class="pv-plate"/><line x1="349" y1="800" x2="357" y2="800" class="pv-lead"/><line x1="363"  y1="800" x2="371" y2="800" class="pv-lead"/></g><g><rect x="511" y="817" width="18" height="6" rx="1" class="pv-res"/><line x1="506" y1="820" x2="511" y2="820" class="pv-lead"/><line x1="529"  y1="820" x2="534" y2="820" class="pv-lead"/></g><g><rect x="51" y="657" width="18" height="6" rx="1" class="pv-res"/><line x1="46" y1="660" x2="51" y2="660" class="pv-lead"/><line x1="69"  y1="660" x2="74" y2="660" class="pv-lead"/></g><g transform="rotate(90 300 960)"><rect x="291" y="957" width="18" height="6" rx="1" class="pv-res"/><line x1="286" y1="960" x2="291" y2="960" class="pv-lead"/><line x1="309"  y1="960" x2="314" y2="960" class="pv-lead"/></g><g><rect x="551" y="857" width="18" height="6" rx="1" class="pv-res"/><line x1="546" y1="860" x2="551" y2="860" class="pv-lead"/><line x1="569"  y1="860" x2="574" y2="860" class="pv-lead"/></g><g><rect x="231" y="717" width="18" height="6" rx="1" class="pv-res"/><line x1="226" y1="720" x2="231" y2="720" class="pv-lead"/><line x1="249"  y1="720" x2="254" y2="720" class="pv-lead"/></g><g><line x1="137" y1="254" x2="137" y2="266" class="pv-plate"/><line x1="143" y1="254" x2="143" y2="266" class="pv-plate"/><line x1="129" y1="260" x2="137" y2="260" class="pv-lead"/><line x1="143"  y1="260" x2="151" y2="260" class="pv-lead"/></g><g transform="rotate(90 440 80)"><rect x="431" y="77" width="18" height="6" rx="1" class="pv-res"/><line x1="426" y1="80" x2="431" y2="80" class="pv-lead"/><line x1="449"  y1="80" x2="454" y2="80" class="pv-lead"/></g><g transform="rotate(90 540 960)"><rect x="531" y="957" width="18" height="6" rx="1" class="pv-res"/><line x1="526" y1="960" x2="531" y2="960" class="pv-lead"/><line x1="549"  y1="960" x2="554" y2="960" class="pv-lead"/></g><g transform="rotate(90 780 620)"><rect x="771" y="617" width="18" height="6" rx="1" class="pv-res"/><line x1="766" y1="620" x2="771" y2="620" class="pv-lead"/><line x1="789"  y1="620" x2="794" y2="620" class="pv-lead"/></g><g transform="rotate(90 180 100)"><rect x="171" y="97" width="18" height="6" rx="1" class="pv-res"/><line x1="166" y1="100" x2="171" y2="100" class="pv-lead"/><line x1="189"  y1="100" x2="194" y2="100" class="pv-lead"/></g><g transform="rotate(90 320 380)"><line x1="317" y1="374" x2="317" y2="386" class="pv-plate"/><line x1="323" y1="374" x2="323" y2="386" class="pv-plate"/><line x1="309" y1="380" x2="317" y2="380" class="pv-lead"/><line x1="323"  y1="380" x2="331" y2="380" class="pv-lead"/></g></g>
+
+      <!-- Animated current-flow overlay (only on the traces that matter) -->
+      <g><path d="M0 80 L270 80 A10 10 0 0 1 280 90 L280 250 A10 10 0 0 0 290 260 L800 260" class="tr-flow" pathLength="100" style="stroke-width:1.5;stroke-dasharray:5 45 5 45;animation:trFlow 6.0s linear infinite;animation-delay:-5.07s"/><path d="M0 460 L190 460 A10 10 0 0 1 200 470 L200 650 A10 10 0 0 0 210 660 L800 660" class="tr-flow" pathLength="100" style="stroke-width:1.5;stroke-dasharray:4 30 4 62;animation:trFlow 6.4s linear infinite;animation-delay:-2.07s"/><path d="M0 920 L350 920 A10 10 0 0 0 360 910 L360 790 A10 10 0 0 1 370 780 L800 780" class="tr-flow" pathLength="100" style="stroke-width:1.5;stroke-dasharray:4 30 4 62;animation:trFlow 7.2s linear infinite;animation-delay:-0.77s"/><path d="M120 0 L120 190 A10 10 0 0 0 130 200 L490 200 A10 10 0 0 1 500 210 L500 460" class="tr-flow" pathLength="100" style="stroke-width:1.5;stroke-dasharray:6 94;animation:trFlow 7.6s linear infinite;animation-delay:-1.25s"/><path d="M680 0 L680 170 A10 10 0 0 1 670 180 L570 180 A10 10 0 0 0 560 190 L560 460" class="tr-flow" pathLength="100" style="stroke-width:1.5;stroke-dasharray:4 30 4 62;animation:trFlow 5.4s linear infinite;animation-delay:-0.61s"/><path d="M400 1000 L400 830 A10 10 0 0 0 390 820 L150 820 A10 10 0 0 1 140 810 L140 640" class="tr-flow" pathLength="100" style="stroke-width:1.5;stroke-dasharray:6 94;animation:trFlow 8.0s linear infinite;animation-delay:-4.39s"/><path d="M760 1000 L760 870 A10 10 0 0 0 750 860 L630 860 A10 10 0 0 1 620 850 L620 720" class="tr-flow" pathLength="100" style="stroke-width:1.5;stroke-dasharray:6 94;animation:trFlow 7.0s linear infinite;animation-delay:-4.48s"/><path d="M0 340 L90 340 A10 10 0 0 1 100 350 L100 490 A10 10 0 0 0 110 500 L280 500" class="tr-flow" pathLength="100" style="stroke-width:1.5;stroke-dasharray:5 45 5 45;animation:trFlow 7.2s linear infinite;animation-delay:-0.48s"/><path d="M800 380 L710 380 A10 10 0 0 0 700 390 L700 510 A10 10 0 0 1 690 520 L540 520" class="tr-flow" pathLength="100" style="stroke-width:1.5;stroke-dasharray:4 30 4 62;animation:trFlow 6.0s linear infinite;animation-delay:-5.8s"/><path d="M0 720 L50 720 A10 10 0 0 1 60 730 L60 890 A10 10 0 0 0 70 900 L200 900" class="tr-flow" pathLength="100" style="stroke-width:1.5;stroke-dasharray:5 45 5 45;animation:trFlow 7.1s linear infinite;animation-delay:-3.16s"/><path d="M0 160 L50 160 A10 10 0 0 0 60 150 L60 50 A10 10 0 0 1 70 40 L240 40" class="tr-flow" pathLength="100" style="stroke-width:1.5;stroke-dasharray:5 45 5 45;animation:trFlow 7.0s linear infinite;animation-delay:-6.37s"/><path d="M800 60 L730 60 A10 10 0 0 0 720 70 L720 130 A10 10 0 0 1 710 140 L600 140" class="tr-flow" pathLength="100" style="stroke-width:1.5;stroke-dasharray:5 45 5 45;animation:trFlow 5.5s linear infinite;animation-delay:-4.4s"/><path d="M600 780 L430 780 A10 10 0 0 1 420 770 L420 640" class="tr-flow" pathLength="100" style="stroke-width:1.2;stroke-dasharray:5 45 5 45;animation:trFlow 7.3s linear infinite;animation-delay:-3.51s"/><path d="M140 420 L270 420 A10 10 0 0 1 280 430 L280 510 A10 10 0 0 0 290 520 L460 520" class="tr-flow" pathLength="100" style="stroke-width:1.2;stroke-dasharray:5 45 5 45;animation:trFlow 8.4s linear infinite;animation-delay:-1.71s"/><path d="M740 280 L570 280 A10 10 0 0 0 560 290 L560 410 A10 10 0 0 1 550 420 L480 420" class="tr-flow" pathLength="100" style="stroke-width:1.2;stroke-dasharray:4 30 4 62;animation:trFlow 6.6s linear infinite;animation-delay:-4.92s"/><path d="M620 200 L430 200 A10 10 0 0 1 420 190 L420 110 A10 10 0 0 1 430 100 L540 100" class="tr-flow" pathLength="100" style="stroke-width:1.2;stroke-dasharray:5 45 5 45;animation:trFlow 8.7s linear infinite;animation-delay:-0.79s"/></g>
+    </svg>
+  </div>
+  <div class="wrap">
+    <div class="brand-mark-logo">
+      <img src="apple-touch-icon.png" alt="PearlFox" class="brand-mark-icon" width="192" height="192">
+      <img src="wordmark.webp" alt="PearlFox" class="brand-mark-word" width="840" height="280">
+    </div>
+    <p class="lead">PearlFox builds focused, well-crafted software — starting with Eagle View, a desktop companion that keeps mail, meetings, and your day in one glance.</p>
+    <div class="btn-row">
+      <a class="btn-secondary" href="contact.html">Get in touch</a>
+    </div>
+  </div>
+</section>
+
+<section class="app-preview" id="products">
+  <div class="brand-mark-next">Products</div>
+  <div class="wrap ap-grid">
+    <div class="ap-text">
+      <div class="eyebrow">
+        <svg width="40" height="40" viewBox="0 0 100 100" fill="none" class="eyebrow-icon">
+          <defs>
+            <linearGradient id="eyeb-eagle-body" x1="50" y1="15" x2="50" y2="85" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#FFFFFF"/>
+              <stop offset="100%" stop-color="#B8E8E4"/>
+            </linearGradient>
+          </defs>
+          <polygon points="50,8 67,40 50,35 33,40" fill="url(#eyeb-eagle-body)"/>
+          <polygon points="50,35 10,25 20,50 38,50" fill="url(#eyeb-eagle-body)" opacity="0.9"/>
+          <polygon points="50,35 90,25 80,50 62,50" fill="url(#eyeb-eagle-body)" opacity="0.9"/>
+          <polygon points="38,50 20,60 30,72 50,65" fill="url(#eyeb-eagle-body)" opacity="0.8"/>
+          <polygon points="62,50 80,60 70,72 50,65" fill="url(#eyeb-eagle-body)" opacity="0.8"/>
+          <polygon points="50,65 44,85 50,80 56,85" fill="url(#eyeb-eagle-body)" opacity="0.75"/>
+        </svg>
+        Eagle View
+      </div>
+      <h2>All your work, always in view.</h2>
+      <p>Eagle View brings the parts of your workday you check constantly into one quiet, always-current sidebar.</p>
+      <ul class="ap-list">
+        <li>
+          <span class="ap-ico ap-ico-stack">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <defs>
+                <linearGradient id="li-mail-bg" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#42A5F5"/>
+                  <stop offset="100%" stop-color="#1565C0"/>
+                </linearGradient>
+              </defs>
+              <rect x="0" y="2" width="24" height="20" rx="2.5" fill="url(#li-mail-bg)"/>
+              <path d="M0 5.5 L12 14.5 L24 5.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M0 21 L8 13.5" stroke="white" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>
+              <path d="M24 21 L16 13.5" stroke="white" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>
+              <text x="6" y="19" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="12" font-weight="bold" font-family="Arial, sans-serif" opacity="0.95">O</text>
+            </svg>
+            <svg width="20" height="20" viewBox="52 42 88 66" fill="none">
+              <rect x="52" y="48" width="88" height="60" rx="4" fill="white"/>
+              <path d="M52 59 L72 74 L72 108 L52 108 Z" fill="#4285F4"/>
+              <path d="M120 74 L140 59 L140 108 L120 108 Z" fill="#34A853"/>
+              <path d="M72 48 L96 66 L120 48 L120 74 L96 92 L72 74 Z" fill="#EA4335"/>
+              <path d="M120 48 L120 74 L140 59 L140 48 Z" fill="#FBBC04"/>
+              <path d="M72 48 L72 74 L52 59 L52 48 Z" fill="#C5221F"/>
+            </svg>
+          </span>
+          <div><strong>Live Mail &amp; To Do</strong><span>Real-time rows for mail and flagged items, refreshed on your own schedule.</span></div>
+        </li>
+        <li>
+          <span class="ap-ico ap-ico-stack">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <defs>
+                <linearGradient id="li-cal-hdr" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#FFC878"/>
+                  <stop offset="50%" stop-color="#E87722"/>
+                  <stop offset="100%" stop-color="#B85400"/>
+                </linearGradient>
+                <linearGradient id="li-cal-body" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#FFFFFF"/>
+                  <stop offset="100%" stop-color="#EDE9DF"/>
+                </linearGradient>
+                <linearGradient id="li-cal-peg" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#FFA040"/>
+                  <stop offset="100%" stop-color="#7A3200"/>
+                </linearGradient>
+              </defs>
+              <rect x="0.5" y="3" width="23" height="20.5" rx="3" fill="url(#li-cal-body)"/>
+              <rect x="0.5" y="3" width="23" height="6" rx="3" fill="url(#li-cal-hdr)"/>
+              <rect x="0.5" y="7" width="23" height="2" fill="url(#li-cal-hdr)"/>
+              <rect x="6" y="0.5" width="2.5" height="5.5" rx="1.25" fill="url(#li-cal-peg)"/>
+              <rect x="15.5" y="0.5" width="2.5" height="5.5" rx="1.25" fill="url(#li-cal-peg)"/>
+              <text id="ap-cal-day" x="12" y="20.5" text-anchor="middle" font-size="11" font-weight="900" fill="#7A3200" font-family="-apple-system, BlinkMacSystemFont, sans-serif" letter-spacing="-0.5">13</text>
+            </svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <defs>
+                <linearGradient id="li-flag-fill" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#FF6B6B"/>
+                  <stop offset="100%" stop-color="#C0392B"/>
+                </linearGradient>
+              </defs>
+              <line x1="5" y1="2.5" x2="5" y2="21.5" stroke="rgba(240,220,190,0.85)" stroke-width="2" stroke-linecap="round"/>
+              <path d="M5 3.5 L20 7.5 L5 13 Z" fill="url(#li-flag-fill)"/>
+              <circle cx="5" cy="21.5" r="1.2" fill="rgba(240,220,190,0.7)"/>
+            </svg>
+          </span>
+          <div><strong>Meetings &amp; To Do, always current</strong><span>Your next meeting, join link, and flagged items — without opening a calendar app or digging through mail.</span></div>
+        </li>
+        <li>
+          <span class="ap-ico ap-ico-stack ap-ico-stack-wide">
+            <svg width="20" height="20" viewBox="4 4 36 38" fill="none">
+              <path fill="#7B83DB" d="M21.9999 20h12c3.3137 0 6 2.6863 6 6v10c0 3.3137-2.6863 6-6 6s-6-2.6863-6-6V26c0-3.3137-2.6863-6-6-6"/>
+              <path fill="#5B5EA6" d="M7.99988 24c0-3.3137 2.68632-6 6.00002-6h8c3.3137 0 6 2.6863 6 6v12c0 3.3137 2.6863 6 6 6l-16.0001-.0001c-5.5228 0-9.99992-4.4771-9.99992-10z"/>
+              <circle cx="32.9999" cy="13" r="5" fill="#9EA4DE"/>
+              <circle cx="17.9999" cy="10" r="6" fill="#7B83DB"/>
+              <rect width="16" height="16" x="4" y="23" rx="3.25" fill="#464EB8"/>
+              <path fill="white" d="M15.4792 28.1054h-2.4471v7.466h-2.0648v-7.466H8.52014v-1.6768h6.95906z"/>
+            </svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <rect x="6.5" y="12.6" width="5" height="11.4" rx="2.5" fill="#E01E5A"/>
+              <circle cx="2.6" cy="15.1" r="2.5" fill="#E01E5A"/>
+              <rect x="0" y="6.3" width="11.4" height="5" rx="2.5" fill="#36C5F0"/>
+              <circle cx="8.9" cy="2.6" r="2.5" fill="#36C5F0"/>
+              <rect x="12.5" y="0" width="5" height="11.4" rx="2.5" fill="#2EB67D"/>
+              <circle cx="21.4" cy="8.9" r="2.5" fill="#2EB67D"/>
+              <rect x="12.6" y="12.5" width="11.4" height="5" rx="2.5" fill="#ECB22E"/>
+              <circle cx="15.1" cy="21.4" r="2.5" fill="#ECB22E"/>
+            </svg>
+          </span>
+          <div><strong>Teams &amp; Slack, right in your sidebar</strong><span>Recent chats and channel activity from both — unread counts, previews, and one click through to the conversation.</span></div>
+        </li>
+        <li>
+          <span class="ap-ico ap-ico-stack ap-ico-stack-lg">
+            <svg width="20" height="20" viewBox="0 0 128 128" fill="none">
+              <defs>
+                <linearGradient id="li-jira-g1" gradientUnits="userSpaceOnUse" x1="88.136" y1="39.092" x2="68.472" y2="59.368">
+                  <stop offset="0.176" stop-color="#0052CC"/>
+                  <stop offset="1" stop-color="#2684FF"/>
+                </linearGradient>
+                <linearGradient id="li-jira-g2" gradientUnits="userSpaceOnUse" x1="66.564" y1="62.256" x2="43.828" y2="84.376">
+                  <stop offset="0.176" stop-color="#0052CC"/>
+                  <stop offset="1" stop-color="#2684FF"/>
+                </linearGradient>
+              </defs>
+              <path d="M108.023 16H61.805c0 11.52 9.324 20.848 20.847 20.848h8.5v8.226c0 11.52 9.328 20.848 20.848 20.848V19.977A3.98 3.98 0 00108.023 16z" fill="#2684FF"/>
+              <path d="M85.121 39.04H38.902c0 11.519 9.325 20.847 20.844 20.847h8.504v8.226c0 11.52 9.328 20.848 20.848 20.848V43.016a3.983 3.983 0 00-3.977-3.977z" fill="url(#li-jira-g1)"/>
+              <path d="M62.219 62.078H16c0 11.524 9.324 20.848 20.848 20.848h8.5v8.23c0 11.52 9.328 20.844 20.847 20.844V66.059a3.984 3.984 0 00-3.976-3.98z" fill="url(#li-jira-g2)"/>
+            </svg>
+            <svg width="20" height="20" viewBox="0 0 34 35" fill="none">
+              <defs>
+                <linearGradient id="li-az-grad" x1="17" y1="35" x2="17" y2="0" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#0078D4"/>
+                  <stop offset="0.16" stop-color="#1380DA"/>
+                  <stop offset="0.53" stop-color="#3C91E5"/>
+                  <stop offset="0.82" stop-color="#559CEC"/>
+                  <stop offset="1" stop-color="#5EA0EF"/>
+                </linearGradient>
+              </defs>
+              <path fill="url(#li-az-grad)" d="M34 6.375V27.0725L25.5 34.0425L12.325 29.24V34L4.86625 24.2462L26.605 25.9463V7.31L34 6.375ZM26.7538 7.41625L14.5562 0V4.86625L3.3575 8.16L0 12.4737V22.27L4.8025 24.395V11.8363L26.7538 7.41625Z"/>
+            </svg>
+          </span>
+          <div><strong>Jira &amp; Azure Boards</strong><span>Assigned tickets and work items with status pills — update transitions right from the sidebar, no browser needed.</span></div>
+        </li>
+      </ul>
+      <a class="btn-secondary btn-explore" href="https://eagleview.pearlfox.io" target="_blank" rel="noopener">Explore more →</a>
+    </div>
+
+    <div class="ap-visual">
+      <div class="ap-ring ap-ring1" aria-hidden="true"></div>
+      <div class="ap-ring ap-ring2" aria-hidden="true"></div>
+
+      <div class="ap-chip ap-chip1" aria-hidden="true">
+        <div class="ap-chip-l">Unread mails</div>
+        <div class="ap-chip-v">15 new today</div>
+        <div class="ap-chip-s">↑ Just synced</div>
+      </div>
+      <div class="ap-chip ap-chip2" aria-hidden="true">
+        <div class="ap-chip-l">Next meeting</div>
+        <div class="ap-chip-v ap-red">● in 12 min</div>
+        <div class="ap-chip-s">Team standup</div>
+      </div>
+      <div class="ap-chip ap-chip3" aria-hidden="true">
+        <div class="ap-chip-l">Checklist</div>
+        <div class="ap-chip-v">1 due today</div>
+        <div class="ap-chip-s">Reply to client</div>
+      </div>
+
+      <div class="ap-panel" aria-hidden="true">
+        <img src="app-screenshot.webp" alt="" class="ap-panel-shot" width="416" height="1298">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="wrap">
+    <div class="stat-grid">
+      <div><div class="num">[—]</div><div class="lbl">Active users<span class="placeholder-tag">needs real data</span></div></div>
+      <div><div class="num">[—]</div><div class="lbl">Releases shipped<span class="placeholder-tag">needs real data</span></div></div>
+      <div><div class="num">[—]</div><div class="lbl">Platforms supported<span class="placeholder-tag">needs real data</span></div></div>
+      <div><div class="num">[—]</div><div class="lbl">App rating<span class="placeholder-tag">needs real data</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="about">
+  <div class="wrap">
+    <h2>About PearlFox</h2>
+    <p>PearlFox is a software studio focused on building small, dependable tools done right — no bloat, no unnecessary complexity, just software that quietly does its job well.</p>
+    <div class="btn-row about-cta">
+      <a class="btn-secondary" href="company.html">More about PearlFox →</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer-big">
+  <div class="wrap">
+    <div class="fcols">
+      <div class="fcol">
+        <div class="fbrand"><img src="apple-touch-icon.png" alt="PearlFox"><span class="pearl">Pearl</span><span class="fox">Fox</span></div>
+        <p class="ftagline">Small, dependable software tools, built to quietly do their job well.</p>
+      </div>
+      <div class="fcol">
+        <h3>Product</h3>
+        <a href="products.html">Products</a>
+        <a href="https://eagleview.pearlfox.io" target="_blank" rel="noopener">Eagle View ↗</a>
+      </div>
+      <div class="fcol">
+        <h3>Company</h3>
+        <a href="company.html">Company</a>
+        <a href="security.html">Security</a>
+      </div>
+      <div class="fcol">
+        <h3>Support</h3>
+        <a href="faq.html">FAQ</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="fcol">
+        <h3>Legal</h3>
+        <a href="https://eagleview.pearlfox.io/privacy.html" target="_blank" rel="noopener">Privacy Policy ↗</a>
+      </div>
+    </div>
+    <div class="fbottom">
+      <div class="copy">© 2026 PearlFox. All rights reserved.</div>
+      <a href="mailto:dev@pearlfox.io">dev@pearlfox.io</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  /* Pause section-2 background SVG animations while the page is scrolling,
+     so the scroll-driven flying-logo handoff has full frame budget.
+     Does NOT touch nav, .nav-logo-target*, .brand-mark-icon/.brand-mark-word,
+     or any heart-level dimensions/z-indexes. */
+  body.is-scrolling .brand-mark-bg *{animation-play-state:paused!important;}
+</style>
+<script>
+  (function(){
+    var t, b = document.body;
+    window.addEventListener('scroll', function(){
+      if (!b.classList.contains('is-scrolling')) b.classList.add('is-scrolling');
+      clearTimeout(t);
+      t = setTimeout(function(){ b.classList.remove('is-scrolling'); }, 140);
+    }, { passive: true });
+  })();
+</script>
+<script src="shared.js"></script>
+</body>
+</html>

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Section 2 · Background Design Gallery</title>
+<style>
+:root{
+  --fox-bright:#FFB245;
+  --fox-glow:#FFD37E;
+  --bg:#120802;
+  --bg-2:#1e1108;
+  --text:#FFF3D6;
+  --text-dim:rgba(255,243,214,0.65);
+  --border:rgba(255,178,69,0.18);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);padding:40px 24px;min-height:100vh;}
+header{max-width:1400px;margin:0 auto 36px;text-align:center}
+h1{margin:0 0 8px;font-weight:700;letter-spacing:-0.5px;font-size:28px;background:linear-gradient(135deg,var(--fox-bright),var(--fox-glow));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--text-dim);margin:0;font-size:15px}
+.grid{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:22px}
+.tile{background:linear-gradient(180deg,#241608,#0f0602);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+.tile:hover{transform:translateY(-3px);border-color:rgba(255,178,69,0.45);box-shadow:0 10px 30px rgba(255,178,69,0.08)}
+.preview{position:relative;aspect-ratio:16/9;background:#0a0501;overflow:hidden}
+.preview svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.meta{padding:14px 16px;display:flex;align-items:center;gap:12px;border-top:1px solid var(--border)}
+.num{display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:28px;padding:0 8px;background:rgba(255,178,69,0.15);color:var(--fox-bright);border-radius:6px;font-weight:800;font-size:13px}
+.name{font-weight:700;font-size:15px;flex:1}
+.tag{color:var(--text-dim);font-size:11.5px;text-transform:uppercase;letter-spacing:1px}
+
+/* === per-tile animations === */
+
+/* 1 grid+beam */
+.gb-scan{animation:gbScan 5s linear infinite}
+@keyframes gbScan{0%{transform:translateY(-40px)}100%{transform:translateY(260px)}}
+.gb-dot{fill:var(--fox-bright);animation:gbDot 3s ease-in-out infinite}
+@keyframes gbDot{0%,100%{opacity:.2}50%{opacity:.9}}
+
+/* 2 network */
+.nw-hub{fill:var(--fox-bright);animation:nwPulse 2.5s ease-in-out infinite}
+.nw-leaf{fill:var(--fox-bright);animation:nwPulse 3.5s ease-in-out infinite}
+@keyframes nwPulse{0%,100%{opacity:.4}50%{opacity:1}}
+.nw-ring{stroke:var(--fox-bright);fill:none;transform-origin:center;transform-box:fill-box;animation:nwRing 3s ease-out infinite}
+@keyframes nwRing{0%{transform:scale(1);opacity:.6}100%{transform:scale(3);opacity:0}}
+
+/* 3 matrix */
+.mr-tail{fill:var(--fox-bright)}
+.mr-head{fill:#FFF3D6;filter:drop-shadow(0 0 4px var(--fox-bright));opacity:1!important}
+.mr-col{animation-name:mrFall;animation-timing-function:linear;animation-iteration-count:infinite}
+@keyframes mrFall{0%{transform:translateY(-160px)}100%{transform:translateY(230px)}}
+
+/* 4 scope */
+.sc-wave{fill:none;stroke:var(--fox-bright);stroke-width:1.2;filter:drop-shadow(0 0 2px var(--fox-bright))}
+.sc-w1{opacity:.75;animation:scShift1 4s linear infinite}
+.sc-w2{opacity:.65;animation:scShift2 3.2s linear infinite}
+.sc-w3{opacity:.55;animation:scShift3 5.2s linear infinite}
+@keyframes scShift1{to{transform:translateX(-120px)}}
+@keyframes scShift2{to{transform:translateX(-90px)}}
+@keyframes scShift3{to{transform:translateX(-140px)}}
+.sc-grid{stroke:var(--fox-bright);stroke-width:.4;opacity:.1}
+
+/* 5 terminal */
+.tm-scroll{animation:tmScroll 20s linear infinite}
+@keyframes tmScroll{0%{transform:translateY(0)}100%{transform:translateY(-190px)}}
+.tm-dim{fill:var(--fox-bright);opacity:.45;font-family:ui-monospace,Menlo,monospace;font-size:10px}
+.tm-ok{fill:var(--fox-bright);opacity:.9;font-family:ui-monospace,Menlo,monospace;font-size:10px;font-weight:700}
+.tm-prompt{fill:#FFF3D6;opacity:.95;font-family:ui-monospace,Menlo,monospace;font-size:10px;font-weight:700}
+.tm-cursor{fill:#FFF3D6;animation:tmBlink 1s steps(2,end) infinite}
+@keyframes tmBlink{0%,49%{opacity:1}50%,100%{opacity:0}}
+
+/* 6 iso cubes */
+.ic-top{fill:var(--bg-2);stroke:var(--fox-bright);stroke-width:.6;opacity:.55}
+.ic-top-lit{fill:var(--fox-bright);stroke:var(--fox-bright);stroke-width:.6;opacity:.7;animation:icBlink 3s ease-in-out infinite;filter:drop-shadow(0 0 3px var(--fox-bright))}
+@keyframes icBlink{0%,100%{opacity:.3}50%{opacity:.95}}
+.ic-left{fill:#3a2410;stroke:rgba(255,178,69,0.35);stroke-width:.5}
+.ic-right{fill:#1c0f04;stroke:rgba(255,178,69,0.35);stroke-width:.5}
+
+/* 7 blueprint */
+.bp-lines line,.bp-lines rect,.bp-lines circle,.bp-lines path{stroke:var(--fox-bright);stroke-width:.7;opacity:.6}
+.bp-lines rect{opacity:.4}
+.bp-lines .bp-arc{stroke-dasharray:3 3}
+.bp-label{fill:var(--fox-bright);opacity:.7;font-family:ui-monospace,Menlo,monospace;font-size:9px;font-weight:700}
+.bp-dot{fill:var(--fox-bright);opacity:1;animation:bpBlink 1.8s ease-in-out infinite}
+@keyframes bpBlink{0%,100%{opacity:.35}50%{opacity:1}}
+
+/* 8 topo */
+.tp-ring{fill:none;stroke:var(--fox-bright);stroke-width:.8;animation:tpBreath 6s ease-in-out infinite;transform-origin:200px 112px;transform-box:fill-box}
+@keyframes tpBreath{0%,100%{transform:scale(0.97)}50%{transform:scale(1.03)}}
+
+/* 9 hex chunks */
+.hx-blip{fill:var(--fox-bright);font-family:ui-monospace,Menlo,monospace;font-size:11px;font-weight:700;opacity:0;animation-name:hxBlip;animation-timing-function:ease-in-out;animation-iteration-count:infinite}
+@keyframes hxBlip{0%,100%{opacity:0}25%{opacity:.85}75%{opacity:.2}}
+
+/* 10 particle field */
+.pf-dot{fill:var(--fox-bright);opacity:.7;filter:drop-shadow(0 0 2px var(--fox-bright))}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important}
+}
+</style>
+</head>
+<body>
+  <header>
+    <h1>Section 2 — Background Design Gallery</h1>
+    <p class="sub">10 IT / tech-feel concepts. Watch them all live, then tell me which number to build for real. </p>
+  </header>
+  <div class="grid">
+    <div class="tile">
+      <div class="preview">
+        <svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <pattern id="gb-g" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0 L0 0 0 20" fill="none" stroke="#FFB245" stroke-width=".5" opacity=".18"/></pattern>
+            <linearGradient id="gb-bm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFB245" stop-opacity="0"/><stop offset=".5" stop-color="#FFB245" stop-opacity=".4"/><stop offset="1" stop-color="#FFB245" stop-opacity="0"/></linearGradient>
+          </defs>
+          <rect width="400" height="225" fill="url(#gb-g)"/>
+          <g class="gb-scan"><rect x="0" y="-30" width="400" height="60" fill="url(#gb-bm)"/><line x1="0" y1="0" x2="400" y2="0" stroke="#FFB245" stroke-width="1" opacity=".55"/></g>
+          <circle class="gb-dot" cx="80" cy="60" r="2" style="animation-delay:-.4s"/>
+          <circle class="gb-dot" cx="220" cy="120" r="2" style="animation-delay:-1.6s"/>
+          <circle class="gb-dot" cx="340" cy="80" r="2" style="animation-delay:-2.5s"/>
+          <circle class="gb-dot" cx="140" cy="180" r="2" style="animation-delay:-.9s"/>
+          <circle class="gb-dot" cx="300" cy="180" r="2" style="animation-delay:-3.1s"/>
+        </svg>
+      </div>
+      <div class="meta">
+        <span class="num">01</span>
+        <span class="name">Data Grid + Scan Beam</span>
+        <span class="tag">Blueprint · Sweep</span>
+      </div>
+    </div>
+    <div class="tile">
+      <div class="preview">
+        <svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice">
+          <g stroke="#FFB245" stroke-width=".7" opacity=".2" fill="none">
+            <line x1="100" y1="70" x2="200" y2="115"/>
+            <line x1="300" y1="60" x2="200" y2="115"/>
+            <line x1="200" y1="115" x2="120" y2="180"/>
+            <line x1="200" y1="115" x2="290" y2="180"/>
+            <line x1="100" y1="70" x2="40" y2="40"/>
+            <line x1="100" y1="70" x2="60" y2="110"/>
+            <line x1="300" y1="60" x2="360" y2="40"/>
+            <line x1="300" y1="60" x2="350" y2="100"/>
+            <line x1="120" y1="180" x2="60" y2="200"/>
+            <line x1="290" y1="180" x2="350" y2="200"/>
+          </g>
+          <g>
+            <circle class="nw-ring" cx="200" cy="115" r="4" style="animation-delay:-.5s"/>
+            <circle class="nw-hub" cx="200" cy="115" r="4"/>
+            <circle class="nw-ring" cx="100" cy="70" r="3.4" style="animation-delay:-1.5s"/>
+            <circle class="nw-hub" cx="100" cy="70" r="3.4" style="animation-delay:-.9s"/>
+            <circle class="nw-ring" cx="300" cy="60" r="3.4" style="animation-delay:-2.1s"/>
+            <circle class="nw-hub" cx="300" cy="60" r="3.4" style="animation-delay:-1.4s"/>
+            <circle class="nw-leaf" cx="40" cy="40" r="2" style="animation-delay:-.3s"/>
+            <circle class="nw-leaf" cx="60" cy="110" r="2" style="animation-delay:-1.1s"/>
+            <circle class="nw-leaf" cx="360" cy="40" r="2" style="animation-delay:-2.2s"/>
+            <circle class="nw-leaf" cx="350" cy="100" r="2" style="animation-delay:-.7s"/>
+            <circle class="nw-leaf" cx="120" cy="180" r="2" style="animation-delay:-1.8s"/>
+            <circle class="nw-leaf" cx="290" cy="180" r="2" style="animation-delay:-2.6s"/>
+            <circle class="nw-leaf" cx="60" cy="200" r="2" style="animation-delay:-.5s"/>
+            <circle class="nw-leaf" cx="350" cy="200" r="2" style="animation-delay:-1.3s"/>
+          </g>
+        </svg>
+      </div>
+      <div class="meta">
+        <span class="num">02</span>
+        <span class="name">Node Network</span>
+        <span class="tag">Topology · Pulse</span>
+      </div>
+    </div>
+    <div class="tile">
+      <div class="preview">
+        <svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice">
+          <g class="mr-col" style="animation-duration:4.7s;animation-delay:-3.8s"><text font-family="ui-monospace,Menlo,monospace" font-size="13" font-weight="700"><tspan x="20" y="0" class="mr-tail" style="opacity:0.08">A</tspan><tspan x="20" y="16" class="mr-tail" style="opacity:0.2">{</tspan><tspan x="20" y="32" class="mr-tail" style="opacity:0.32">B</tspan><tspan x="20" y="48" class="mr-tail" style="opacity:0.44">=</tspan><tspan x="20" y="64" class="mr-tail" style="opacity:0.56">/</tspan><tspan x="20" y="80" class="mr-tail" style="opacity:0.68">=</tspan><tspan x="20" y="96" class="mr-head" style="opacity:0.8">|</tspan></text></g><g class="mr-col" style="animation-duration:5.4s;animation-delay:-0.5s"><text font-family="ui-monospace,Menlo,monospace" font-size="13" font-weight="700"><tspan x="60" y="0" class="mr-tail" style="opacity:0.08">0</tspan><tspan x="60" y="16" class="mr-tail" style="opacity:0.17"><</tspan><tspan x="60" y="32" class="mr-tail" style="opacity:0.26">></tspan><tspan x="60" y="48" class="mr-tail" style="opacity:0.35">-</tspan><tspan x="60" y="64" class="mr-tail" style="opacity:0.44">0</tspan><tspan x="60" y="80" class="mr-tail" style="opacity:0.53">/</tspan><tspan x="60" y="96" class="mr-tail" style="opacity:0.62">{</tspan><tspan x="60" y="112" class="mr-tail" style="opacity:0.71">F</tspan><tspan x="60" y="128" class="mr-head" style="opacity:0.8">+</tspan></text></g><g class="mr-col" style="animation-duration:5.7s;animation-delay:-0.2s"><text font-family="ui-monospace,Menlo,monospace" font-size="13" font-weight="700"><tspan x="100" y="0" class="mr-tail" style="opacity:0.08">0</tspan><tspan x="100" y="16" class="mr-tail" style="opacity:0.22">|</tspan><tspan x="100" y="32" class="mr-tail" style="opacity:0.37">*</tspan><tspan x="100" y="48" class="mr-tail" style="opacity:0.51">0</tspan><tspan x="100" y="64" class="mr-tail" style="opacity:0.66"><</tspan><tspan x="100" y="80" class="mr-head" style="opacity:0.8">E</tspan></text></g><g class="mr-col" style="animation-duration:5.2s;animation-delay:-2.7s"><text font-family="ui-monospace,Menlo,monospace" font-size="13" font-weight="700"><tspan x="140" y="0" class="mr-tail" style="opacity:0.08">/</tspan><tspan x="140" y="16" class="mr-tail" style="opacity:0.17">=</tspan><tspan x="140" y="32" class="mr-tail" style="opacity:0.26">*</tspan><tspan x="140" y="48" class="mr-tail" style="opacity:0.35">F</tspan><tspan x="140" y="64" class="mr-tail" style="opacity:0.44">]</tspan><tspan x="140" y="80" class="mr-tail" style="opacity:0.53">F</tspan><tspan x="140" y="96" class="mr-tail" style="opacity:0.62">F</tspan><tspan x="140" y="112" class="mr-tail" style="opacity:0.71">/</tspan><tspan x="140" y="128" class="mr-head" style="opacity:0.8">}</tspan></text></g><g class="mr-col" style="animation-duration:4.2s;animation-delay:-3.8s"><text font-family="ui-monospace,Menlo,monospace" font-size="13" font-weight="700"><tspan x="180" y="0" class="mr-tail" style="opacity:0.08">|</tspan><tspan x="180" y="16" class="mr-tail" style="opacity:0.22">B</tspan><tspan x="180" y="32" class="mr-tail" style="opacity:0.37">D</tspan><tspan x="180" y="48" class="mr-tail" style="opacity:0.51">|</tspan><tspan x="180" y="64" class="mr-tail" style="opacity:0.66">}</tspan><tspan x="180" y="80" class="mr-head" style="opacity:0.8">B</tspan></text></g><g class="mr-col" style="animation-duration:5.7s;animation-delay:-5.5s"><text font-family="ui-monospace,Menlo,monospace" font-size="13" font-weight="700"><tspan x="220" y="0" class="mr-tail" style="opacity:0.08">;</tspan><tspan x="220" y="16" class="mr-tail" style="opacity:0.18">></tspan><tspan x="220" y="32" class="mr-tail" style="opacity:0.29">;</tspan><tspan x="220" y="48" class="mr-tail" style="opacity:0.39">E</tspan><tspan x="220" y="64" class="mr-tail" style="opacity:0.49">}</tspan><tspan x="220" y="80" class="mr-tail" style="opacity:0.59">}</tspan><tspan x="220" y="96" class="mr-tail" style="opacity:0.7">+</tspan><tspan x="220" y="112" class="mr-head" style="opacity:0.8">=</tspan></text></g><g class="mr-col" style="animation-duration:4.2s;animation-delay:-3.6s"><text font-family="ui-monospace,Menlo,monospace" font-size="13" font-weight="700"><tspan x="260" y="0" class="mr-tail" style="opacity:0.08">=</tspan><tspan x="260" y="16" class="mr-tail" style="opacity:0.16">F</tspan><tspan x="260" y="32" class="mr-tail" style="opacity:0.24"><</tspan><tspan x="260" y="48" class="mr-tail" style="opacity:0.32">></tspan><tspan x="260" y="64" class="mr-tail" style="opacity:0.4">D</tspan><tspan x="260" y="80" class="mr-tail" style="opacity:0.48">]</tspan><tspan x="260" y="96" class="mr-tail" style="opacity:0.56">*</tspan><tspan x="260" y="112" class="mr-tail" style="opacity:0.64">]</tspan><tspan x="260" y="128" class="mr-tail" style="opacity:0.72">A</tspan><tspan x="260" y="144" class="mr-head" style="opacity:0.8">/</tspan></text></g><g class="mr-col" style="animation-duration:3.3s;animation-delay:-0.5s"><text font-family="ui-monospace,Menlo,monospace" font-size="13" font-weight="700"><tspan x="300" y="0" class="mr-tail" style="opacity:0.08"><</tspan><tspan x="300" y="16" class="mr-tail" style="opacity:0.16">]</tspan><tspan x="300" y="32" class="mr-tail" style="opacity:0.24">=</tspan><tspan x="300" y="48" class="mr-tail" style="opacity:0.32">0</tspan><tspan x="300" y="64" class="mr-tail" style="opacity:0.4">=</tspan><tspan x="300" y="80" class="mr-tail" style="opacity:0.48">1</tspan><tspan x="300" y="96" class="mr-tail" style="opacity:0.56">}</tspan><tspan x="300" y="112" class="mr-tail" style="opacity:0.64">-</tspan><tspan x="300" y="128" class="mr-tail" style="opacity:0.72">+</tspan><tspan x="300" y="144" class="mr-head" style="opacity:0.8">+</tspan></text></g><g class="mr-col" style="animation-duration:4.9s;animation-delay:-0.8s"><text font-family="ui-monospace,Menlo,monospace" font-size="13" font-weight="700"><tspan x="340" y="0" class="mr-tail" style="opacity:0.08">F</tspan><tspan x="340" y="16" class="mr-tail" style="opacity:0.17">0</tspan><tspan x="340" y="32" class="mr-tail" style="opacity:0.26">E</tspan><tspan x="340" y="48" class="mr-tail" style="opacity:0.35">*</tspan><tspan x="340" y="64" class="mr-tail" style="opacity:0.44">*</tspan><tspan x="340" y="80" class="mr-tail" style="opacity:0.53">F</tspan><tspan x="340" y="96" class="mr-tail" style="opacity:0.62"><</tspan><tspan x="340" y="112" class="mr-tail" style="opacity:0.71">;</tspan><tspan x="340" y="128" class="mr-head" style="opacity:0.8">]</tspan></text></g><g class="mr-col" style="animation-duration:4.1s;animation-delay:-3.7s"><text font-family="ui-monospace,Menlo,monospace" font-size="13" font-weight="700"><tspan x="380" y="0" class="mr-tail" style="opacity:0.08">*</tspan><tspan x="380" y="16" class="mr-tail" style="opacity:0.16">-</tspan><tspan x="380" y="32" class="mr-tail" style="opacity:0.24">0</tspan><tspan x="380" y="48" class="mr-tail" style="opacity:0.32"><</tspan><tspan x="380" y="64" class="mr-tail" style="opacity:0.4">;</tspan><tspan x="380" y="80" class="mr-tail" style="opacity:0.48">C</tspan><tspan x="380" y="96" class="mr-tail" style="opacity:0.56">;</tspan><tspan x="380" y="112" class="mr-tail" style="opacity:0.64">*</tspan><tspan x="380" y="128" class="mr-tail" style="opacity:0.72">E</tspan><tspan x="380" y="144" class="mr-head" style="opacity:0.8">></tspan></text></g>
+        </svg>
+      </div>
+      <div class="meta">
+        <span class="num">03</span>
+        <span class="name">Matrix Code Rain</span>
+        <span class="tag">Falling · Glyphs</span>
+      </div>
+    </div>
+    <div class="tile">
+      <div class="preview">
+        <svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice">
+          <g class="sc-grid" fill="none">
+            <line x1="0" y1="20" x2="400" y2="20"/><line x1="0" y1="40" x2="400" y2="40"/><line x1="0" y1="60" x2="400" y2="60"/><line x1="0" y1="80" x2="400" y2="80"/><line x1="0" y1="100" x2="400" y2="100"/><line x1="0" y1="120" x2="400" y2="120"/><line x1="0" y1="140" x2="400" y2="140"/><line x1="0" y1="160" x2="400" y2="160"/><line x1="0" y1="180" x2="400" y2="180"/><line x1="0" y1="200" x2="400" y2="200"/><line x1="0" y1="220" x2="400" y2="220"/>
+            <line x1="20" y1="0" x2="20" y2="225"/><line x1="40" y1="0" x2="40" y2="225"/><line x1="60" y1="0" x2="60" y2="225"/><line x1="80" y1="0" x2="80" y2="225"/><line x1="100" y1="0" x2="100" y2="225"/><line x1="120" y1="0" x2="120" y2="225"/><line x1="140" y1="0" x2="140" y2="225"/><line x1="160" y1="0" x2="160" y2="225"/><line x1="180" y1="0" x2="180" y2="225"/><line x1="200" y1="0" x2="200" y2="225"/><line x1="220" y1="0" x2="220" y2="225"/><line x1="240" y1="0" x2="240" y2="225"/><line x1="260" y1="0" x2="260" y2="225"/><line x1="280" y1="0" x2="280" y2="225"/><line x1="300" y1="0" x2="300" y2="225"/><line x1="320" y1="0" x2="320" y2="225"/><line x1="340" y1="0" x2="340" y2="225"/><line x1="360" y1="0" x2="360" y2="225"/><line x1="380" y1="0" x2="380" y2="225"/><line x1="400" y1="0" x2="400" y2="225"/>
+          </g>
+          <g class="sc-w1"><path class="sc-wave" d="M-200,60.0 L-194,68.1 L-188,75.1 L-182,79.9 L-176,82.0 L-170,80.9 L-164,77.0 L-158,70.6 L-152,62.8 L-146,54.5 L-140,47.1 L-134,41.4 L-128,38.4 L-122,38.4 L-116,41.4 L-110,47.1 L-104,54.5 L-98,62.8 L-92,70.6 L-86,77.0 L-80,80.9 L-74,82.0 L-68,79.9 L-62,75.1 L-56,68.1 L-50,60.0 L-44,51.9 L-38,44.9 L-32,40.1 L-26,38.0 L-20,39.1 L-14,43.0 L-8,49.4 L-2,57.2 L4,65.5 L10,72.9 L16,78.6 L22,81.6 L28,81.6 L34,78.6 L40,72.9 L46,65.5 L52,57.2 L58,49.4 L64,43.0 L70,39.1 L76,38.0 L82,40.1 L88,44.9 L94,51.9 L100,60.0 L106,68.1 L112,75.1 L118,79.9 L124,82.0 L130,80.9 L136,77.0 L142,70.6 L148,62.8 L154,54.5 L160,47.1 L166,41.4 L172,38.4 L178,38.4 L184,41.4 L190,47.1 L196,54.5 L202,62.8 L208,70.6 L214,77.0 L220,80.9 L226,82.0 L232,79.9 L238,75.1 L244,68.1 L250,60.0 L256,51.9 L262,44.9 L268,40.1 L274,38.0 L280,39.1 L286,43.0 L292,49.4 L298,57.2 L304,65.5 L310,72.9 L316,78.6 L322,81.6 L328,81.6 L334,78.6 L340,72.9 L346,65.5 L352,57.2 L358,49.4 L364,43.0 L370,39.1 L376,38.0 L382,40.1 L388,44.9 L394,51.9 L400,60.0 L406,68.1 L412,75.1 L418,79.9 L424,82.0 L430,80.9 L436,77.0 L442,70.6 L448,62.8 L454,54.5 L460,47.1 L466,41.4 L472,38.4 L478,38.4 L484,41.4 L490,47.1 L496,54.5 L502,62.8 L508,70.6 L514,77.0 L520,80.9 L526,82.0 L532,79.9 L538,75.1 L544,68.1 L550,60.0 L556,51.9 L562,44.9 L568,40.1 L574,38.0 L580,39.1 L586,43.0 L592,49.4 L598,57.2 L604,65.5 L610,72.9 L616,78.6 L622,81.6 L628,81.6 L634,78.6 L640,72.9 L646,65.5 L652,57.2 L658,49.4 L664,43.0 L670,39.1 L676,38.0 L682,40.1 L688,44.9 L694,51.9 L700,60.0"/></g>
+          <g class="sc-w2"><path class="sc-wave" d="M-200,101 L-155.0,101 L-155.0,129 L-110,129 L-110,101 L-65.0,101 L-65.0,129 L-20,129 L-20,101 L25.0,101 L25.0,129 L70,129 L70,101 L115.0,101 L115.0,129 L160,129 L160,101 L205.0,101 L205.0,129 L250,129 L250,101 L295.0,101 L295.0,129 L340,129 L340,101 L385.0,101 L385.0,129 L430,129 L430,101 L475.0,101 L475.0,129 L520,129 L520,101 L565.0,101 L565.0,129 L610,129 L610,101 L655.0,101 L655.0,129 L700,129 L700,101 L745.0,101 L745.0,129 L790,129"/></g>
+          <g class="sc-w3"><path class="sc-wave" d="M-200,168.7 L-194,162.9 L-188,158.3 L-182,155.3 L-176,154.0 L-170,154.7 L-164,157.1 L-158,161.2 L-152,166.7 L-146,173.1 L-140,180.0 L-134,186.9 L-128,193.3 L-122,198.8 L-116,202.9 L-110,205.3 L-104,206.0 L-98,204.7 L-92,201.7 L-86,197.1 L-80,191.3 L-74,184.6 L-68,177.7 L-62,170.9 L-56,164.7 L-50,159.7 L-44,156.1 L-38,154.2 L-32,154.2 L-26,156.1 L-20,159.7 L-14,164.7 L-8,170.9 L-2,177.7 L4,184.6 L10,191.3 L16,197.1 L22,201.7 L28,204.7 L34,206.0 L40,205.3 L46,202.9 L52,198.8 L58,193.3 L64,186.9 L70,180.0 L76,173.1 L82,166.7 L88,161.2 L94,157.1 L100,154.7 L106,154.0 L112,155.3 L118,158.3 L124,162.9 L130,168.7 L136,175.4 L142,182.3 L148,189.1 L154,195.3 L160,200.3 L166,203.9 L172,205.8 L178,205.8 L184,203.9 L190,200.3 L196,195.3 L202,189.1 L208,182.3 L214,175.4 L220,168.7 L226,162.9 L232,158.3 L238,155.3 L244,154.0 L250,154.7 L256,157.1 L262,161.2 L268,166.7 L274,173.1 L280,180.0 L286,186.9 L292,193.3 L298,198.8 L304,202.9 L310,205.3 L316,206.0 L322,204.7 L328,201.7 L334,197.1 L340,191.3 L346,184.6 L352,177.7 L358,170.9 L364,164.7 L370,159.7 L376,156.1 L382,154.2 L388,154.2 L394,156.1 L400,159.7 L406,164.7 L412,170.9 L418,177.7 L424,184.6 L430,191.3 L436,197.1 L442,201.7 L448,204.7 L454,206.0 L460,205.3 L466,202.9 L472,198.8 L478,193.3 L484,186.9 L490,180.0 L496,173.1 L502,166.7 L508,161.2 L514,157.1 L520,154.7 L526,154.0 L532,155.3 L538,158.3 L544,162.9 L550,168.7 L556,175.4 L562,182.3 L568,189.1 L574,195.3 L580,200.3 L586,203.9 L592,205.8 L598,205.8 L604,203.9 L610,200.3 L616,195.3 L622,189.1 L628,182.3 L634,175.4 L640,168.7 L646,162.9 L652,158.3 L658,155.3 L664,154.0 L670,154.7 L676,157.1 L682,161.2 L688,166.7 L694,173.1 L700,180.0"/></g>
+        </svg>
+      </div>
+      <div class="meta">
+        <span class="num">04</span>
+        <span class="name">Oscilloscope Waveforms</span>
+        <span class="tag">Signals · Scroll</span>
+      </div>
+    </div>
+    <div class="tile">
+      <div class="preview">
+        <svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice">
+          <g>
+            <g class="tm-scroll">
+              <text class="tm-prompt" x="14" y="20">$ pearlfox sync --all</text><text class="tm-dim" x="14" y="39">[10:42] connecting mail.io:993</text><text class="tm-dim" x="14" y="58">[10:42] TLS handshake OK</text><text class="tm-ok" x="14" y="77">[10:42] [OK] mail synced (47)</text><text class="tm-dim" x="14" y="96">[10:42] fetching calendar...</text><text class="tm-ok" x="14" y="115">[10:42] [OK] 12 events</text><text class="tm-prompt" x="14" y="134">$ eagleview refresh</text><text class="tm-ok" x="14" y="153">[10:43] [OK] 340ms</text><text class="tm-dim" x="14" y="172">[10:43] listening for events</text><text class="tm-dim" x="14" y="191">[10:43] event: mail.new</text>
+              <text class="tm-prompt" x="14" y="210">$ pearlfox sync --all</text><text class="tm-dim" x="14" y="229">[10:42] connecting mail.io:993</text><text class="tm-dim" x="14" y="248">[10:42] TLS handshake OK</text><text class="tm-ok" x="14" y="267">[10:42] [OK] mail synced (47)</text><text class="tm-dim" x="14" y="286">[10:42] fetching calendar...</text><text class="tm-ok" x="14" y="305">[10:42] [OK] 12 events</text><text class="tm-prompt" x="14" y="324">$ eagleview refresh</text><text class="tm-ok" x="14" y="343">[10:43] [OK] 340ms</text><text class="tm-dim" x="14" y="362">[10:43] listening for events</text><text class="tm-dim" x="14" y="381">[10:43] event: mail.new</text>
+            </g>
+          </g>
+          <text class="tm-prompt" x="14" y="215">$</text>
+          <rect class="tm-cursor" x="24" y="205" width="6" height="11"/>
+        </svg>
+      </div>
+      <div class="meta">
+        <span class="num">05</span>
+        <span class="name">Terminal Log Stream</span>
+        <span class="tag">tail -f · Console</span>
+      </div>
+    </div>
+    <div class="tile">
+      <div class="preview">
+        <svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice">
+          <polygon points="192,44.0 220,58.0 220,74.8 192,60.8" class="ic-left"/><polygon points="220,58.0 248,44.0 248,60.8 220,74.8" class="ic-right"/><polygon points="220,30.0 248,44.0 220,58.0 192,44.0" class="ic-top" style="animation-delay:-1.2s"/><polygon points="220,58.0 248,72.0 248,88.8 220,74.8" class="ic-left"/><polygon points="248,72.0 276,58.0 276,74.8 248,88.8" class="ic-right"/><polygon points="248,44.0 276,58.0 248,72.0 220,58.0" class="ic-top" style="animation-delay:-1.8s"/><polygon points="248,72.0 276,86.0 276,102.8 248,88.8" class="ic-left"/><polygon points="276,86.0 304,72.0 304,88.8 276,102.8" class="ic-right"/><polygon points="276,58.0 304,72.0 276,86.0 248,72.0" class="ic-top-lit" style="animation-delay:-3.1s"/><polygon points="276,86.0 304,100.0 304,116.8 276,102.8" class="ic-left"/><polygon points="304,100.0 332,86.0 332,102.8 304,116.8" class="ic-right"/><polygon points="304,72.0 332,86.0 304,100.0 276,86.0" class="ic-top" style="animation-delay:-0.1s"/><polygon points="304,100.0 332,114.0 332,130.8 304,116.8" class="ic-left"/><polygon points="332,114.0 360,100.0 360,116.8 332,130.8" class="ic-right"/><polygon points="332,86.0 360,100.0 332,114.0 304,100.0" class="ic-top-lit" style="animation-delay:-1.3s"/><polygon points="332,114.0 360,128.0 360,144.8 332,130.8" class="ic-left"/><polygon points="360,128.0 388,114.0 388,130.8 360,144.8" class="ic-right"/><polygon points="360,100.0 388,114.0 360,128.0 332,114.0" class="ic-top" style="animation-delay:-5.0s"/><polygon points="164,58.0 192,72.0 192,88.8 164,74.8" class="ic-left"/><polygon points="192,72.0 220,58.0 220,74.8 192,88.8" class="ic-right"/><polygon points="192,44.0 220,58.0 192,72.0 164,58.0" class="ic-top" style="animation-delay:-4.2s"/><polygon points="192,72.0 220,86.0 220,102.8 192,88.8" class="ic-left"/><polygon points="220,86.0 248,72.0 248,88.8 220,102.8" class="ic-right"/><polygon points="220,58.0 248,72.0 220,86.0 192,72.0" class="ic-top-lit" style="animation-delay:-3.2s"/><polygon points="220,86.0 248,100.0 248,116.8 220,102.8" class="ic-left"/><polygon points="248,100.0 276,86.0 276,102.8 248,116.8" class="ic-right"/><polygon points="248,72.0 276,86.0 248,100.0 220,86.0" class="ic-top" style="animation-delay:-3.2s"/><polygon points="248,100.0 276,114.0 276,130.8 248,116.8" class="ic-left"/><polygon points="276,114.0 304,100.0 304,116.8 276,130.8" class="ic-right"/><polygon points="276,86.0 304,100.0 276,114.0 248,100.0" class="ic-top" style="animation-delay:-2.6s"/><polygon points="276,114.0 304,128.0 304,144.8 276,130.8" class="ic-left"/><polygon points="304,128.0 332,114.0 332,130.8 304,144.8" class="ic-right"/><polygon points="304,100.0 332,114.0 304,128.0 276,114.0" class="ic-top-lit" style="animation-delay:-3.4s"/><polygon points="304,128.0 332,142.0 332,158.8 304,144.8" class="ic-left"/><polygon points="332,142.0 360,128.0 360,144.8 332,158.8" class="ic-right"/><polygon points="332,114.0 360,128.0 332,142.0 304,128.0" class="ic-top" style="animation-delay:-3.8s"/><polygon points="136,72.0 164,86.0 164,102.8 136,88.8" class="ic-left"/><polygon points="164,86.0 192,72.0 192,88.8 164,102.8" class="ic-right"/><polygon points="164,58.0 192,72.0 164,86.0 136,72.0" class="ic-top-lit" style="animation-delay:-1.5s"/><polygon points="164,86.0 192,100.0 192,116.8 164,102.8" class="ic-left"/><polygon points="192,100.0 220,86.0 220,102.8 192,116.8" class="ic-right"/><polygon points="192,72.0 220,86.0 192,100.0 164,86.0" class="ic-top" style="animation-delay:-4.3s"/><polygon points="192,100.0 220,114.0 220,130.8 192,116.8" class="ic-left"/><polygon points="220,114.0 248,100.0 248,116.8 220,130.8" class="ic-right"/><polygon points="220,86.0 248,100.0 220,114.0 192,100.0" class="ic-top" style="animation-delay:-3.6s"/><polygon points="220,114.0 248,128.0 248,144.8 220,130.8" class="ic-left"/><polygon points="248,128.0 276,114.0 276,130.8 248,144.8" class="ic-right"/><polygon points="248,100.0 276,114.0 248,128.0 220,114.0" class="ic-top" style="animation-delay:-3.6s"/><polygon points="248,128.0 276,142.0 276,158.8 248,144.8" class="ic-left"/><polygon points="276,142.0 304,128.0 304,144.8 276,158.8" class="ic-right"/><polygon points="276,114.0 304,128.0 276,142.0 248,128.0" class="ic-top" style="animation-delay:-2.0s"/><polygon points="276,142.0 304,156.0 304,172.8 276,158.8" class="ic-left"/><polygon points="304,156.0 332,142.0 332,158.8 304,172.8" class="ic-right"/><polygon points="304,128.0 332,142.0 304,156.0 276,142.0" class="ic-top" style="animation-delay:-2.2s"/><polygon points="108,86.0 136,100.0 136,116.8 108,102.8" class="ic-left"/><polygon points="136,100.0 164,86.0 164,102.8 136,116.8" class="ic-right"/><polygon points="136,72.0 164,86.0 136,100.0 108,86.0" class="ic-top-lit" style="animation-delay:-4.4s"/><polygon points="136,100.0 164,114.0 164,130.8 136,116.8" class="ic-left"/><polygon points="164,114.0 192,100.0 192,116.8 164,130.8" class="ic-right"/><polygon points="164,86.0 192,100.0 164,114.0 136,100.0" class="ic-top-lit" style="animation-delay:-0.7s"/><polygon points="164,114.0 192,128.0 192,144.8 164,130.8" class="ic-left"/><polygon points="192,128.0 220,114.0 220,130.8 192,144.8" class="ic-right"/><polygon points="192,100.0 220,114.0 192,128.0 164,114.0" class="ic-top" style="animation-delay:-4.8s"/><polygon points="192,128.0 220,142.0 220,158.8 192,144.8" class="ic-left"/><polygon points="220,142.0 248,128.0 248,144.8 220,158.8" class="ic-right"/><polygon points="220,114.0 248,128.0 220,142.0 192,128.0" class="ic-top" style="animation-delay:-3.1s"/><polygon points="220,142.0 248,156.0 248,172.8 220,158.8" class="ic-left"/><polygon points="248,156.0 276,142.0 276,158.8 248,172.8" class="ic-right"/><polygon points="248,128.0 276,142.0 248,156.0 220,142.0" class="ic-top" style="animation-delay:-2.5s"/><polygon points="248,156.0 276,170.0 276,186.8 248,172.8" class="ic-left"/><polygon points="276,170.0 304,156.0 304,172.8 276,186.8" class="ic-right"/><polygon points="276,142.0 304,156.0 276,170.0 248,156.0" class="ic-top" style="animation-delay:-1.8s"/><polygon points="80,100.0 108,114.0 108,130.8 80,116.8" class="ic-left"/><polygon points="108,114.0 136,100.0 136,116.8 108,130.8" class="ic-right"/><polygon points="108,86.0 136,100.0 108,114.0 80,100.0" class="ic-top" style="animation-delay:-2.9s"/><polygon points="108,114.0 136,128.0 136,144.8 108,130.8" class="ic-left"/><polygon points="136,128.0 164,114.0 164,130.8 136,144.8" class="ic-right"/><polygon points="136,100.0 164,114.0 136,128.0 108,114.0" class="ic-top" style="animation-delay:-3.4s"/><polygon points="136,128.0 164,142.0 164,158.8 136,144.8" class="ic-left"/><polygon points="164,142.0 192,128.0 192,144.8 164,158.8" class="ic-right"/><polygon points="164,114.0 192,128.0 164,142.0 136,128.0" class="ic-top" style="animation-delay:-4.3s"/><polygon points="164,142.0 192,156.0 192,172.8 164,158.8" class="ic-left"/><polygon points="192,156.0 220,142.0 220,158.8 192,172.8" class="ic-right"/><polygon points="192,128.0 220,142.0 192,156.0 164,142.0" class="ic-top-lit" style="animation-delay:-3.4s"/><polygon points="192,156.0 220,170.0 220,186.8 192,172.8" class="ic-left"/><polygon points="220,170.0 248,156.0 248,172.8 220,186.8" class="ic-right"/><polygon points="220,142.0 248,156.0 220,170.0 192,156.0" class="ic-top" style="animation-delay:-4.3s"/><polygon points="220,170.0 248,184.0 248,200.8 220,186.8" class="ic-left"/><polygon points="248,184.0 276,170.0 276,186.8 248,200.8" class="ic-right"/><polygon points="248,156.0 276,170.0 248,184.0 220,170.0" class="ic-top" style="animation-delay:-4.5s"/>
+        </svg>
+      </div>
+      <div class="meta">
+        <span class="num">06</span>
+        <span class="name">Isometric Server Racks</span>
+        <span class="tag">3D · Data Center</span>
+      </div>
+    </div>
+    <div class="tile">
+      <div class="preview">
+        <svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice">
+          
+      <g class="bp-lines">
+        <rect x="60" y="50" width="140" height="90" fill="none" stroke-dasharray="4 3"/>
+        <rect x="230" y="70" width="110" height="120" fill="none"/>
+        <line x1="200" y1="95" x2="230" y2="95"/>
+        <line x1="60" y1="160" x2="60" y2="185"/>
+        <line x1="200" y1="160" x2="200" y2="185"/>
+        <line x1="55" y1="180" x2="205" y2="180"/>
+        <line x1="60" y1="175" x2="60" y2="185"/>
+        <line x1="200" y1="175" x2="200" y2="185"/>
+        <text class="bp-label" x="130" y="196" text-anchor="middle">140.00</text>
+        <text class="bp-label" x="70" y="45">A1</text>
+        <text class="bp-label" x="240" y="65">B2</text>
+        <circle cx="130" cy="95" r="24" fill="none"/>
+        <circle cx="130" cy="95" r="2" class="bp-dot"/>
+        <line x1="130" y1="71" x2="130" y2="119"/>
+        <line x1="106" y1="95" x2="154" y2="95"/>
+        <path class="bp-arc" d="M 285 130 A 25 25 0 0 1 310 155" fill="none"/>
+        <text class="bp-label" x="310" y="128">R25</text>
+      </g>
+    
+        </svg>
+      </div>
+      <div class="meta">
+        <span class="num">07</span>
+        <span class="name">Blueprint Schematic</span>
+        <span class="tag">Technical · Drawing</span>
+      </div>
+    </div>
+    <div class="tile">
+      <div class="preview">
+        <svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice">
+          <path d="M 180,112 C 180,97.6 212.0,97.6 220,112 C 220,126.4 188.0,126.4 180,112 Z" class="tp-ring" style="opacity:0.35;animation-delay:-0.0s"/><path d="M 158,112 C 158,82.0 225.2,82.0 242,112 C 242,142.0 174.8,142.0 158,112 Z" class="tp-ring" style="opacity:0.32;animation-delay:-0.4s"/><path d="M 136,112 C 136,66.4 238.4,66.4 264,112 C 264,157.6 161.6,157.6 136,112 Z" class="tp-ring" style="opacity:0.29;animation-delay:-0.8s"/><path d="M 114,112 C 114,50.800000000000004 251.6,50.800000000000004 286,112 C 286,173.2 148.4,173.2 114,112 Z" class="tp-ring" style="opacity:0.26;animation-delay:-1.2000000000000002s"/><path d="M 92,112 C 92,35.2 264.8,35.2 308,112 C 308,188.8 135.2,188.8 92,112 Z" class="tp-ring" style="opacity:0.23;animation-delay:-1.6s"/><path d="M 70,112 C 70,19.60000000000001 278.0,19.60000000000001 330,112 C 330,204.39999999999998 122.0,204.39999999999998 70,112 Z" class="tp-ring" style="opacity:0.2;animation-delay:-2.0s"/><path d="M 48,112 C 48,4.0 291.2,4.0 352,112 C 352,220.0 108.8,220.0 48,112 Z" class="tp-ring" style="opacity:0.17;animation-delay:-2.4000000000000004s"/>
+        </svg>
+      </div>
+      <div class="meta">
+        <span class="num">08</span>
+        <span class="name">Topographic Contours</span>
+        <span class="tag">Layered · Breathing</span>
+      </div>
+    </div>
+    <div class="tile">
+      <div class="preview">
+        <svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice">
+          <text class="hx-blip" x="257" y="186" style="animation-duration:3.5s;animation-delay:-1.1s">01</text><text class="hx-blip" x="366" y="31" style="animation-duration:5.2s;animation-delay:-2.0s">01</text><text class="hx-blip" x="61" y="115" style="animation-duration:4.8s;animation-delay:-3.7s">FF</text><text class="hx-blip" x="214" y="73" style="animation-duration:5.4s;animation-delay:-3.8s">1101</text><text class="hx-blip" x="236" y="70" style="animation-duration:3.3s;animation-delay:-1.0s">0xFF</text><text class="hx-blip" x="279" y="181" style="animation-duration:4.0s;animation-delay:-3.1s">1011</text><text class="hx-blip" x="72" y="104" style="animation-duration:4.8s;animation-delay:-2.7s">0xA3</text><text class="hx-blip" x="235" y="52" style="animation-duration:4.0s;animation-delay:-3.6s">B7</text><text class="hx-blip" x="194" y="41" style="animation-duration:3.0s;animation-delay:-2.8s">0xA3</text><text class="hx-blip" x="230" y="44" style="animation-duration:3.3s;animation-delay:-3.4s">110</text><text class="hx-blip" x="141" y="138" style="animation-duration:3.3s;animation-delay:-3.6s">1101</text><text class="hx-blip" x="325" y="30" style="animation-duration:3.5s;animation-delay:-3.1s">1011</text><text class="hx-blip" x="123" y="114" style="animation-duration:3.3s;animation-delay:-3.6s">0110</text><text class="hx-blip" x="28" y="158" style="animation-duration:4.3s;animation-delay:-2.3s">1011</text>
+        </svg>
+      </div>
+      <div class="meta">
+        <span class="num">09</span>
+        <span class="name">Binary / Hex Chunks</span>
+        <span class="tag">Sparse · Blips</span>
+      </div>
+    </div>
+    <div class="tile">
+      <div class="preview">
+        <svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice">
+          <circle r="1.8" class="pf-dot">
+          <animateMotion dur="8.7s" begin="-7.4s" repeatCount="indefinite">
+            <mpath href="#pf-orbit-0"/>
+          </animateMotion>
+        </circle>
+        <path id="pf-orbit-0" d="M 269 163 C 269 150 233 150 233 163 C 233 176 269 176 269 163 Z" fill="none" stroke="none"/><circle r="1.8" class="pf-dot">
+          <animateMotion dur="8.9s" begin="-5.5s" repeatCount="indefinite">
+            <mpath href="#pf-orbit-1"/>
+          </animateMotion>
+        </circle>
+        <path id="pf-orbit-1" d="M 135 67 C 135 53 99 53 99 67 C 99 81 135 81 135 67 Z" fill="none" stroke="none"/><circle r="1.8" class="pf-dot">
+          <animateMotion dur="6.9s" begin="-3.7s" repeatCount="indefinite">
+            <mpath href="#pf-orbit-2"/>
+          </animateMotion>
+        </circle>
+        <path id="pf-orbit-2" d="M 128 44 C 128 34 102 34 102 44 C 102 54 128 54 128 44 Z" fill="none" stroke="none"/><circle r="1.8" class="pf-dot">
+          <animateMotion dur="11.9s" begin="-11.5s" repeatCount="indefinite">
+            <mpath href="#pf-orbit-3"/>
+          </animateMotion>
+        </circle>
+        <path id="pf-orbit-3" d="M 381 182 C 381 167 369 167 369 182 C 369 197 381 197 381 182 Z" fill="none" stroke="none"/><circle r="1.8" class="pf-dot">
+          <animateMotion dur="9.7s" begin="-8.1s" repeatCount="indefinite">
+            <mpath href="#pf-orbit-4"/>
+          </animateMotion>
+        </circle>
+        <path id="pf-orbit-4" d="M 370 177 C 370 169 338 169 338 177 C 338 185 370 185 370 177 Z" fill="none" stroke="none"/><circle r="1.8" class="pf-dot">
+          <animateMotion dur="11.3s" begin="-6.8s" repeatCount="indefinite">
+            <mpath href="#pf-orbit-5"/>
+          </animateMotion>
+        </circle>
+        <path id="pf-orbit-5" d="M 58 35 C 58 26 46 26 46 35 C 46 44 58 44 58 35 Z" fill="none" stroke="none"/><circle r="1.8" class="pf-dot">
+          <animateMotion dur="11.1s" begin="-5.8s" repeatCount="indefinite">
+            <mpath href="#pf-orbit-6"/>
+          </animateMotion>
+        </circle>
+        <path id="pf-orbit-6" d="M 270 103 C 270 88 244 88 244 103 C 244 118 270 118 270 103 Z" fill="none" stroke="none"/><circle r="1.8" class="pf-dot">
+          <animateMotion dur="10.0s" begin="-4.6s" repeatCount="indefinite">
+            <mpath href="#pf-orbit-7"/>
+          </animateMotion>
+        </circle>
+        <path id="pf-orbit-7" d="M 360 95 C 360 89 334 89 334 95 C 334 101 360 101 360 95 Z" fill="none" stroke="none"/><circle r="1.8" class="pf-dot">
+          <animateMotion dur="10.2s" begin="-3.2s" repeatCount="indefinite">
+            <mpath href="#pf-orbit-8"/>
+          </animateMotion>
+        </circle>
+        <path id="pf-orbit-8" d="M 176 124 C 176 117 148 117 148 124 C 148 131 176 131 176 124 Z" fill="none" stroke="none"/><circle r="1.8" class="pf-dot">
+          <animateMotion dur="6.4s" begin="-4.9s" repeatCount="indefinite">
+            <mpath href="#pf-orbit-9"/>
+          </animateMotion>
+        </circle>
+        <path id="pf-orbit-9" d="M 147 151 C 147 145 127 145 127 151 C 127 157 147 157 147 151 Z" fill="none" stroke="none"/><circle r="1.8" class="pf-dot">
+          <animateMotion dur="6.4s" begin="-0.1s" repeatCount="indefinite">
+            <mpath href="#pf-orbit-10"/>
+          </animateMotion>
+        </circle>
+        <path id="pf-orbit-10" d="M 235 47 C 235 35 215 35 215 47 C 215 59 235 59 235 47 Z" fill="none" stroke="none"/><circle r="1.8" class="pf-dot">
+          <animateMotion dur="11.6s" begin="-0.6s" repeatCount="indefinite">
+            <mpath href="#pf-orbit-11"/>
+          </animateMotion>
+        </circle>
+        <path id="pf-orbit-11" d="M 379 20 C 379 11 361 11 361 20 C 361 29 379 29 379 20 Z" fill="none" stroke="none"/><circle r="1.8" class="pf-dot">
+          <animateMotion dur="6.4s" begin="-4.0s" repeatCount="indefinite">
+            <mpath href="#pf-orbit-12"/>
+          </animateMotion>
+        </circle>
+        <path id="pf-orbit-12" d="M 224 201 C 224 189 200 189 200 201 C 200 213 224 213 224 201 Z" fill="none" stroke="none"/><circle r="1.8" class="pf-dot">
+          <animateMotion dur="7.9s" begin="-0.1s" repeatCount="indefinite">
+            <mpath href="#pf-orbit-13"/>
+          </animateMotion>
+        </circle>
+        <path id="pf-orbit-13" d="M 376 89 C 376 82 354 82 354 89 C 354 96 376 96 376 89 Z" fill="none" stroke="none"/><circle r="1.8" class="pf-dot">
+          <animateMotion dur="10.2s" begin="-0.1s" repeatCount="indefinite">
+            <mpath href="#pf-orbit-14"/>
+          </animateMotion>
+        </circle>
+        <path id="pf-orbit-14" d="M 237 50 C 237 41 221 41 221 50 C 221 59 237 59 237 50 Z" fill="none" stroke="none"/><circle r="1.8" class="pf-dot">
+          <animateMotion dur="9.4s" begin="-4.2s" repeatCount="indefinite">
+            <mpath href="#pf-orbit-15"/>
+          </animateMotion>
+        </circle>
+        <path id="pf-orbit-15" d="M 266 144 C 266 128 250 128 250 144 C 250 160 266 160 266 144 Z" fill="none" stroke="none"/><circle r="1.8" class="pf-dot">
+          <animateMotion dur="8.3s" begin="-3.3s" repeatCount="indefinite">
+            <mpath href="#pf-orbit-16"/>
+          </animateMotion>
+        </circle>
+        <path id="pf-orbit-16" d="M 129 53 C 129 37 105 37 105 53 C 105 69 129 69 129 53 Z" fill="none" stroke="none"/><circle r="1.8" class="pf-dot">
+          <animateMotion dur="9.6s" begin="-9.6s" repeatCount="indefinite">
+            <mpath href="#pf-orbit-17"/>
+          </animateMotion>
+        </circle>
+        <path id="pf-orbit-17" d="M 138 20 C 138 2 118 2 118 20 C 118 38 138 38 138 20 Z" fill="none" stroke="none"/><circle r="1.8" class="pf-dot">
+          <animateMotion dur="12.0s" begin="-7.2s" repeatCount="indefinite">
+            <mpath href="#pf-orbit-18"/>
+          </animateMotion>
+        </circle>
+        <path id="pf-orbit-18" d="M 38 73 C 38 61 22 61 22 73 C 22 85 38 85 38 73 Z" fill="none" stroke="none"/><circle r="1.8" class="pf-dot">
+          <animateMotion dur="7.3s" begin="-1.9s" repeatCount="indefinite">
+            <mpath href="#pf-orbit-19"/>
+          </animateMotion>
+        </circle>
+        <path id="pf-orbit-19" d="M 321 45 C 321 37 309 37 309 45 C 309 53 321 53 321 45 Z" fill="none" stroke="none"/><circle r="1.8" class="pf-dot">
+          <animateMotion dur="6.4s" begin="-0.6s" repeatCount="indefinite">
+            <mpath href="#pf-orbit-20"/>
+          </animateMotion>
+        </circle>
+        <path id="pf-orbit-20" d="M 342 104 C 342 92 322 92 322 104 C 322 116 342 116 342 104 Z" fill="none" stroke="none"/><circle r="1.8" class="pf-dot">
+          <animateMotion dur="9.6s" begin="-3.6s" repeatCount="indefinite">
+            <mpath href="#pf-orbit-21"/>
+          </animateMotion>
+        </circle>
+        <path id="pf-orbit-21" d="M 327 182 C 327 176 309 176 309 182 C 309 188 327 188 327 182 Z" fill="none" stroke="none"/>
+        </svg>
+      </div>
+      <div class="meta">
+        <span class="num">10</span>
+        <span class="name">Particle Field</span>
+        <span class="tag">Drifting · Orbit</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
