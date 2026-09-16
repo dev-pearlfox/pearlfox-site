@@ -1,5 +1,28 @@
 # PearlFox Website — Permanent Rules
 
+## Environment notes (Manvi's setup)
+
+- **Screenshots always live at `/Users/manojpro/Documents/Screenshots/`.** When Manvi says "check the latest screenshot," look there first (sorted by mtime), not on the Desktop.
+
+## Favicon / GitHub Pages Octocat cache (SEO gotcha, fixed 2026-09-17)
+
+Symptom seen: Google SERP showed the GitHub octocat instead of the PearlFox fox next to `pearlfox.io`.
+
+Root cause: before a real `/favicon.ico` was deployed, requests to `pearlfox.io/favicon.ico` fell through to GitHub Pages' default 404 HTML page, which embeds a base64 octocat. Google's favicon indexer misfiled that octocat as the site's favicon and cached it. This can happen to any GitHub-Pages-hosted site that goes live without a favicon in place from day one.
+
+What was done:
+- Removed the 816 KB PNG-in-SVG `favicon.svg` (RealFaviconGenerator output — not a real vector, was a Google fetch-timeout risk) and the `<link rel="icon" type="image/svg+xml">` tags pointing at it.
+- Added `robots.txt` (allows all, points at sitemap) and `sitemap.xml` (5 public pages: index, company, products, security, faq).
+- Cache-busted the favicon `<link>` tags across all 5 pages with `?v=2` to force Google's favicon indexer to re-fetch.
+- Left `/favicon.ico` reachable at the canonical path (browsers auto-request it regardless of `<link>` tags).
+
+Rules going forward:
+- If the favicon design ever changes, **bump the query-string version** on all `<link rel="icon">` / `<link rel="apple-touch-icon">` tags across all 5 HTML pages (`?v=3`, then `?v=4`, etc.) — not doing this leaves users and Google seeing the old cached icon for months.
+- Never let `/favicon.ico` 404 on GitHub Pages, even temporarily, or the octocat-cache trap re-arms itself.
+- Any newly-created HTML page in this site must copy the full favicon block from `index.html` — do not omit it "because browsers auto-request `/favicon.ico`"; Google's favicon indexer explicitly looks at the `<link>` tags.
+
+
+
 ## Heart-Logic Caution Signal (applies to every Heart section in this document)
 
 Whenever a request, question, or planned change touches, modifies, or risks disturbing **any** Heart-level logic documented anywhere in this file — not just the section it happens to be discussed under — prefix the response with a red heart (❤️) before proceeding, asking for confirmation, or explaining the risk. This makes Heart-adjacent moments immediately visible in the conversation, on top of (not instead of) the normal "stop and ask" behavior each Heart section already requires.
