@@ -1,0 +1,7 @@
+# PearlFox — robots.txt
+# Allow all well-behaved crawlers everywhere.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://pearlfox.io/sitemap.xml
