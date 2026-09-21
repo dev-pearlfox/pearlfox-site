@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Private internal tool. Do NOT index. -->
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="googlebot" content="noindex, nofollow">
+<title>PearlFox — CEO Dashboard</title>
+<!--
+    PearlFox CEO Dashboard
+    ============================================
+    Hub page linking all internal tools. Uses the same Supabase project
+    and single shared login as the expenses tracker. Once you sign in
+    here, the same session unlocks the tracker without re-login
+    (Supabase persists the session in localStorage on the pearlfox.io
+    origin, shared by every page).
+-->
+<style>
+    :root {
+        --pearl-light: #FBF6EF;
+        --pearl-cream: #F5DFC9;
+        --pearl-warm:  #EDC9A9;
+        --pearl-deep:  #C98F63;
+        --fox-bright:  #FFB245;
+        --fox-orange:  #FC8215;
+        --fox-amber:   #F45A08;
+        --fox-deep:    #D92802;
+        --fox-dark:    #8A1204;
+
+        --bg:           var(--pearl-light);
+        --surface:      #FFFFFF;
+        --surface-alt:  #FCF9F4;
+        --text:         #1A1310;
+        --text-muted:   #5A4E44;
+        --border:       rgba(20,10,0,0.10);
+        --border-strong:rgba(20,10,0,0.22);
+        --danger:       var(--fox-dark);
+
+        --shadow-sm: 0 1px 2px rgba(20,10,0,0.06);
+        --shadow-md: 0 4px 12px rgba(20,10,0,0.08);
+        --shadow-lg: 0 12px 32px rgba(20,10,0,0.15);
+        --shadow-card: 0 6px 20px rgba(20,10,0,0.10);
+
+        --radius-sm: 4px;
+        --radius-md: 8px;
+        --radius-lg: 14px;
+
+        --fox-gradient: linear-gradient(135deg, var(--fox-bright), var(--fox-amber));
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+        margin: 0;
+        width: 100%;
+        min-height: 100%;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        color: var(--text);
+        background: var(--bg);
+        font-size: 15px;
+        line-height: 1.5;
+    }
+
+    /* ---- Login (identical UX to tracker) ---- */
+    .login {
+        position: fixed;
+        inset: 0;
+        background:
+            radial-gradient(ellipse at top left,  rgba(255,178,69,0.18), transparent 55%),
+            radial-gradient(ellipse at bottom right, rgba(252,130,21,0.15), transparent 55%),
+            var(--bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        padding: 20px;
+    }
+    .login-box {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 36px 32px 28px;
+        width: 340px;
+        max-width: 100%;
+        text-align: center;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-lg);
+        position: relative;
+    }
+    .login-box::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 24px; right: 24px;
+        height: 3px;
+        background: var(--fox-gradient);
+        border-radius: 0 0 4px 4px;
+    }
+    .login-box h2 {
+        margin: 0 0 6px;
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: -0.3px;
+    }
+    .login-box .sub {
+        margin: 0 0 20px;
+        color: var(--text-muted);
+        font-size: 13px;
+    }
+    .login-box input {
+        width: 100%;
+        padding: 12px 14px;
+        margin: 6px 0 8px;
+        font: inherit;
+        font-size: 14px;
+        border: 1px solid var(--border-strong);
+        border-radius: var(--radius-md);
+        background: var(--surface);
+        color: var(--text);
+        transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .login-box input:focus {
+        outline: none;
+        border-color: var(--fox-orange);
+        box-shadow: 0 0 0 3px rgba(252,130,21,0.18);
+    }
+    .login-box button {
+        width: 100%;
+        padding: 11px 20px;
+        margin-top: 12px;
+        cursor: pointer;
+        font: inherit;
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        color: #1A0E04;
+        background: var(--fox-gradient);
+        border: none;
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-sm);
+        transition: transform 0.05s, filter 0.15s;
+    }
+    .login-box button:hover:not(:disabled) { filter: brightness(1.05); }
+    .login-box button:active { transform: translateY(1px); }
+    .login-box button:disabled { opacity: 0.55; cursor: wait; }
+    .error {
+        color: var(--danger);
+        font-size: 13px;
+        min-height: 18px;
+        margin-top: 8px;
+    }
+
+    #app { display: none; min-height: 100vh; }
+    #app.ready { display: block; }
+
+    /* ---- Top-right sign-out ---- */
+    .top-right {
+        position: fixed;
+        top: 14px;
+        right: 22px;
+        z-index: 200;
+    }
+    .top-right button {
+        font: inherit;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        padding: 7px 12px;
+        border: 1px solid var(--border-strong);
+        background: var(--surface);
+        color: var(--text);
+        cursor: pointer;
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-sm);
+        transition: background 0.15s, border-color 0.15s;
+    }
+    .top-right button:hover {
+        background: var(--pearl-cream);
+        border-color: var(--pearl-deep);
+    }
+
+    /* ---- Dashboard ---- */
+    .dash {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 56px 24px 40px;
+    }
+    .dash-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    .dash-header h1 {
+        font-size: 34px;
+        font-weight: 800;
+        letter-spacing: -0.6px;
+        margin: 0 0 6px;
+        color: var(--text);
+    }
+    .dash-header h1::after {
+        content: "";
+        display: block;
+        width: 56px;
+        height: 3px;
+        background: var(--fox-gradient);
+        border-radius: 2px;
+        margin: 10px auto 0;
+    }
+    .dash-header p {
+        margin: 12px 0 0;
+        color: var(--text-muted);
+        font-size: 15px;
+    }
+
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+    }
+
+    .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 24px 22px 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        box-shadow: var(--shadow-sm);
+        transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.15s;
+        position: relative;
+        overflow: hidden;
+    }
+    .card::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        background: var(--fox-gradient);
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+    .card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-card);
+        border-color: var(--pearl-deep);
+    }
+    .card:hover::before { opacity: 1; }
+
+    .card-icon {
+        width: 54px;
+        height: 54px;
+        border-radius: var(--radius-md);
+        background: var(--fox-gradient);
+        color: #1A0E04;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        box-shadow: 0 2px 8px rgba(252,130,21,0.28);
+        flex-shrink: 0;
+    }
+    .card h3 {
+        margin: 4px 0 0;
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: -0.2px;
+    }
+    .card p {
+        margin: 0;
+        color: var(--text-muted);
+        font-size: 13px;
+        line-height: 1.55;
+        flex: 1;
+    }
+    .card-btn {
+        display: inline-block;
+        margin-top: 6px;
+        padding: 9px 18px;
+        border-radius: var(--radius-md);
+        font: inherit;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        text-align: center;
+        cursor: pointer;
+        text-decoration: none;
+        border: none;
+        color: #1A0E04;
+        background: var(--fox-gradient);
+        box-shadow: var(--shadow-sm);
+        transition: filter 0.15s, transform 0.05s;
+    }
+    .card-btn:hover:not(:disabled) { filter: brightness(1.05); }
+    .card-btn:active:not(:disabled) { transform: translateY(1px); }
+    .card-btn:disabled {
+        opacity: 1;
+        background: var(--pearl-warm);
+        color: var(--text-muted);
+        cursor: not-allowed;
+        box-shadow: none;
+    }
+
+    .card.coming-soon .card-icon {
+        background: var(--pearl-warm);
+        color: var(--text-muted);
+        box-shadow: none;
+    }
+    .badge {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        padding: 4px 8px;
+        background: var(--pearl-cream);
+        color: var(--fox-dark);
+        border-radius: 999px;
+        border: 1px solid var(--pearl-deep);
+    }
+
+    /* Toast for auth errors */
+    .toast {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%) translateY(140%);
+        background: var(--text);
+        color: var(--pearl-light);
+        padding: 12px 20px;
+        border-radius: var(--radius-md);
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: var(--shadow-lg);
+        z-index: 500;
+        transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+        max-width: 90vw;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.error { background: var(--fox-dark); }
+
+    /* Config-error screen */
+    .config-error {
+        position: fixed;
+        inset: 0;
+        background: var(--bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        padding: 20px;
+    }
+    .config-error .box {
+        background: var(--surface);
+        border: 1px solid var(--fox-dark);
+        border-top: 4px solid var(--fox-dark);
+        padding: 28px 30px;
+        max-width: 540px;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-lg);
+    }
+    .config-error h2 { color: var(--fox-dark); margin-top: 0; font-size: 20px; }
+    .config-error code {
+        background: var(--pearl-cream);
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-family: "SF Mono", Menlo, Consolas, monospace;
+        color: var(--fox-dark);
+    }
+
+    @media (max-width: 600px) {
+        .dash { padding: 40px 16px 32px; }
+        .dash-header h1 { font-size: 26px; }
+        .card { padding: 20px 18px 18px; }
+        .top-right { top: 10px; right: 12px; }
+        .top-right button { font-size: 11px; padding: 5px 9px; }
+        .login-box { padding: 28px 22px 20px; }
+    }
+</style>
+</head>
+<body>
+
+<!-- Login -->
+<div id="login" class="login">
+    <div class="login-box">
+        <h2>PearlFox</h2>
+        <p class="sub">CEO Dashboard</p>
+        <input type="password" id="login-password" placeholder="Password" autocomplete="current-password" autofocus>
+        <button type="button" id="btn-login">Unlock</button>
+        <div id="login-error" class="error" role="alert"></div>
+    </div>
+</div>
+
+<!-- Dashboard -->
+<div id="app">
+    <div class="top-right">
+        <button type="button" id="btn-logout" title="Sign out">Sign out</button>
+    </div>
+
+    <div class="dash">
+        <header class="dash-header">
+            <h1>CEO Dashboard</h1>
+            <p>PearlFox internal tools and timelines</p>
+        </header>
+
+        <div class="card-grid">
+
+            <!-- Expenses Tracker -->
+            <div class="card">
+                <div class="card-icon">Rs</div>
+                <h3>Expenses Tracker</h3>
+                <p>Log shared expenses between Manoj and Praveen. Attach receipts, export CSV, view running totals.</p>
+                <a href="et-9k2m7x4.html" class="card-btn">Open Tracker</a>
+            </div>
+
+            <!-- Product Roadmap -->
+            <div class="card coming-soon">
+                <span class="badge">In dev</span>
+                <div class="card-icon">PR</div>
+                <h3>Product Roadmap</h3>
+                <p>Feature milestones, release timeline, and product bets. Coming when there is something worth tracking.</p>
+                <button type="button" class="card-btn" disabled>Coming soon</button>
+            </div>
+
+            <!-- Company Roadmap -->
+            <div class="card coming-soon">
+                <span class="badge">In dev</span>
+                <div class="card-icon">CR</div>
+                <h3>Company Roadmap</h3>
+                <p>Hiring, funding rounds, key company milestones. A single source of truth for the timeline.</p>
+                <button type="button" class="card-btn" disabled>Coming soon</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+"use strict";
+
+// Same Supabase project + login as the expenses tracker.
+const SUPABASE_URL      = "https://sbeltsxzciquslnqdunv.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_VWYVGfp4m7RMfY-FliZYRw_ZYmA8Y9H";
+const LOGIN_EMAIL       = "pearlfox@local.app";
+
+if (SUPABASE_URL.startsWith("REPLACE_ME") || SUPABASE_ANON_KEY.startsWith("REPLACE_ME")) {
+    document.body.innerHTML = `
+        <div class="config-error"><div class="box">
+            <h2>Supabase not configured</h2>
+            <p>Set <code>SUPABASE_URL</code> and <code>SUPABASE_ANON_KEY</code> in this file's script block.</p>
+        </div></div>`;
+    throw new Error("Supabase config missing");
+}
+
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    auth: { persistSession: true, autoRefreshToken: true }
+});
+
+let toastTimer = null;
+function toast(msg, kind) {
+    const el = document.getElementById("toast");
+    el.textContent = msg;
+    el.className = "toast show" + (kind ? " " + kind : "");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove("show"), 3500);
+}
+
+async function handleLogin() {
+    const password = document.getElementById("login-password").value;
+    const errorEl  = document.getElementById("login-error");
+    const btn      = document.getElementById("btn-login");
+
+    errorEl.textContent = "";
+    if (!password) { errorEl.textContent = "Enter password"; return; }
+
+    btn.disabled = true;
+    btn.textContent = "Unlocking...";
+    try {
+        const { error } = await sb.auth.signInWithPassword({ email: LOGIN_EMAIL, password });
+        if (error) throw error;
+        enterApp();
+    } catch (e) {
+        errorEl.textContent = (e.message || "").toLowerCase().includes("invalid")
+            ? "Incorrect password"
+            : (e.message || "Sign-in failed");
+    } finally {
+        btn.disabled = false;
+        btn.textContent = "Unlock";
+    }
+}
+
+async function handleLogout() {
+    if (!confirm("Sign out?")) return;
+    try { await sb.auth.signOut(); } catch (e) { /* ignore */ }
+    location.reload();
+}
+
+function enterApp() {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("app").style.display = "block";
+    document.getElementById("app").classList.add("ready");
+}
+
+(async function init() {
+    document.getElementById("btn-login").addEventListener("click", handleLogin);
+    document.getElementById("btn-logout").addEventListener("click", handleLogout);
+    document.getElementById("login-password").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") handleLogin();
+    });
+
+    // Reuse existing session if user already logged in (e.g. via tracker).
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) enterApp();
+})();
+</script>
+</body>
+</html>
