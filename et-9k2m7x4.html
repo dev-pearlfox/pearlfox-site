@@ -595,11 +595,11 @@
        ============================================================ */
     @media (max-width: 780px) {
         .container {
-            padding: 12px 8px 8px;
+            padding: 52px 8px 8px;   /* top: enough to clear the fixed .top-right cluster */
             gap: 8px;
         }
 
-        h1 { font-size: 20px; padding: 4px 0 4px; }
+        h1 { font-size: 20px; padding: 4px 12px; }  /* side padding so text never runs under fixed buttons */
 
         /* Toolbar: compact but keep single row */
         .toolbar {
