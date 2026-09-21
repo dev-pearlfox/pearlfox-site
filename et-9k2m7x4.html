@@ -651,7 +651,7 @@
                 <tr>
                     <td class="sno"></td>
                     <td class="date"></td>
-                    <td class="description footer-label">TOTAL</td>
+                    <td class="description footer-label">GRAND TOTAL</td>
                     <td class="expense footer-total" id="totalExpense">₹0</td>
                     <td class="share"></td>
                     <td class="person footer-total" id="totalManoj">₹0</td>
@@ -1338,7 +1338,7 @@ function exportCSV() {
         const a = computeAmounts(r);
         tm += a.manoj; tp += a.praveen;
     });
-    lines.push(["","","TOTAL", Math.round(te), "", Math.round(tm), "", Math.round(tp), "", "", ""].map(csvEscape).join(","));
+    lines.push(["","","GRAND TOTAL", Math.round(te), "", Math.round(tm), "", Math.round(tp), "", "", ""].map(csvEscape).join(","));
 
     const blob = new Blob(["\ufeff" + lines.join("\n")], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
