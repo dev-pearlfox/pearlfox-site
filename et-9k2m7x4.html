@@ -482,10 +482,20 @@
     body.table-locked #btn-add,
     body.table-locked .paid-check,
     body.table-locked .share-select,
-    body.table-locked input[type="date"],
-    body.table-locked .receipt-btn,
-    body.table-locked .receipt-remove {
+    body.table-locked input[type="date"] {
         cursor: not-allowed;
+    }
+
+    /* Locked-state receipt cell: hide "add" button (dead action) and
+       hide "×" remove button (can't remove while locked). "View" button
+       (.has-file) stays visible and clickable so attachments remain
+       downloadable in locked mode. */
+    body.table-locked .receipt-btn:not(.has-file),
+    body.table-locked .receipt-remove {
+        display: none;
+    }
+    body.table-locked .receipt-btn.has-file {
+        cursor: pointer;
     }
 
     /* Defeat browser's default washed-out styling on disabled form
@@ -1020,7 +1030,11 @@ function applyLockToDom() {
     document.querySelectorAll('#expenseBody input, #expenseBody select').forEach(el => {
         el.disabled = locked;
     });
-    document.querySelectorAll('#expenseBody .receipt-btn, #expenseBody .receipt-remove').forEach(el => {
+    // Receipt "view/add" button stays enabled even when locked so users
+    // can still view/download attachments. The click handler refuses to
+    // fire the upload path when locked; CSS hides the "add" (no-file)
+    // variant so no dead buttons are visible.
+    document.querySelectorAll('#expenseBody .receipt-remove').forEach(el => {
         el.disabled = locked;
     });
     const addBtn = document.getElementById("btn-add");
