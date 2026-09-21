@@ -74,10 +74,12 @@
 
     .container {
         width: 100%;
+        max-width: 1080px;      /* match table width; no wasted side space */
+        margin: 0 auto;
         height: 100vh;
         display: flex;
         flex-direction: column;
-        padding: 16px 24px 12px;
+        padding: 16px 0 12px;   /* vertical only; sides are naturally aligned with the table */
         gap: 10px;
     }
 
