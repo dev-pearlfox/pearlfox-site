@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PearlFox Expenses Tracker</title>
+<!--
+    PearlFox Expenses Tracker (Supabase-backed)
+    ============================================
+    SETUP STEPS:
+    1. Run supabase_setup.sql in your Supabase SQL editor.
+    2. Create a single shared user under Authentication → Users.
+    3. Fill in SUPABASE_URL and SUPABASE_ANON_KEY below (search for
+       "REPLACE_ME"). The anon key is safe to expose; RLS enforces
+       that only authenticated users can read/write data.
+    4. Host this file on pearlfox.io as a static asset.
+-->
+<style>
+    /* =========================================================
+       PearlFox Expenses Tracker — brand-aligned UI
+       Uses the PearlFox palette (fox orange accents on pearl cream)
+       ========================================================= */
+    :root {
+        /* Brand */
+        --pearl-light: #FBF6EF;
+        --pearl-cream: #F5DFC9;
+        --pearl-warm:  #EDC9A9;
+        --pearl-deep:  #C98F63;
+        --fox-bright:  #FFB245;
+        --fox-orange:  #FC8215;
+        --fox-amber:   #F45A08;
+        --fox-deep:    #D92802;
+        --fox-dark:    #8A1204;
+
+        /* Semantic */
+        --bg:          var(--pearl-light);
+        --surface:     #FFFFFF;
+        --surface-alt: #FCF9F4;
+        --text:        #1A1310;
+        --text-muted:  #5A4E44;
+        --border:      rgba(20,10,0,0.10);
+        --border-strong: rgba(20,10,0,0.22);
+        --success:     #1f7a3a;
+        --success-dark:#145c2a;
+        --danger:      var(--fox-dark);
+
+        --shadow-sm: 0 1px 2px rgba(20,10,0,0.06);
+        --shadow-md: 0 4px 12px rgba(20,10,0,0.08);
+        --shadow-lg: 0 12px 32px rgba(20,10,0,0.15);
+
+        --radius-sm: 4px;
+        --radius-md: 8px;
+        --radius-lg: 12px;
+
+        --fox-gradient: linear-gradient(135deg, var(--fox-bright), var(--fox-amber));
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        color: var(--text);
+        background: var(--bg);
+        font-size: 14px;
+    }
+    body { overflow: hidden; }
+
+    .container {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        padding: 16px 24px 12px;
+        gap: 10px;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: -0.3px;
+        margin: 0;
+        padding: 6px 0 2px;
+        flex-shrink: 0;
+        color: var(--text);
+    }
+    h1::after {
+        content: "";
+        display: block;
+        width: 48px;
+        height: 3px;
+        background: var(--fox-gradient);
+        border-radius: 2px;
+        margin: 6px auto 0;
+    }
+
+    /* Toolbar */
+    .toolbar {
+        padding: 0 0 6px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: 100%;
+        max-width: 1080px;
+        margin: 0 auto;
+    }
+    .toolbar button,
+    .toolbar input[type="search"] {
+        font: inherit;
+        font-size: 13px;
+        padding: 7px 14px;
+        border: 1px solid var(--border-strong);
+        background: var(--surface);
+        color: var(--text);
+        cursor: pointer;
+        border-radius: var(--radius-md);
+        transition: background 0.15s ease, border-color 0.15s ease, transform 0.05s ease;
+    }
+    .toolbar button:hover {
+        background: var(--pearl-cream);
+        border-color: var(--pearl-deep);
+    }
+    .toolbar button:active { transform: translateY(1px); }
+    .toolbar input[type="search"] {
+        cursor: text;
+        min-width: 200px;
+        flex: 0 1 260px;
+        background: var(--surface);
+    }
+    .toolbar input[type="search"]:focus {
+        outline: none;
+        border-color: var(--fox-orange);
+        box-shadow: 0 0 0 3px rgba(252,130,21,0.15);
+    }
+    .toolbar .spacer { flex: 1; }
+    .toolbar .status {
+        font-size: 12px;
+        color: var(--text-muted);
+        font-style: italic;
+    }
+
+    /* Table container */
+    .table-wrap {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        background: var(--surface);
+        box-shadow: var(--shadow-sm);
+    }
+
+    table {
+        width: 1080px;
+        min-width: 1080px;
+        table-layout: fixed;
+        border-collapse: separate;
+        border-spacing: 0;
+        background: var(--surface);
+        margin: 0 auto;
+        font-size: 13px;
+    }
+
+    th, td {
+        border-right: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        padding: 10px 8px;
+        height: 32px;
+        background: var(--surface);
+    }
+    th:last-child, td:last-child { border-right: none; }
+    tbody tr:last-child td { border-bottom: none; }
+
+    thead th {
+        background: var(--pearl-cream);
+        color: var(--text);
+        text-align: center;
+        vertical-align: middle;
+        font-weight: 700;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        position: sticky;
+        top: 0;
+        z-index: 90;
+        border-bottom: 2px solid var(--pearl-deep);
+    }
+    thead th.sortable { cursor: pointer; user-select: none; transition: background 0.12s; }
+    thead th.sortable:hover { background: var(--pearl-warm); }
+    thead th .sort-arrow {
+        display: inline-block;
+        width: 10px;
+        color: var(--fox-orange);
+        font-weight: bold;
+    }
+
+    /* Zebra striping */
+    tbody tr:nth-child(even) td { background: var(--surface-alt); }
+    tbody tr:hover td { background: #FFF6E9; }
+
+    tfoot td {
+        background: var(--pearl-cream);
+        color: var(--text);
+        font-weight: 700;
+        text-align: center;
+        position: sticky;
+        bottom: 0;
+        z-index: 80;
+        border-top: 2px solid var(--pearl-deep);
+        font-size: 13px;
+    }
+
+    input[type="date"] {
+        width: 100%;
+        border: none;
+        background: transparent;
+        font: inherit;
+        color: var(--text);
+        cursor: pointer;
+        outline: none;
+    }
+
+    td[contenteditable="true"] { outline: none; transition: background 0.12s; }
+    td[contenteditable="true"]:focus {
+        background: #FFF3D6 !important;
+        box-shadow: inset 0 0 0 2px var(--fox-bright);
+    }
+
+    /* Column widths */
+    .sno         { width: 46px;  }
+    .date        { width: 120px; }
+    .description { width: 220px; }
+    .expense     { width: 120px; }
+    .share       { width: 110px; }
+    .person      { width: 130px; }
+    .remark      { width: 150px; }
+    .receipt     { width: 64px;  }
+
+    thead th   { text-align: center; }
+    td.sno     { text-align: center; color: var(--text-muted); font-weight: 600; }
+    td.date    { text-align: center; }
+    td.expense { text-align: right; font-variant-numeric: tabular-nums; }
+    td.share   { text-align: center; }
+    td.person  { text-align: center; font-variant-numeric: tabular-nums; }
+    td.receipt { text-align: center; }
+
+    .person-cell {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 28px;
+    }
+    .person-amount { min-width: 55px; text-align: right; }
+    .paid-check    { width: 16px; height: 16px; cursor: pointer; accent-color: var(--success); }
+    .person-cell.checked { color: var(--success-dark); font-weight: 700; }
+    .person-cell.checked .person-amount { color: var(--success-dark); }
+
+    .share-select {
+        width: 100%;
+        border: none;
+        background: transparent;
+        font: inherit;
+        color: var(--text);
+        cursor: pointer;
+        outline: none;
+        text-align: center;
+    }
+
+    /* Receipt buttons */
+    .receipt-cell {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+    }
+    .receipt-btn {
+        background: transparent;
+        border: 1px solid var(--border-strong);
+        cursor: pointer;
+        font-size: 10px;
+        padding: 3px 8px;
+        border-radius: var(--radius-sm);
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 700;
+        transition: all 0.15s;
+    }
+    .receipt-btn:hover {
+        background: var(--pearl-cream);
+        color: var(--text);
+    }
+    .receipt-btn.has-file {
+        color: white;
+        background: var(--fox-gradient);
+        border-color: transparent;
+        box-shadow: var(--shadow-sm);
+    }
+    .receipt-btn.has-file:hover { filter: brightness(1.05); }
+    .receipt-remove {
+        color: var(--danger);
+        background: transparent;
+        border: none;
+        font-size: 14px;
+        padding: 0 4px;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+    .receipt-remove:hover { background: rgba(217,40,2,0.1); }
+
+    .footer-label { text-align: center; }
+    .footer-total { text-align: right; }
+
+    tr.filtered-out { display: none; }
+
+    /* ---- Login screen ---- */
+    .login {
+        position: fixed;
+        inset: 0;
+        background:
+            radial-gradient(ellipse at top left,  rgba(255,178,69,0.18), transparent 55%),
+            radial-gradient(ellipse at bottom right, rgba(252,130,21,0.15), transparent 55%),
+            var(--bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        padding: 20px;
+    }
+    .login-box {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 36px 32px 28px;
+        width: 340px;
+        max-width: 100%;
+        text-align: center;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-lg);
+        position: relative;
+    }
+    .login-box::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 24px; right: 24px;
+        height: 3px;
+        background: var(--fox-gradient);
+        border-radius: 0 0 4px 4px;
+    }
+    .login-box h2 {
+        margin: 0 0 20px;
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: -0.3px;
+        color: var(--text);
+    }
+    .login-box input {
+        width: 100%;
+        padding: 12px 14px;
+        margin: 6px 0 8px;
+        font: inherit;
+        font-size: 14px;
+        border: 1px solid var(--border-strong);
+        border-radius: var(--radius-md);
+        background: var(--surface);
+        color: var(--text);
+        transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .login-box input:focus {
+        outline: none;
+        border-color: var(--fox-orange);
+        box-shadow: 0 0 0 3px rgba(252,130,21,0.18);
+    }
+    .login-box button {
+        width: 100%;
+        padding: 11px 20px;
+        margin-top: 12px;
+        cursor: pointer;
+        font: inherit;
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        color: #1A0E04;
+        background: var(--fox-gradient);
+        border: none;
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-sm);
+        transition: transform 0.05s, filter 0.15s;
+    }
+    .login-box button:hover:not(:disabled) { filter: brightness(1.05); }
+    .login-box button:active { transform: translateY(1px); }
+    .login-box button:disabled { opacity: 0.55; cursor: wait; }
+
+    .error {
+        color: var(--danger);
+        font-size: 13px;
+        min-height: 18px;
+        margin-top: 8px;
+    }
+
+    #app { display: none; width: 100%; height: 100vh; }
+    #app.ready { display: block; }
+
+    /* Add-row bar */
+    .add-row-bar {
+        flex-shrink: 0;
+        padding: 8px 0 4px;
+        display: flex;
+        justify-content: center;
+    }
+    .add-row-bar button {
+        font: inherit;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        padding: 9px 22px;
+        border: none;
+        background: var(--fox-gradient);
+        color: #1A0E04;
+        cursor: pointer;
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-sm);
+        transition: transform 0.05s, filter 0.15s;
+    }
+    .add-row-bar button:hover:not(:disabled) { filter: brightness(1.05); }
+    .add-row-bar button:active:not(:disabled) { transform: translateY(1px); }
+    .add-row-bar button:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+        background: var(--pearl-warm);
+        color: var(--text-muted);
+    }
+
+    /* Top-right cluster */
+    .top-right {
+        position: fixed;
+        top: 14px;
+        right: 22px;
+        z-index: 200;
+        display: flex;
+        gap: 8px;
+    }
+    .top-right button {
+        font: inherit;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        padding: 7px 12px;
+        border: 1px solid var(--border-strong);
+        background: var(--surface);
+        color: var(--text);
+        cursor: pointer;
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: var(--shadow-sm);
+        transition: background 0.15s, border-color 0.15s;
+    }
+    .top-right button:hover {
+        background: var(--pearl-cream);
+        border-color: var(--pearl-deep);
+    }
+    .lock-btn.unlocked {
+        background: var(--fox-gradient);
+        border-color: transparent;
+        color: #1A0E04;
+    }
+    .lock-btn.unlocked:hover { filter: brightness(1.05); background: var(--fox-gradient); }
+
+    /* Locked-state dimming */
+    body.table-locked #btn-add,
+    body.table-locked .paid-check,
+    body.table-locked .share-select,
+    body.table-locked input[type="date"],
+    body.table-locked .receipt-btn,
+    body.table-locked .receipt-remove {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    /* Toast */
+    .toast {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%) translateY(140%);
+        background: var(--text);
+        color: var(--pearl-light);
+        padding: 12px 20px;
+        border-radius: var(--radius-md);
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: var(--shadow-lg);
+        z-index: 500;
+        transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+        max-width: 90vw;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.error { background: var(--fox-dark); }
+    .toast.success { background: var(--success); }
+
+    /* Loading overlay */
+    .loading {
+        position: fixed;
+        inset: 0;
+        background: rgba(251,246,239,0.85);
+        backdrop-filter: blur(2px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 900;
+        font-size: 14px;
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+
+    /* Config-error screen */
+    .config-error {
+        position: fixed;
+        inset: 0;
+        background: var(--bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        padding: 20px;
+    }
+    .config-error .box {
+        background: var(--surface);
+        border: 1px solid var(--fox-dark);
+        border-top: 4px solid var(--fox-dark);
+        padding: 28px 30px;
+        max-width: 540px;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-lg);
+    }
+    .config-error h2 {
+        color: var(--fox-dark);
+        margin-top: 0;
+        font-size: 20px;
+        letter-spacing: -0.3px;
+    }
+    .config-error code {
+        background: var(--pearl-cream);
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-size: 13px;
+        font-family: "SF Mono", Menlo, Consolas, monospace;
+        color: var(--fox-dark);
+    }
+
+    /* Responsive */
+    @media (max-width: 700px) {
+        .container { padding: 10px 12px 8px; gap: 6px; }
+        h1 { font-size: 18px; }
+        th, td { padding: 8px 5px; font-size: 12px; }
+        thead th { font-size: 11px; letter-spacing: 0.3px; }
+        .login-box { width: calc(100% - 24px); padding: 28px 22px 20px; }
+        .top-right { top: 10px; right: 12px; }
+        .top-right button { font-size: 11px; padding: 5px 9px; }
+    }
+
+    /* Print */
+    @media print {
+        body, html { overflow: visible; background: white; }
+        .container { padding: 0; height: auto; display: block; }
+        .table-wrap { overflow: visible; border: none; box-shadow: none; border-radius: 0; }
+        .login, .toolbar, .add-row-bar, .paid-check, .top-right,
+        .receipt-btn, .receipt-remove, .toast, .loading { display: none !important; }
+        h1 { position: static; }
+        h1::after { display: none; }
+        table { width: 100%; min-width: 0; }
+        thead th, tfoot td { position: static; background: #eee !important; color: black !important; border: 1px solid #999 !important; }
+        thead th.sortable { cursor: default; }
+        tbody tr:nth-child(even) td { background: white !important; }
+        #app { display: block !important; height: auto; }
+    }
+</style>
+</head>
+<body>
+
+<!-- Login screen -->
+<div id="login" class="login">
+    <div class="login-box">
+        <h2>PearlFox Expenses Tracker</h2>
+        <input type="password" id="login-password" placeholder="Password" autocomplete="current-password" autofocus>
+        <button type="button"  id="btn-login">Unlock</button>
+        <div id="login-error" class="error" role="alert"></div>
+    </div>
+</div>
+
+<!-- App shell -->
+<div id="app">
+    <div class="top-right">
+        <button type="button" id="btn-lock" class="lock-btn" title="Click to unlock for editing" aria-pressed="true">
+            <span id="lock-label">Locked</span>
+        </button>
+        <button type="button" id="btn-logout" title="Sign out">Sign out</button>
+    </div>
+
+    <div class="container">
+        <h1>PearlFox Expenses Tracker</h1>
+
+        <div class="toolbar">
+            <button type="button" id="btn-export">Export CSV</button>
+            <button type="button" id="btn-print">Print</button>
+            <input type="search" id="filter" placeholder="Filter description or remark…" aria-label="Filter rows">
+            <span class="spacer"></span>
+            <span class="status" id="status"></span>
+        </div>
+
+        <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th class="sno">#</th>
+                    <th class="date sortable"    data-sort="date">Date <span class="sort-arrow" data-for="date"></span></th>
+                    <th class="description">Description</th>
+                    <th class="expense">Expense</th>
+                    <th class="share">Share</th>
+                    <th class="person sortable" data-sort="manoj">Manoj <span class="sort-arrow" data-for="manoj"></span></th>
+                    <th class="person sortable" data-sort="praveen">Praveen <span class="sort-arrow" data-for="praveen"></span></th>
+                    <th class="remark">Remark</th>
+                    <th class="receipt">Receipt</th>
+                </tr>
+            </thead>
+            <tbody id="expenseBody"></tbody>
+            <tfoot>
+                <tr>
+                    <td class="sno"></td>
+                    <td class="date"></td>
+                    <td class="description footer-label">TOTAL</td>
+                    <td class="expense footer-total" id="totalExpense">₹0</td>
+                    <td class="share"></td>
+                    <td class="person footer-total" id="totalManoj">₹0</td>
+                    <td class="person footer-total" id="totalPraveen">₹0</td>
+                    <td class="remark"></td>
+                    <td class="receipt"></td>
+                </tr>
+            </tfoot>
+        </table>
+        </div>
+
+        <div class="add-row-bar">
+            <button type="button" id="btn-add">+ Add Row</button>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden file input for receipt uploads -->
+<input type="file" id="file-input" accept="image/*,application/pdf" style="display:none">
+
+<!-- Toast + loading overlay -->
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div id="loading" class="loading" style="display:none">Loading…</div>
+
+<!-- Supabase SDK (UMD) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+"use strict";
+
+// ============================================================
+// CONFIG — fill these in before deploying
+// ============================================================
+const SUPABASE_URL      = "https://sbeltsxzciquslnqdunv.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_VWYVGfp4m7RMfY-FliZYRw_ZYmA8Y9H";
+// The Supabase user's email is hidden from the UI. Create a user in
+// Supabase Auth with THIS email (and password "janaki"). Users only
+// ever type the password on the login screen.
+const LOGIN_EMAIL       = "pearlfox@local.app";
+
+// ============================================================
+// Constants
+// ============================================================
+const CURRENCY      = "₹";
+const SHARE_OPTIONS = ["", "All", "Manoj", "Praveen"];
+const BUCKET        = "expense-receipts";
+const SAVE_DEBOUNCE_MS = 500;
+const DEFAULT_ROWS  = 30;   // auto-seeded on first load when DB is empty
+
+// ============================================================
+// Client init (with config-error guard)
+// ============================================================
+if (SUPABASE_URL.startsWith("REPLACE_ME") || SUPABASE_ANON_KEY.startsWith("REPLACE_ME")) {
+    document.body.innerHTML = `
+        <div class="config-error"><div class="box">
+            <h2>Supabase not configured</h2>
+            <p>Open this HTML file in a text editor and set:</p>
+            <ul>
+                <li><code>SUPABASE_URL</code> — your project's URL</li>
+                <li><code>SUPABASE_ANON_KEY</code> — your project's anon public key</li>
+            </ul>
+            <p>Both are at <strong>Supabase Dashboard → Settings → API</strong>.</p>
+            <p>Also run <code>supabase_setup.sql</code> in the SQL Editor and create a user in <strong>Authentication → Users</strong> with email <code>pearlfox@local.app</code> and password <code>janaki</code>.</p>
+        </div></div>`;
+    throw new Error("Supabase config missing");
+}
+
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    auth: { persistSession: true, autoRefreshToken: true }
+});
+
+// ============================================================
+// State (in-memory mirror of DB rows for rendering)
+// ============================================================
+let rows = [];             // array of row objects (camelCase, id from DB)
+let sort = { key: null, dir: 1 };
+let locked = true;
+
+// Pending debounced saves per row+field
+const pendingSaves = new Map();  // key: `${id}:${field}` → timeoutId
+
+// ============================================================
+// Utils
+// ============================================================
+function parseExpense(raw) {
+    if (raw === null || raw === undefined) return null;
+    const cleaned = String(raw).trim().replace(/[₹$,\s]/g, "");
+    if (cleaned === "") return null;
+    const n = parseFloat(cleaned);
+    return isNaN(n) ? null : n;
+}
+
+function formatMoney(n) {
+    if (n === null || n === undefined || isNaN(n)) return "";
+    return CURRENCY + Math.round(n).toLocaleString("en-IN");
+}
+
+function computeAmounts(row) {
+    const exp = row.expense;
+    if (exp === null || exp === undefined) return { manoj: 0, praveen: 0 };
+    if (row.share === "All")     return { manoj: exp / 2, praveen: exp / 2 };
+    if (row.share === "Manoj")   return { manoj: exp,     praveen: 0 };
+    if (row.share === "Praveen") return { manoj: 0,       praveen: exp };
+    return { manoj: 0, praveen: 0 };
+}
+
+// DB → client shape
+function fromDb(r) {
+    return {
+        id:          r.id,
+        date:        r.row_date || "",
+        description: r.description || "",
+        expense:     r.expense === null ? null : Number(r.expense),
+        share:       r.share || "",
+        manojPaid:   !!r.manoj_paid,
+        praveenPaid: !!r.praveen_paid,
+        remark:      r.remark || "",
+        receiptPath: r.receipt_path || null,
+        receiptName: r.receipt_name || null,
+        sortOrder:   r.sort_order || 0
+    };
+}
+
+// Client field name → DB column name
+const FIELD_TO_COL = {
+    date:        "row_date",
+    description: "description",
+    expense:     "expense",
+    share:       "share",
+    manojPaid:   "manoj_paid",
+    praveenPaid: "praveen_paid",
+    remark:      "remark",
+    receiptPath: "receipt_path",
+    receiptName: "receipt_name",
+    sortOrder:   "sort_order"
+};
+
+// ============================================================
+// Toast + status
+// ============================================================
+let toastTimer = null;
+function toast(msg, kind) {
+    const el = document.getElementById("toast");
+    el.textContent = msg;
+    el.className = "toast show" + (kind ? " " + kind : "");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove("show"), 3500);
+}
+
+let statusTimer = null;
+function setStatus(msg) {
+    const el = document.getElementById("status");
+    if (!el) return;
+    el.textContent = msg;
+    clearTimeout(statusTimer);
+    statusTimer = setTimeout(() => { el.textContent = ""; }, 1500);
+}
+
+function showLoading(show) {
+    document.getElementById("loading").style.display = show ? "flex" : "none";
+}
+
+// ============================================================
+// Data access — Supabase
+// ============================================================
+async function fetchRows() {
+    const { data, error } = await sb
+        .from("expenses")
+        .select("*")
+        .order("sort_order", { ascending: true })
+        .order("created_at", { ascending: true });
+    if (error) throw error;
+    return (data || []).map(fromDb);
+}
+
+// Bulk-insert N blank rows. Used to seed the sheet on first load.
+async function seedDefaultRows(n) {
+    const blanks = [];
+    for (let i = 0; i < n; i++) {
+        blanks.push({
+            row_date: null,
+            description: "",
+            expense: null,
+            share: "",
+            manoj_paid: false,
+            praveen_paid: false,
+            remark: "",
+            sort_order: i + 1
+        });
+    }
+    const { error } = await sb.from("expenses").insert(blanks);
+    if (error) throw error;
+}
+
+async function insertRow(patch) {
+    const dbPatch = {};
+    for (const [k, v] of Object.entries(patch)) {
+        if (FIELD_TO_COL[k]) dbPatch[FIELD_TO_COL[k]] = v;
+    }
+    // Set sort_order = max + 1
+    const maxOrder = rows.reduce((m, r) => Math.max(m, r.sortOrder || 0), 0);
+    dbPatch.sort_order = maxOrder + 1;
+
+    const { data, error } = await sb
+        .from("expenses")
+        .insert(dbPatch)
+        .select()
+        .single();
+    if (error) throw error;
+    return fromDb(data);
+}
+
+async function updateRowInDb(id, patch) {
+    const dbPatch = {};
+    for (const [k, v] of Object.entries(patch)) {
+        if (FIELD_TO_COL[k]) dbPatch[FIELD_TO_COL[k]] = v;
+    }
+    if (Object.keys(dbPatch).length === 0) return;
+    const { error } = await sb.from("expenses").update(dbPatch).eq("id", id);
+    if (error) throw error;
+}
+
+// Debounced update — text fields fire many events per keystroke
+function scheduleSave(id, field, value) {
+    const key = `${id}:${field}`;
+    clearTimeout(pendingSaves.get(key));
+    const t = setTimeout(async () => {
+        pendingSaves.delete(key);
+        try {
+            await updateRowInDb(id, { [field]: value });
+            setStatus("Saved");
+        } catch (e) {
+            toast("Save failed: " + e.message, "error");
+        }
+    }, SAVE_DEBOUNCE_MS);
+    pendingSaves.set(key, t);
+}
+
+// Immediate save (checkboxes, selects)
+async function saveNow(id, field, value) {
+    try {
+        await updateRowInDb(id, { [field]: value });
+        setStatus("Saved");
+    } catch (e) {
+        toast("Save failed: " + e.message, "error");
+    }
+}
+
+function getRow(id) { return rows.find(r => r.id === id); }
+
+// ============================================================
+// Rendering
+// ============================================================
+function rowTemplate(row, index) {
+    const tr = document.createElement("tr");
+    tr.dataset.id = row.id;
+
+    const amounts = computeAmounts(row);
+    const shareOptionsHtml = SHARE_OPTIONS.map(v =>
+        `<option value="${v}"${row.share === v ? " selected" : ""}>${v === "" ? "Select" : v}</option>`
+    ).join("");
+
+    const hasReceipt = !!row.receiptPath;
+    const receiptLabel = hasReceipt ? "view" : "add";
+    const receiptTitle = hasReceipt ? `View ${row.receiptName || "receipt"}` : "Upload receipt";
+
+    tr.innerHTML = `
+        <td class="sno">${index + 1}</td>
+        <td class="date"><input type="date" data-field="date" value="${row.date || ""}"></td>
+        <td class="description" contenteditable="true" data-field="description"></td>
+        <td class="expense" contenteditable="true" data-field="expense" inputmode="decimal"></td>
+        <td class="share">
+            <select class="share-select" data-field="share">${shareOptionsHtml}</select>
+        </td>
+        <td class="person">
+            <div class="person-cell${row.manojPaid ? " checked" : ""}">
+                <input type="checkbox" class="paid-check" data-field="manojPaid"${row.manojPaid ? " checked" : ""} aria-label="Manoj paid">
+                <span class="person-amount manoj-amount">${formatMoney(amounts.manoj)}</span>
+            </div>
+        </td>
+        <td class="person">
+            <div class="person-cell${row.praveenPaid ? " checked" : ""}">
+                <input type="checkbox" class="paid-check" data-field="praveenPaid"${row.praveenPaid ? " checked" : ""} aria-label="Praveen paid">
+                <span class="person-amount praveen-amount">${formatMoney(amounts.praveen)}</span>
+            </div>
+        </td>
+        <td class="remark" contenteditable="true" data-field="remark"></td>
+        <td class="receipt">
+            <div class="receipt-cell">
+                <button type="button" class="receipt-btn${hasReceipt ? " has-file" : ""}" data-action="receipt" title="${receiptTitle}">${receiptLabel}</button>
+                ${hasReceipt ? '<button type="button" class="receipt-remove" data-action="remove-receipt" title="Remove receipt">×</button>' : ""}
+            </div>
+        </td>
+    `;
+
+    tr.querySelector('[data-field="description"]').textContent = row.description || "";
+    tr.querySelector('[data-field="expense"]').textContent =
+        row.expense === null ? "" : formatMoney(row.expense);
+    tr.querySelector('[data-field="remark"]').textContent = row.remark || "";
+
+    return tr;
+}
+
+function render() {
+    const tbody = document.getElementById("expenseBody");
+    tbody.innerHTML = "";
+    const view = getSortedRows();
+    view.forEach((row, i) => tbody.appendChild(rowTemplate(row, i)));
+    updateTotals();
+    updateSortIndicators();
+    applyFilter();
+    applyLockToDom();
+}
+
+function getSortedRows() {
+    if (!sort.key) return rows;
+    const dir = sort.dir;
+    const key = sort.key;
+    const copy = rows.slice();
+    copy.sort((a, b) => {
+        if (key === "date") {
+            return (a.date || "").localeCompare(b.date || "") * dir;
+        }
+        const aAmt = computeAmounts(a), bAmt = computeAmounts(b);
+        const av = key === "manoj" ? aAmt.manoj : aAmt.praveen;
+        const bv = key === "manoj" ? bAmt.manoj : bAmt.praveen;
+        return (av - bv) * dir;
+    });
+    return copy;
+}
+
+function updateSortIndicators() {
+    document.querySelectorAll(".sort-arrow").forEach(el => { el.textContent = ""; });
+    if (!sort.key) return;
+    const el = document.querySelector(`.sort-arrow[data-for="${sort.key}"]`);
+    if (el) el.textContent = sort.dir > 0 ? "▲" : "▼";
+}
+
+function updateTotals() {
+    let te = 0, tm = 0, tp = 0;
+    rows.forEach(r => {
+        if (r.expense !== null && r.expense !== undefined) te += r.expense;
+        const a = computeAmounts(r);
+        tm += a.manoj;
+        tp += a.praveen;
+    });
+    document.getElementById("totalExpense").textContent = formatMoney(te) || (CURRENCY + "0");
+    document.getElementById("totalManoj").textContent   = formatMoney(tm) || (CURRENCY + "0");
+    document.getElementById("totalPraveen").textContent = formatMoney(tp) || (CURRENCY + "0");
+}
+
+function updateRowAmountsDom(tr, row) {
+    const a = computeAmounts(row);
+    tr.querySelector(".manoj-amount").textContent   = formatMoney(a.manoj);
+    tr.querySelector(".praveen-amount").textContent = formatMoney(a.praveen);
+    updateTotals();
+}
+
+// ============================================================
+// Lock
+// ============================================================
+function applyLockToDom() {
+    document.body.classList.toggle("table-locked", locked);
+    document.querySelectorAll('#expenseBody td[contenteditable]').forEach(el => {
+        el.setAttribute("contenteditable", locked ? "false" : "true");
+    });
+    document.querySelectorAll('#expenseBody input, #expenseBody select').forEach(el => {
+        el.disabled = locked;
+    });
+    document.querySelectorAll('#expenseBody .receipt-btn, #expenseBody .receipt-remove').forEach(el => {
+        el.disabled = locked;
+    });
+    const addBtn = document.getElementById("btn-add");
+    if (addBtn) addBtn.disabled = locked;
+
+    const btn = document.getElementById("btn-lock");
+    if (btn) {
+        btn.classList.toggle("unlocked", !locked);
+        btn.setAttribute("aria-pressed", String(locked));
+        btn.title = locked ? "Click to unlock for editing" : "Click to lock (prevent edits)";
+        document.getElementById("lock-label").textContent = locked ? "Locked" : "Unlocked";
+    }
+}
+
+function toggleLock() {
+    if (locked) {
+        if (!confirm("Unlock the tracker for editing?")) return;
+        locked = false;
+    } else {
+        locked = true;
+    }
+    applyLockToDom();
+}
+
+// ============================================================
+// Mutations
+// ============================================================
+async function addRow() {
+    if (locked) return;
+    try {
+        showLoading(true);
+        const newRow = await insertRow({
+            date: "", description: "", expense: null, share: "",
+            manojPaid: false, praveenPaid: false, remark: ""
+        });
+        rows.push(newRow);
+        render();
+        toast("Row added", "success");
+    } catch (e) {
+        toast("Add row failed: " + e.message, "error");
+    } finally {
+        showLoading(false);
+    }
+}
+
+function handleCellEdit(tr, field, value) {
+    if (locked) return;
+    const row = getRow(tr.dataset.id);
+    if (!row) return;
+
+    if (field === "expense") {
+        row.expense = parseExpense(value);
+        scheduleSave(row.id, "expense", row.expense);
+    } else if (field === "date") {
+        row.date = value || "";
+        scheduleSave(row.id, "date", row.date || null);
+    } else if (field === "description" || field === "remark") {
+        row[field] = value;
+        scheduleSave(row.id, field, value);
+    } else if (field === "share") {
+        row.share = value;
+        saveNow(row.id, "share", value);
+    }
+
+    if (field === "expense" || field === "share") {
+        updateRowAmountsDom(tr, row);
+    }
+}
+
+// ============================================================
+// Receipt upload / download / remove
+// ============================================================
+let pendingReceiptRowId = null;
+
+function receiptFilePath(rowId, originalName) {
+    const ext = (originalName.match(/\.[a-zA-Z0-9]+$/) || [""])[0];
+    return `${rowId}/${Date.now()}${ext}`;
+}
+
+async function uploadReceipt(rowId, file) {
+    const row = getRow(rowId);
+    if (!row) return;
+    try {
+        showLoading(true);
+        // If there was an old receipt, remove it first (best-effort)
+        if (row.receiptPath) {
+            await sb.storage.from(BUCKET).remove([row.receiptPath]).catch(() => {});
+        }
+        const path = receiptFilePath(rowId, file.name);
+        const { error: upErr } = await sb.storage.from(BUCKET).upload(path, file, {
+            cacheControl: "3600",
+            upsert: false,
+            contentType: file.type || undefined
+        });
+        if (upErr) throw upErr;
+
+        await updateRowInDb(rowId, { receiptPath: path, receiptName: file.name });
+        row.receiptPath = path;
+        row.receiptName = file.name;
+        render();
+        toast("Receipt uploaded", "success");
+    } catch (e) {
+        toast("Upload failed: " + e.message, "error");
+    } finally {
+        showLoading(false);
+    }
+}
+
+async function openReceipt(rowId) {
+    const row = getRow(rowId);
+    if (!row || !row.receiptPath) return;
+    try {
+        const { data, error } = await sb.storage.from(BUCKET)
+            .createSignedUrl(row.receiptPath, 60 * 5); // 5-minute link
+        if (error) throw error;
+        window.open(data.signedUrl, "_blank", "noopener");
+    } catch (e) {
+        toast("Could not open receipt: " + e.message, "error");
+    }
+}
+
+async function removeReceipt(rowId) {
+    if (locked) return;
+    const row = getRow(rowId);
+    if (!row || !row.receiptPath) return;
+    if (!confirm(`Remove receipt "${row.receiptName || ""}"?`)) return;
+    try {
+        showLoading(true);
+        await sb.storage.from(BUCKET).remove([row.receiptPath]).catch(() => {});
+        await updateRowInDb(rowId, { receiptPath: null, receiptName: null });
+        row.receiptPath = null;
+        row.receiptName = null;
+        render();
+        toast("Receipt removed", "success");
+    } catch (e) {
+        toast("Remove failed: " + e.message, "error");
+    } finally {
+        showLoading(false);
+    }
+}
+
+// ============================================================
+// Events
+// ============================================================
+function bindEvents() {
+    document.getElementById("btn-add").addEventListener("click", addRow);
+    document.getElementById("btn-export").addEventListener("click", exportCSV);
+    document.getElementById("btn-print").addEventListener("click", () => window.print());
+    document.getElementById("btn-lock").addEventListener("click", toggleLock);
+    document.getElementById("btn-logout").addEventListener("click", handleLogout);
+    document.getElementById("filter").addEventListener("input", applyFilter);
+
+    // Sortable headers
+    document.querySelectorAll("thead th.sortable").forEach(th => {
+        th.addEventListener("click", () => {
+            const key = th.dataset.sort;
+            sort = sort.key === key ? { key, dir: -sort.dir } : { key, dir: 1 };
+            render();
+        });
+    });
+
+    const tbody = document.getElementById("expenseBody");
+
+    tbody.addEventListener("input", (e) => {
+        const t = e.target;
+        const tr = t.closest("tr");
+        if (!tr) return;
+        const field = t.dataset.field;
+        if (!field) return;
+
+        if (t.matches('[contenteditable="true"]')) {
+            handleCellEdit(tr, field, t.textContent);
+        } else if (t.matches('input[type="date"]')) {
+            handleCellEdit(tr, field, t.value);
+        }
+    });
+
+    // Expense cell: format on blur, unformat on focus
+    tbody.addEventListener("blur", (e) => {
+        const t = e.target;
+        if (t.matches && t.matches('[data-field="expense"][contenteditable="true"]')) {
+            const row = getRow(t.closest("tr").dataset.id);
+            if (row) t.textContent = row.expense === null ? "" : formatMoney(row.expense);
+        }
+    }, true);
+
+    tbody.addEventListener("focus", (e) => {
+        const t = e.target;
+        if (t.matches && t.matches('[data-field="expense"][contenteditable="true"]')) {
+            const row = getRow(t.closest("tr").dataset.id);
+            if (row && row.expense !== null) t.textContent = String(row.expense);
+        }
+    }, true);
+
+    tbody.addEventListener("change", (e) => {
+        const t = e.target;
+        const tr = t.closest("tr");
+        if (!tr) return;
+        const field = t.dataset.field;
+        if (!field) return;
+
+        if (t.matches("select")) {
+            handleCellEdit(tr, field, t.value);
+        } else if (t.matches('input[type="checkbox"]')) {
+            const row = getRow(tr.dataset.id);
+            if (!row) return;
+            row[field] = t.checked;
+            t.closest(".person-cell").classList.toggle("checked", t.checked);
+            saveNow(row.id, field, t.checked);
+        } else if (t.matches('input[type="date"]')) {
+            handleCellEdit(tr, field, t.value);
+        }
+    });
+
+    // Receipt buttons
+    tbody.addEventListener("click", (e) => {
+        const btn = e.target.closest("button[data-action]");
+        if (!btn) return;
+        const tr = btn.closest("tr");
+        if (!tr) return;
+        const rowId = tr.dataset.id;
+        const action = btn.dataset.action;
+
+        if (action === "receipt") {
+            const row = getRow(rowId);
+            if (!row) return;
+            if (row.receiptPath) {
+                openReceipt(rowId);
+            } else {
+                if (locked) return;
+                pendingReceiptRowId = rowId;
+                document.getElementById("file-input").click();
+            }
+        } else if (action === "remove-receipt") {
+            removeReceipt(rowId);
+        }
+    });
+
+    document.getElementById("file-input").addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        e.target.value = "";  // reset so same file can be picked again
+        if (!file || !pendingReceiptRowId) return;
+        const id = pendingReceiptRowId;
+        pendingReceiptRowId = null;
+        uploadReceipt(id, file);
+    });
+
+    // Paste sanitizer
+    tbody.addEventListener("paste", (e) => {
+        const t = e.target;
+        if (!t.matches || !t.matches('[contenteditable="true"]')) return;
+        e.preventDefault();
+        const text = (e.clipboardData || window.clipboardData).getData("text/plain");
+        document.execCommand("insertText", false, text);
+    });
+
+    // Expense keystroke filter
+    tbody.addEventListener("keydown", (e) => {
+        const t = e.target;
+        if (!t.matches || !t.matches('[data-field="expense"][contenteditable="true"]')) return;
+        const allowed = ["Backspace","Delete","ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Tab","Home","End","Enter"];
+        if (allowed.includes(e.key)) return;
+        if (e.ctrlKey || e.metaKey) return;
+        if (/^[0-9]$/.test(e.key)) return;
+        if (e.key === "." && !t.textContent.includes(".")) return;
+        e.preventDefault();
+    });
+}
+
+// ============================================================
+// Filter
+// ============================================================
+function applyFilter() {
+    const q = (document.getElementById("filter").value || "").trim().toLowerCase();
+    document.querySelectorAll("#expenseBody tr").forEach(tr => {
+        if (!q) { tr.classList.remove("filtered-out"); return; }
+        const row = getRow(tr.dataset.id);
+        if (!row) return;
+        const hay = ((row.description || "") + " " + (row.remark || "")).toLowerCase();
+        tr.classList.toggle("filtered-out", !hay.includes(q));
+    });
+}
+
+// ============================================================
+// CSV Export
+// ============================================================
+function csvEscape(s) {
+    if (s === null || s === undefined) return "";
+    const str = String(s);
+    return /[",\n]/.test(str) ? '"' + str.replace(/"/g, '""') + '"' : str;
+}
+
+function exportCSV() {
+    const header = ["S.No.","Date","Description","Expense","Share","Manoj","Manoj Paid","Praveen","Praveen Paid","Remark","Receipt"];
+    const lines = [header.map(csvEscape).join(",")];
+    rows.forEach((r, i) => {
+        const a = computeAmounts(r);
+        lines.push([
+            i + 1,
+            r.date || "",
+            r.description || "",
+            r.expense === null ? "" : r.expense,
+            r.share || "",
+            Math.round(a.manoj) || "",
+            r.manojPaid ? "Yes" : "",
+            Math.round(a.praveen) || "",
+            r.praveenPaid ? "Yes" : "",
+            r.remark || "",
+            r.receiptName || ""
+        ].map(csvEscape).join(","));
+    });
+    let te = 0, tm = 0, tp = 0;
+    rows.forEach(r => {
+        if (r.expense !== null && r.expense !== undefined) te += r.expense;
+        const a = computeAmounts(r);
+        tm += a.manoj; tp += a.praveen;
+    });
+    lines.push(["","","TOTAL", Math.round(te), "", Math.round(tm), "", Math.round(tp), "", "", ""].map(csvEscape).join(","));
+
+    const blob = new Blob(["\ufeff" + lines.join("\n")], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const stamp = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = `PearlFox_Expenses_${stamp}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+// ============================================================
+// Auth
+// ============================================================
+async function handleLogin() {
+    const password = document.getElementById("login-password").value;
+    const errorEl = document.getElementById("login-error");
+    const btn = document.getElementById("btn-login");
+
+    errorEl.textContent = "";
+    if (!password) {
+        errorEl.textContent = "Enter password";
+        return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = "Unlocking…";
+    try {
+        const { error } = await sb.auth.signInWithPassword({ email: LOGIN_EMAIL, password });
+        if (error) throw error;
+        await enterApp();
+    } catch (e) {
+        // Supabase says "Invalid login credentials" — clarify for our UX
+        errorEl.textContent = (e.message || "").toLowerCase().includes("invalid")
+            ? "Incorrect password"
+            : (e.message || "Sign-in failed");
+    } finally {
+        btn.disabled = false;
+        btn.textContent = "Unlock";
+    }
+}
+
+async function handleLogout() {
+    if (!confirm("Sign out?")) return;
+    try {
+        await sb.auth.signOut();
+    } catch (e) { /* ignore */ }
+    location.reload();
+}
+
+async function enterApp() {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("app").style.display = "block";
+    document.getElementById("app").classList.add("ready");
+    showLoading(true);
+    try {
+        rows = await fetchRows();
+        if (rows.length === 0) {
+            // First-time setup: seed default blank rows so the sheet
+            // is usable immediately instead of an empty grid.
+            await seedDefaultRows(DEFAULT_ROWS);
+            rows = await fetchRows();
+        }
+        render();
+    } catch (e) {
+        toast("Failed to load data: " + e.message, "error");
+    } finally {
+        showLoading(false);
+    }
+}
+
+// ============================================================
+// Boot
+// ============================================================
+(async function init() {
+    document.getElementById("btn-login").addEventListener("click", handleLogin);
+    document.getElementById("login-password").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") handleLogin();
+    });
+
+    bindEvents();
+
+    // Restore session if any
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) {
+        await enterApp();
+    }
+})();
+</script>
+</body>
+</html>
