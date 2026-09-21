@@ -436,10 +436,9 @@
     .add-row-bar button:hover:not(:disabled) { filter: brightness(1.05); }
     .add-row-bar button:active:not(:disabled) { transform: translateY(1px); }
     .add-row-bar button:disabled {
-        opacity: 0.55;
         cursor: not-allowed;
         background: var(--pearl-warm);
-        color: var(--text-muted);
+        color: var(--text);
     }
 
     /* Top-right cluster */
@@ -479,16 +478,27 @@
     }
     .lock-btn.unlocked:hover { filter: brightness(1.05); background: var(--fox-gradient); }
 
-    /* Locked-state dimming */
+    /* Locked-state: only change cursor, keep text/colors fully readable */
     body.table-locked #btn-add,
     body.table-locked .paid-check,
     body.table-locked .share-select,
     body.table-locked input[type="date"],
     body.table-locked .receipt-btn,
     body.table-locked .receipt-remove {
-        opacity: 0.5;
         cursor: not-allowed;
     }
+
+    /* Defeat browser's default washed-out styling on disabled form
+       controls so cell values (dates, share choices, etc.) stay crisp
+       and legible while the tracker is locked. */
+    #expenseBody select:disabled,
+    #expenseBody input:disabled {
+        opacity: 1;
+        color: var(--text);
+        -webkit-text-fill-color: var(--text);
+        background: transparent;
+    }
+    #expenseBody input[type="checkbox"]:disabled { opacity: 1; }
 
     /* Toast */
     .toast {
