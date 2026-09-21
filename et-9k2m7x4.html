@@ -116,8 +116,7 @@
         max-width: 1080px;
         margin: 0 auto;
     }
-    .toolbar button,
-    .toolbar input[type="search"] {
+    .toolbar button {
         font: inherit;
         font-size: 13px;
         padding: 7px 14px;
@@ -133,17 +132,6 @@
         border-color: var(--pearl-deep);
     }
     .toolbar button:active { transform: translateY(1px); }
-    .toolbar input[type="search"] {
-        cursor: text;
-        min-width: 200px;
-        flex: 0 1 260px;
-        background: var(--surface);
-    }
-    .toolbar input[type="search"]:focus {
-        outline: none;
-        border-color: var(--fox-orange);
-        box-shadow: 0 0 0 3px rgba(252,130,21,0.15);
-    }
     .toolbar .spacer { flex: 1; }
     .toolbar .status {
         font-size: 12px;
@@ -328,8 +316,6 @@
 
     .footer-label { text-align: right; padding-right: 12px; }
     .footer-total { text-align: right; }
-
-    tr.filtered-out { display: none; }
 
     /* ---- Login screen ---- */
     .login {
@@ -610,10 +596,6 @@
             padding: 6px 10px;
             font-size: 12px;
         }
-        .toolbar input[type="search"] {
-            flex: 1 1 100%;      /* search wraps to its own row */
-            font-size: 13px;
-        }
 
         /* Table cells a touch smaller on mobile */
         th, td {
@@ -679,7 +661,6 @@
         <div class="toolbar">
             <button type="button" id="btn-export">Export CSV</button>
             <button type="button" id="btn-print">Print</button>
-            <input type="search" id="filter" placeholder="Filter description or remark…" aria-label="Filter rows">
             <span class="spacer"></span>
             <span class="status" id="status"></span>
         </div>
@@ -1014,7 +995,6 @@ function render() {
     view.forEach((row, i) => tbody.appendChild(rowTemplate(row, i)));
     updateTotals();
     updateSortIndicators();
-    applyFilter();
     applyLockToDom();
 }
 
@@ -1228,7 +1208,6 @@ function bindEvents() {
     document.getElementById("btn-print").addEventListener("click", () => window.print());
     document.getElementById("btn-lock").addEventListener("click", toggleLock);
     document.getElementById("btn-logout").addEventListener("click", handleLogout);
-    document.getElementById("filter").addEventListener("input", applyFilter);
 
     // Sortable headers
     document.querySelectorAll("thead th.sortable").forEach(th => {
@@ -1344,20 +1323,6 @@ function bindEvents() {
         if (/^[0-9]$/.test(e.key)) return;
         if (e.key === "." && !t.textContent.includes(".")) return;
         e.preventDefault();
-    });
-}
-
-// ============================================================
-// Filter
-// ============================================================
-function applyFilter() {
-    const q = (document.getElementById("filter").value || "").trim().toLowerCase();
-    document.querySelectorAll("#expenseBody tr").forEach(tr => {
-        if (!q) { tr.classList.remove("filtered-out"); return; }
-        const row = getRow(tr.dataset.id);
-        if (!row) return;
-        const hay = ((row.description || "") + " " + (row.remark || "")).toLowerCase();
-        tr.classList.toggle("filtered-out", !hay.includes(q));
     });
 }
 
