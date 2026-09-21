@@ -74,12 +74,12 @@
 
     .container {
         width: 100%;
-        max-width: 1080px;      /* match table width; no wasted side space */
+        max-width: 1082px;      /* table (1080) + .table-wrap 1px borders x2 */
         margin: 0 auto;
         height: 100vh;
         display: flex;
         flex-direction: column;
-        padding: 16px 0 12px;   /* vertical only; sides are naturally aligned with the table */
+        padding: 16px 0 12px;
         gap: 10px;
     }
 
@@ -240,9 +240,13 @@
     }
 
     /* Column widths */
+    /* Column widths apply to both th and td (fixed layout).
+       IMPORTANT: sum must equal the table's declared width so the
+       last column isn't clipped.
+       46 + 120 + 210 + 120 + 110 + 130 + 130 + 150 + 64 = 1080 */
     .sno         { width: 46px;  }
     .date        { width: 120px; }
-    .description { width: 220px; }
+    .description { width: 210px; }
     .expense     { width: 120px; }
     .share       { width: 110px; }
     .person      { width: 130px; }
