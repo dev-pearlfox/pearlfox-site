@@ -255,11 +255,17 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 22px;
-        font-weight: 800;
-        letter-spacing: -0.5px;
         box-shadow: 0 2px 8px rgba(252,130,21,0.28);
         flex-shrink: 0;
+    }
+    .card-icon svg {
+        width: 28px;
+        height: 28px;
+        stroke: #1A0E04;
+        stroke-width: 2.2;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
     }
     .card h3 {
         margin: 4px 0 0;
@@ -410,7 +416,9 @@
 
             <!-- Expenses Tracker -->
             <div class="card">
-                <div class="card-icon">Rs</div>
+                <div class="card-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M5 3v18l2-1.5L9 21l2-1.5L13 21l2-1.5L17 21l2-1.5V3z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+                </div>
                 <h3>Expenses Tracker</h3>
                 <p>Log shared expenses between Manoj and Praveen. Attach receipts, export CSV, view running totals.</p>
                 <a href="et-9k2m7x4.html" class="card-btn">Open Tracker</a>
@@ -418,7 +426,9 @@
 
             <!-- Product Launch Roadmap (direct link) -->
             <div class="card">
-                <div class="card-icon">PR</div>
+                <div class="card-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+                </div>
                 <h3>Product Launch Roadmap</h3>
                 <p>Path from a production-ready app to fully signed, fully verified distribution — phases, durations, and costs.</p>
                 <a href="https://eagleview.pearlfox.io/eagleview/roadmap/product-launch.html" class="card-btn">Open Roadmap</a>
@@ -426,7 +436,9 @@
 
             <!-- Eagle View Roadmap Hub -->
             <div class="card">
-                <div class="card-icon">EV</div>
+                <div class="card-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><polygon points="1 6 8 3 16 6 23 3 23 18 16 21 8 18 1 21 1 6"/><line x1="8" y1="3" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="21"/></svg>
+                </div>
                 <h3>Eagle View Roadmap</h3>
                 <p>Product launch, CASA Tier 2 security compliance, executive view, adoption paths, timeline calendar, and world roadmap.</p>
                 <a href="https://eagleview.pearlfox.io/eagleview/roadmap/" class="card-btn">Open Roadmaps</a>
@@ -434,7 +446,9 @@
 
             <!-- Company Roadmap (direct link to Eagle View's CEO executive doc) -->
             <div class="card">
-                <div class="card-icon">CR</div>
+                <div class="card-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"/><path d="M6 12H4a2 2 0 0 0-2 2v8h4"/><path d="M18 9h2a2 2 0 0 1 2 2v11h-4"/><path d="M10 6h4M10 10h4M10 14h4M10 18h4"/></svg>
+                </div>
                 <h3>Company Roadmap</h3>
                 <p>Executive view of Eagle View's plan — for leadership and stakeholder conversations. Milestones, strategy, key bets.</p>
                 <a href="https://eagleview.pearlfox.io/eagleview/roadmap/EagleView_Roadmap_CEO.html" class="card-btn">Open Roadmap</a>
