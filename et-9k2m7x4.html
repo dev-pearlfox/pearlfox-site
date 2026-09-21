@@ -433,42 +433,17 @@
         color: var(--text);
     }
 
-    /* Top-right cluster */
-    .top-right {
-        position: fixed;
-        top: 14px;
-        right: 22px;
-        z-index: 200;
-        display: flex;
-        gap: 8px;
-    }
-    .top-right button {
-        font: inherit;
-        font-size: 12px;
-        font-weight: 700;
-        letter-spacing: 0.3px;
-        padding: 7px 12px;
-        border: 1px solid var(--border-strong);
-        background: var(--surface);
-        color: var(--text);
-        cursor: pointer;
-        border-radius: var(--radius-md);
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        box-shadow: var(--shadow-sm);
-        transition: background 0.15s, border-color 0.15s;
-    }
-    .top-right button:hover {
-        background: var(--pearl-cream);
-        border-color: var(--pearl-deep);
-    }
+    /* Lock button unlocked-state accent (in toolbar).
+       Base .toolbar button styles cover everything else. */
     .lock-btn.unlocked {
         background: var(--fox-gradient);
         border-color: transparent;
         color: #1A0E04;
     }
-    .lock-btn.unlocked:hover { filter: brightness(1.05); background: var(--fox-gradient); }
+    .lock-btn.unlocked:hover {
+        filter: brightness(1.05);
+        background: var(--fox-gradient);
+    }
 
     /* Locked-state: only change cursor, keep text/colors fully readable */
     body.table-locked #btn-add,
@@ -581,11 +556,11 @@
        ============================================================ */
     @media (max-width: 780px) {
         .container {
-            padding: 52px 8px 8px;   /* top: enough to clear the fixed .top-right cluster */
+            padding: 12px 8px 8px;
             gap: 8px;
         }
 
-        h1 { font-size: 20px; padding: 4px 12px; }  /* side padding so text never runs under fixed buttons */
+        h1 { font-size: 20px; padding: 4px 0; }
 
         /* Toolbar: compact but keep single row */
         .toolbar {
@@ -611,10 +586,8 @@
         .add-row-bar { padding: 6px 0 4px; }
         .add-row-bar button { width: 100%; max-width: 320px; padding: 11px 20px; }
 
-        /* Login screen + top-right controls */
+        /* Login screen tuning */
         .login-box { width: calc(100% - 24px); padding: 28px 22px 20px; }
-        .top-right { top: 8px; right: 8px; }
-        .top-right button { font-size: 11px; padding: 6px 10px; }
     }
 
     /* Print */
@@ -622,7 +595,7 @@
         body, html { overflow: visible; background: white; }
         .container { padding: 0; height: auto; display: block; }
         .table-wrap { overflow: visible; border: none; box-shadow: none; border-radius: 0; }
-        .login, .toolbar, .add-row-bar, .paid-check, .top-right,
+        .login, .toolbar, .add-row-bar, .paid-check,
         .receipt-btn, .receipt-remove, .toast, .loading { display: none !important; }
         h1 { position: static; }
         h1::after { display: none; }
@@ -648,13 +621,6 @@
 
 <!-- App shell -->
 <div id="app">
-    <div class="top-right">
-        <button type="button" id="btn-lock" class="lock-btn" title="Click to unlock for editing" aria-pressed="true">
-            <span id="lock-label">Locked</span>
-        </button>
-        <button type="button" id="btn-logout" title="Sign out">Sign out</button>
-    </div>
-
     <div class="container">
         <h1>PearlFox Expenses Tracker</h1>
 
@@ -663,6 +629,10 @@
             <button type="button" id="btn-print">Print</button>
             <span class="spacer"></span>
             <span class="status" id="status"></span>
+            <button type="button" id="btn-lock" class="lock-btn" title="Click to unlock for editing" aria-pressed="true">
+                <span id="lock-label">Locked</span>
+            </button>
+            <button type="button" id="btn-logout" title="Sign out">Sign out</button>
         </div>
 
         <div class="table-wrap">
