@@ -588,232 +588,50 @@
     }
 
     /* ============================================================
-       MOBILE (< 780px): transform table into stacked card layout.
-       Each row becomes a self-contained card with labeled fields;
-       the footer totals become a sticky compact bar at the bottom.
+       MOBILE (< 780px): keep the same table structure as desktop.
+       The .table-wrap already scrolls horizontally, so the full
+       1080px-wide table remains reachable via horizontal swipe.
+       Only surrounding chrome (padding, toolbar, header) gets tuned.
        ============================================================ */
     @media (max-width: 780px) {
-        html, body { overflow: auto; }
-        body { background: var(--bg); }
-
         .container {
-            max-width: 100%;
-            width: 100%;
-            height: auto;
-            min-height: 100vh;
-            padding: 60px 10px 90px;   /* room for top-right btns + sticky totals */
-            gap: 12px;
-            margin: 0;
-        }
-
-        h1 { font-size: 20px; padding: 6px 0 0; }
-
-        /* Toolbar: wrap and compact */
-        .toolbar {
-            justify-content: center;
-            padding: 6px 4px;
-            gap: 6px;
-        }
-        .toolbar button {
-            padding: 8px 12px;
-            font-size: 12px;
-        }
-        .toolbar input[type="search"] {
-            flex: 1 1 100%;         /* takes its own row */
-            font-size: 13px;
-        }
-
-        /* Kill the table's desktop borders / min-widths */
-        .table-wrap {
-            border: none;
-            background: transparent;
-            box-shadow: none;
-            overflow: visible;
-            flex: 0 0 auto;
-        }
-        table {
-            width: 100%;
-            min-width: 0;
-            background: transparent;
-            font-size: 13px;
-        }
-
-        /* Fully unpin the table structure so <tr> can become a "card" */
-        table, thead, tbody, tfoot, tr, th, td { display: block; }
-        thead { display: none; }        /* hide desktop column headers */
-
-        tbody tr {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            margin-bottom: 10px;
-            padding: 14px;
-            box-shadow: var(--shadow-sm);
-            position: relative;
-        }
-        tbody tr:nth-child(even) td,
-        tbody tr:hover td { background: transparent; }
-
-        tbody td {
-            border: none;
-            padding: 6px 0;
-            height: auto;
-            background: transparent;
-            text-align: left;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            min-height: 30px;
-        }
-        tbody td:not(:last-child) {
-            border-bottom: 1px dashed var(--border);
-        }
-
-        /* Labels on every field (left side of each row inside a card) */
-        tbody td[data-label]::before {
-            content: attr(data-label);
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            color: var(--text-muted);
-            flex-shrink: 0;
-        }
-
-        /* S.No: show as small chip at the top-right corner of the card */
-        tbody td.sno {
-            position: absolute;
-            top: 10px;
-            right: 12px;
-            padding: 2px 8px;
-            border-radius: 999px;
-            background: var(--pearl-cream);
-            color: var(--text-muted);
-            font-size: 11px;
-            font-weight: 700;
-            min-height: 0;
-            display: inline-block;
-        }
-        tbody td.sno::before { display: none; }
-        tbody td.sno { border-bottom: none !important; }
-
-        /* Description: emphasize as the "title" of the card */
-        tbody td.description {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text);
-            padding-right: 60px;    /* clear the sno chip */
-            border-bottom: 1px solid var(--border) !important;
-            padding-bottom: 10px;
-        }
-        tbody td.description::before {
-            content: "Description";
-            font-size: 10px;
-            display: block;
-            width: 100%;
-            margin-bottom: 2px;
-        }
-        tbody td.description[contenteditable="true"] { min-height: 22px; }
-
-        /* Amount: prominent orange */
-        tbody td.expense {
-            font-size: 17px;
-            font-weight: 800;
-            color: var(--fox-amber);
-            font-variant-numeric: tabular-nums;
-            text-align: right;
-        }
-
-        /* Person cells: show the checkbox + amount on the right, label left */
-        tbody td.person .person-cell {
-            justify-content: flex-end;
+            padding: 12px 8px 8px;
             gap: 8px;
         }
 
-        /* Share dropdown fills the value column */
-        tbody td.share .share-select {
-            text-align: right;
-            padding-right: 4px;
-        }
+        h1 { font-size: 20px; padding: 4px 0 4px; }
 
-        /* Date input aligns right too */
-        tbody td.date input[type="date"] {
-            text-align: right;
-            width: auto;
-            max-width: 60%;
-        }
-
-        /* Remark stretches */
-        tbody td.remark {
-            flex-wrap: wrap;
-        }
-        tbody td.remark[contenteditable="true"] {
-            flex: 1 1 100%;
-            text-align: left;
-            min-height: 22px;
-            margin-top: 4px;
-        }
-
-        /* Receipt cell aligns buttons right */
-        tbody td.receipt .receipt-cell {
-            justify-content: flex-end;
-        }
-
-        /* ---- Footer totals: sticky bar ---- */
-        tfoot {
-            position: fixed;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 150;
-            background: var(--pearl-cream);
-            border-top: 2px solid var(--pearl-deep);
-            box-shadow: 0 -4px 16px rgba(20,10,0,0.10);
-            padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
-        }
-        tfoot tr {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
+        /* Toolbar: compact but keep single row */
+        .toolbar {
+            padding: 4px 0 6px;
             gap: 6px;
         }
-        tfoot td {
-            display: none;              /* hide everything by default */
-            padding: 2px 4px;
-            background: transparent;
+        .toolbar button {
+            padding: 6px 10px;
+            font-size: 12px;
+        }
+        .toolbar input[type="search"] {
+            flex: 1 1 100%;      /* search wraps to its own row */
+            font-size: 13px;
+        }
+
+        /* Table cells a touch smaller on mobile */
+        th, td {
+            padding: 8px 6px;
+            font-size: 12px;
+        }
+        thead th {
             font-size: 11px;
-            color: var(--text);
-            flex: 1;
-            text-align: center;
-            min-height: 0;
+            letter-spacing: 0.3px;
         }
-        tfoot td.footer-total {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-        }
-        tfoot td.footer-total::before {
-            content: attr(data-label);
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-            color: var(--text-muted);
-        }
-        tfoot td.footer-total { font-size: 15px; font-weight: 800; color: var(--fox-amber); }
-        tfoot td#totalManoj, tfoot td#totalPraveen { color: var(--text); }
 
-        /* Add-row bar */
-        .add-row-bar {
-            padding: 4px 0 8px;
-        }
-        .add-row-bar button { width: 100%; max-width: 320px; padding: 12px 20px; }
+        /* Add-row: full-width easy tap target */
+        .add-row-bar { padding: 6px 0 4px; }
+        .add-row-bar button { width: 100%; max-width: 320px; padding: 11px 20px; }
 
-        /* Login screen and top-right */
+        /* Login screen + top-right controls */
         .login-box { width: calc(100% - 24px); padding: 28px 22px 20px; }
-        .top-right { top: 10px; right: 10px; }
+        .top-right { top: 8px; right: 8px; }
         .top-right button { font-size: 11px; padding: 6px 10px; }
     }
 
