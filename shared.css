@@ -260,7 +260,7 @@ header.hero.hero-scenic{padding:0;overflow:hidden;margin-top:-64px;}
   border:1px solid var(--border-strong);color:var(--text);
   font-weight:600;font-size:15px;padding:13px 27px;border-radius:999px;text-decoration:none;
 }
-/* Layout variant of .btn-secondary used for the Section 3 "Explore more" CTA:
+/* Layout variant of .btn-secondary used for the Section 3 "Explore & Download" CTA:
    pulled up under the feature list and left-aligned inside its flex column. */
 .btn-explore{display:inline-block;align-self:flex-start;margin-top:-24px;padding:9px 27px;}
 
