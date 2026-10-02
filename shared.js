@@ -17,6 +17,64 @@
       window.addEventListener('scroll', updateNav, { passive: true });
     }
 
+    // -------------------------------------------------------------
+    // Mobile hamburger — injected rather than duplicated in markup.
+    // Every page already has <nav><div class="wrap">...<div class=
+    // "navlinks">...</div></div></nav>; we append a button sibling
+    // of .navlinks, then toggle an .is-open class on the links row.
+    // CSS at <=720px flips .navlinks into a drop-down drawer; above
+    // that the button is display:none and the drawer rules don't
+    // apply, so desktop layout is untouched. Button is clickable at
+    // all widths once injected, but only visible on mobile.
+    // -------------------------------------------------------------
+    var navWrap = document.querySelector('nav .wrap');
+    var navLinks = document.querySelector('nav .navlinks');
+    if (navWrap && navLinks) {
+      var navToggle = document.createElement('button');
+      navToggle.className = 'nav-toggle';
+      navToggle.type = 'button';
+      navToggle.setAttribute('aria-label', 'Open menu');
+      navToggle.setAttribute('aria-expanded', 'false');
+      navToggle.setAttribute('aria-controls', 'nav-primary-links');
+      navToggle.innerHTML = '<span></span><span></span><span></span>';
+      navLinks.id = navLinks.id || 'nav-primary-links';
+      navWrap.appendChild(navToggle);
+
+      var closeDrawer = function () {
+        navLinks.classList.remove('is-open');
+        navToggle.classList.remove('is-active');
+        navToggle.setAttribute('aria-expanded', 'false');
+        navToggle.setAttribute('aria-label', 'Open menu');
+      };
+      var openDrawer = function () {
+        navLinks.classList.add('is-open');
+        navToggle.classList.add('is-active');
+        navToggle.setAttribute('aria-expanded', 'true');
+        navToggle.setAttribute('aria-label', 'Close menu');
+      };
+      navToggle.addEventListener('click', function () {
+        if (navLinks.classList.contains('is-open')) closeDrawer();
+        else openDrawer();
+      });
+      // Tapping a link should close the drawer so hash navigation feels
+      // natural (the page scrolls to section with the drawer out of the way).
+      navLinks.addEventListener('click', function (e) {
+        if (e.target.tagName === 'A') closeDrawer();
+      });
+      // If the viewport is resized up past the mobile breakpoint while the
+      // drawer is open, make sure we don't leave stray open-state attributes
+      // hanging around on desktop.
+      window.addEventListener('resize', function () {
+        if (window.innerWidth > 720 && navLinks.classList.contains('is-open')) {
+          closeDrawer();
+        }
+      });
+      // Escape to dismiss, standard a11y convention.
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && navLinks.classList.contains('is-open')) closeDrawer();
+      });
+    }
+
     // Toggle a body.is-scrolling class while the user is actively scrolling,
     // clearing it 140ms after the last scroll event. shared.css uses this to
     // pause heavy background SVG animations mid-scroll (see .brand-mark-bg
@@ -157,9 +215,36 @@
 
     if (brandMark && (iconFlyer || wordFlyer)) {
       var ticking = false;
+      // Mobile breakpoint matches the CSS one. Below this, the brand-mark
+      // section collapses to min-height:auto so its bottom is already
+      // inside the viewport at scroll=0 — which would make the flight
+      // start partially complete (logo appearing clipped/docked in the
+      // nav from the first paint, and the circuit section visibly empty).
+      // Flight is a desktop-only flourish; on mobile we just let the
+      // brand-mark icon+word sit naturally in section 2.
+      var FLIGHT_MIN_WIDTH = 721;
+      var brandIconEl = document.querySelector('.brand-mark-icon');
+      var brandWordEl = document.querySelector('.brand-mark-word');
+      var resetFlyerStyles = function () {
+        [brandIconEl, brandWordEl].forEach(function (el) {
+          if (!el) return;
+          el.style.position = '';
+          el.style.top = '';
+          el.style.left = '';
+          el.style.transform = '';
+        });
+      };
 
       var updateLogoHandoff = function () {
         ticking = false;
+        // Mobile: no flight. Make sure any leftover inline styles from a
+        // prior desktop measurement are cleared, and never flip the nav
+        // into "past hero" state (the static landing logo stays visible).
+        if (window.innerWidth < FLIGHT_MIN_WIDTH) {
+          resetFlyerStyles();
+          if (navEl) navEl.classList.remove('nav-past-hero');
+          return;
+        }
         // The section 2 / section 3 boundary — the "section three starting
         // line". 0 = that line has just appeared at the bottom of the
         // viewport (it starts to scroll into view), 1 = it has reached the
@@ -186,8 +271,13 @@
         }
       };
       var onResize = function () {
-        if (iconFlyer) iconFlyer.measure();
-        if (wordFlyer) wordFlyer.measure();
+        // Skip the measure pass on mobile — measure() temporarily unsets
+        // the element's position to read its natural rect, which flashes
+        // the (large) in-flow logo if we were to keep doing it unnecessarily.
+        if (window.innerWidth >= FLIGHT_MIN_WIDTH) {
+          if (iconFlyer) iconFlyer.measure();
+          if (wordFlyer) wordFlyer.measure();
+        }
         updateLogoHandoff();
       };
       onResize();
