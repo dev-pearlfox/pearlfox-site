@@ -112,7 +112,12 @@ nav .wrap{display:flex;align-items:center;position:relative;height:64px;gap:16px
    visibility:hidden/display:none would remove it from hit-testing. No
    transition on purpose — the landing logo must vanish INSTANTLY the
    moment section 3 starts scrolling in, not fade. */
-.nav-logo-target{display:flex;align-items:center;gap:0;width:244px;height:50px;opacity:1;}
+.nav-logo-target{display:flex;align-items:center;gap:0;width:244px;height:50px;opacity:var(--landing-logo-opacity,1);}
+/* Flight sets --landing-logo-opacity continuously from 1 → 0 across the
+   second half of the flight so the static landing logo cross-fades out as
+   the flying one approaches. .nav-past-hero is the belt-and-braces hard-
+   off once docking completes, ensuring the slot is cleanly empty for the
+   fixed-positioned flying logo to sit in. */
 nav.nav-past-hero .nav-logo-target{opacity:0;}
 .nav-logo-target-icon{width:47px;height:47px;flex-shrink:0;}
 .nav-logo-target-word{width:188px;height:31px;margin-left:-34px;}
@@ -193,7 +198,14 @@ body.is-scrolling .brand-mark-bg *{animation-play-state:paused!important;}
 .brand-mark p.lead{font-size:18px;color:var(--text-muted);max-width:560px;margin:0 auto 32px;opacity:0.9;}
 .brand-mark-next{position:absolute;left:0;right:0;top:0;z-index:1;font-family:'Marcellus',Georgia,serif;font-weight:400;font-size:42px;letter-spacing:0.6px;color:#FFFFFF;text-align:center;margin:0;}
 @media (max-width:720px){
-  .brand-mark{min-height:auto;padding:40px 0 60px;}
+  /* Full-viewport Section 2 on mobile so the flying-logo flight has a clean
+     scroll zone to animate across. Without this (min-height:auto) the
+     section is already short enough that its bottom edge sits INSIDE the
+     viewport at scroll=0, which makes the flight progress start partially
+     complete — logo appears clipped in the nav from the first paint.
+     100svh (small viewport height, excludes mobile browser chrome) is the
+     stable-against-iOS-address-bar unit; 100vh is the fallback. */
+  .brand-mark{min-height:100vh;min-height:100svh;padding:40px 0 60px;}
   .brand-mark-icon{width:150px;margin-bottom:-16px;}
   .brand-mark-word{width:190px;margin-bottom:20px;}
   .brand-mark p.lead{font-size:16px;}
@@ -250,17 +262,20 @@ header.hero.hero-scenic{padding:0;overflow:hidden;margin-top:-64px;}
     object-fit:cover;object-position:35% center;
   }
   .hero-photo-mode .hero-content{padding:32px 20px;}
-  .hero-tagline{transform:translateY(-20px);padding:16px;}
+  /* Lifted tagline sits closer to the top third of the hero — keeps the
+     scenic foreground (fox, chair, waterfall base) visible underneath. */
+  .hero-tagline{transform:translateY(-100px);padding:16px;}
   .hero-tagline h2{font-size:30px;gap:8px;}
 }
 @media (max-width:480px){
   .hero-photo-mode{min-height:420px;}
   .hero-photo-mode .hero-bg img.hero-photo{object-position:38% center;}
-  .hero-tagline{transform:translateY(-10px);padding:12px;}
+  .hero-tagline{transform:translateY(-90px);padding:12px;}
   .hero-tagline h2{font-size:24px;gap:6px;}
 }
 @media (max-width:360px){
   .hero-photo-mode{min-height:380px;}
+  .hero-tagline{transform:translateY(-80px);}
 }
 .btn-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
 .btn-primary{
@@ -450,10 +465,14 @@ section.app-preview::before{
   .ap-text .eyebrow{font-size:18px;}
   .ap-text h2,.ap-text h3{font-size:24px;}
   .ap-text > p{font-size:14.5px;}
-  .ap-visual{min-height:460px;}
-  .ap-ring1{width:240px;height:240px;margin:-120px 0 0 -120px;}
-  .ap-ring2{width:300px;height:300px;margin:-150px 0 0 -150px;}
-  .ap-panel{width:180px;}
+  /* Panel scales up on mobile — at 180px it was overshadowed by the
+     rings/background. Bumped so the Eagle View screenshot reads clearly
+     as the hero of this section. Rings grown proportionally so the panel
+     still sits inside their outer glow instead of poking out. */
+  .ap-visual{min-height:620px;}
+  .ap-ring1{width:300px;height:300px;margin:-150px 0 0 -150px;}
+  .ap-ring2{width:360px;height:360px;margin:-180px 0 0 -180px;}
+  .ap-panel{width:280px;}
 }
 @media (max-width:480px){
   .ap-chip{display:none;}
@@ -461,11 +480,17 @@ section.app-preview::before{
   .ap-text .eyebrow{font-size:16px;gap:8px;}
   .ap-text h2,.ap-text h3{font-size:20px;}
   .ap-list{gap:14px;margin-bottom:24px;}
-  .ap-visual{min-height:400px;}
-  .ap-ring1{width:200px;height:200px;margin:-100px 0 0 -100px;}
-  .ap-ring2{width:260px;height:260px;margin:-130px 0 0 -130px;}
-  .ap-panel{width:160px;}
+  .ap-visual{min-height:560px;}
+  .ap-ring1{width:260px;height:260px;margin:-130px 0 0 -130px;}
+  .ap-ring2{width:320px;height:320px;margin:-160px 0 0 -160px;}
+  .ap-panel{width:250px;}
   .btn-explore{margin-top:0;}
+}
+@media (max-width:360px){
+  .ap-visual{min-height:520px;}
+  .ap-ring1{width:230px;height:230px;margin:-115px 0 0 -115px;}
+  .ap-ring2{width:280px;height:280px;margin:-140px 0 0 -140px;}
+  .ap-panel{width:220px;}
 }
 
 /* ---- alternating showcase blocks ---- */

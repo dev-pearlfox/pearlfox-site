@@ -73,6 +73,15 @@
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && navLinks.classList.contains('is-open')) closeDrawer();
       });
+      // Close on scroll — the drawer sits directly below the nav, which
+      // is exactly where the flying brand-mark logo passes through on its
+      // way to the nav slot. Leaving it open while scrolling would both
+      // overlap the flight visually and give the user no way to see what
+      // they're scrolling toward. Scroll-triggered close is the standard
+      // mobile nav convention anyway.
+      window.addEventListener('scroll', function () {
+        if (navLinks.classList.contains('is-open')) closeDrawer();
+      }, { passive: true });
     }
 
     // Toggle a body.is-scrolling class while the user is actively scrolling,
@@ -100,6 +109,25 @@
     // wraps to multiple rows and is taller than the desktop 64px on mobile —
     // a hardcoded value here was silently wrong on phones.
     var getNavH = function () { return navEl ? navEl.getBoundingClientRect().height : 64; };
+    // Flight-zone height. On iOS Safari, window.innerHeight grows when the
+    // address bar collapses mid-scroll, which would make the flight progress
+    // visibly lurch forward at the exact moment the bar hides. Cache the
+    // viewport height at measure-time instead, and only refresh it on
+    // layout-level resize (orientation change, DevTools device switch) —
+    // not on the pseudo-resize that the address bar fires.
+    //
+    // Detection: iOS Safari's address-bar resize changes HEIGHT but keeps
+    // WIDTH unchanged. A real orientation change or window resize changes
+    // width too. So we track the last-seen width and only refresh height
+    // when the width also moved.
+    var cachedViewportH = window.innerHeight;
+    var cachedViewportW = window.innerWidth;
+    var refreshViewportH = function () {
+      if (window.innerWidth !== cachedViewportW) {
+        cachedViewportW = window.innerWidth;
+        cachedViewportH = window.innerHeight;
+      }
+    };
 
     var makeFlyer = function (el, targetEl) {
       if (!el || !targetEl) return null;
@@ -117,6 +145,12 @@
         el.style.left = '';
         el.style.transform = 'none';
         docked = false;
+        // Reset the frozen flight-start screen position too — after an
+        // orientation change / viewport resize, the previously-captured
+        // start point is in old-layout coordinates and would make the
+        // flight path visibly crooked. The next time progress crosses 0,
+        // it'll be re-captured against the new layout.
+        flightStart = null;
         var r = el.getBoundingClientRect();
         rest = {
           docTop: r.top + window.scrollY,
@@ -215,53 +249,37 @@
 
     if (brandMark && (iconFlyer || wordFlyer)) {
       var ticking = false;
-      // Mobile breakpoint matches the CSS one. Below this, the brand-mark
-      // section collapses to min-height:auto so its bottom is already
-      // inside the viewport at scroll=0 — which would make the flight
-      // start partially complete (logo appearing clipped/docked in the
-      // nav from the first paint, and the circuit section visibly empty).
-      // Flight is a desktop-only flourish; on mobile we just let the
-      // brand-mark icon+word sit naturally in section 2.
-      var FLIGHT_MIN_WIDTH = 721;
-      var brandIconEl = document.querySelector('.brand-mark-icon');
-      var brandWordEl = document.querySelector('.brand-mark-word');
-      var resetFlyerStyles = function () {
-        [brandIconEl, brandWordEl].forEach(function (el) {
-          if (!el) return;
-          el.style.position = '';
-          el.style.top = '';
-          el.style.left = '';
-          el.style.transform = '';
-        });
-      };
+      // Flight runs on mobile too — the CSS gives .brand-mark a full
+      // viewport min-height on <=720px so its bottom edge is below the fold
+      // at scroll=0, keeping flight progress at 0 until the user actually
+      // scrolls into Section 2. Desktop vs mobile uses the same code path.
 
       var updateLogoHandoff = function () {
         ticking = false;
-        // Mobile: no flight. Make sure any leftover inline styles from a
-        // prior desktop measurement are cleared, and never flip the nav
-        // into "past hero" state (the static landing logo stays visible).
-        if (window.innerWidth < FLIGHT_MIN_WIDTH) {
-          resetFlyerStyles();
-          if (navEl) navEl.classList.remove('nav-past-hero');
-          return;
-        }
         // The section 2 / section 3 boundary — the "section three starting
         // line". 0 = that line has just appeared at the bottom of the
         // viewport (it starts to scroll into view), 1 = it has reached the
         // nav (section 2 fully crossed) — both should have arrived by then.
         var lineY = brandMark.getBoundingClientRect().bottom;
-        var zone = window.innerHeight - getNavH();
-        var progress = (window.innerHeight - lineY) / zone;
+        var vh = cachedViewportH;
+        var zone = vh - getNavH();
+        var progress = (vh - lineY) / zone;
         progress = Math.max(0, Math.min(1, progress));
 
         if (iconFlyer) iconFlyer.update(progress);
         if (wordFlyer) wordFlyer.update(progress);
 
-        // Hide the landing-page nav logo the moment section 3 starts
-        // scrolling in (which is also the exact moment the flying logo
-        // takes off from section 2 — so the nav slot goes from "landing
-        // logo visible" straight to "flying logo docking in", never both).
-        if (navEl) navEl.classList.toggle('nav-past-hero', progress > 0);
+        if (navEl) {
+          // Cross-fade the static landing logo instead of flipping it off
+          // the instant progress leaves 0. Keeps the nav branded for the
+          // first half of the flight (when the flying logo is still far
+          // away in Section 2), then fades the static one out so the
+          // arriving flying logo has an empty slot to dock into — no
+          // "logoless nav" gap, no double-image overlap at the end.
+          var landingOpacity = Math.max(0, Math.min(1, 1 - (progress - 0.5) * 2));
+          navEl.style.setProperty('--landing-logo-opacity', landingOpacity);
+          navEl.classList.toggle('nav-past-hero', progress >= 1);
+        }
       };
 
       var onScroll = function () {
@@ -271,13 +289,13 @@
         }
       };
       var onResize = function () {
-        // Skip the measure pass on mobile — measure() temporarily unsets
-        // the element's position to read its natural rect, which flashes
-        // the (large) in-flow logo if we were to keep doing it unnecessarily.
-        if (window.innerWidth >= FLIGHT_MIN_WIDTH) {
-          if (iconFlyer) iconFlyer.measure();
-          if (wordFlyer) wordFlyer.measure();
-        }
+        // Refresh the cached flight-zone height on real layout changes
+        // (orientation, device size switch) — but NOT on the pseudo-resize
+        // iOS Safari fires when the address bar hides, since that was
+        // exactly the lurch we were trying to avoid caching for.
+        refreshViewportH();
+        if (iconFlyer) iconFlyer.measure();
+        if (wordFlyer) wordFlyer.measure();
         updateLogoHandoff();
       };
       onResize();
