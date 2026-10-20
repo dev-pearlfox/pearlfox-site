@@ -684,6 +684,8 @@ section.team::after{
   filter:grayscale(100%) contrast(1.02);
   transition:filter 0.5s ease, transform 0.6s ease;
 }
+/* Opt-in: show a photo in full color all the time (default is grayscale until hover). */
+.team-photo.is-color img{filter:none;}
 /* When a real photo lands, hide the silhouette placeholder. */
 .team-photo:has(img) .team-photo-placeholder{display:none;}
 
@@ -704,12 +706,14 @@ section.team::after{
   display:inline-block;position:relative;
   padding:5px 12px;border-radius:999px;
   font-size:11px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;
-  color:var(--text-muted);
-  background:var(--surface-a);
+  /* Black text on a solid pearl pill: readable in every theme (a translucent
+     fill would make black vanish on the dark theme). */
+  color:#000;
+  background:var(--pearl-light);
   /* Gradient border via the padding-box + linear-gradient border-image trick. */
   border:1px solid transparent;
   background-image:
-    linear-gradient(var(--surface-a), var(--surface-a)),
+    linear-gradient(var(--pearl-light), var(--pearl-light)),
     linear-gradient(135deg, var(--fox-bright), var(--fox-deep));
   background-origin:border-box;
   background-clip:padding-box, border-box;
