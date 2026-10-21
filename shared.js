@@ -254,6 +254,12 @@
       // at scroll=0, keeping flight progress at 0 until the user actually
       // scrolls into Section 2. Desktop vs mobile uses the same code path.
 
+      // Fraction of the flight zone after which the logo has fully landed.
+      // 1 = lands exactly when section 2's bottom edge reaches the nav (the
+      // original timing); lower = same start point, same destination, but it
+      // arrives sooner. Only the speed changes — never the endpoints.
+      var FLIGHT_END = 0.8;
+
       var updateLogoHandoff = function () {
         ticking = false;
         // The section 2 / section 3 boundary — the "section three starting
@@ -263,7 +269,7 @@
         var lineY = brandMark.getBoundingClientRect().bottom;
         var vh = cachedViewportH;
         var zone = vh - getNavH();
-        var progress = (vh - lineY) / zone;
+        var progress = (vh - lineY) / zone / FLIGHT_END;
         progress = Math.max(0, Math.min(1, progress));
 
         if (iconFlyer) iconFlyer.update(progress);
