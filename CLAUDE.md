@@ -17,7 +17,7 @@ What was done:
 - Left `/favicon.ico` reachable at the canonical path (browsers auto-request it regardless of `<link>` tags).
 
 Rules going forward:
-- If the favicon design ever changes, **bump the query-string version** on all `<link rel="icon">` / `<link rel="apple-touch-icon">` tags across all 5 HTML pages (`?v=3`, then `?v=4`, etc.) — not doing this leaves users and Google seeing the old cached icon for months.
+- If the favicon design ever changes, **bump the query-string version** on all `<link rel="icon">` / `<link rel="apple-touch-icon">` tags across all 6 HTML pages (index, company, products, security, faq, team) (`?v=3`, then `?v=4`, etc.) — not doing this leaves users and Google seeing the old cached icon for months.
 - Never let `/favicon.ico` 404 on GitHub Pages, even temporarily, or the octocat-cache trap re-arms itself.
 - Any newly-created HTML page in this site must copy the full favicon block from `index.html` — do not omit it "because browsers auto-request `/favicon.ico`"; Google's favicon indexer explicitly looks at the `<link>` tags.
 

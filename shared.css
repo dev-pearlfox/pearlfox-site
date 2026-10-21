@@ -580,6 +580,7 @@ footer.footer-big{padding:56px 0 32px;}
      inherits all three themes (dark / bright / grey) for free.
    ============================================================ */
 section.team{
+  --team-pill-w:216px; /* one width for every card + role pill (fits the longest role on one line; 4 cards + gaps must stay <= 992px) */
   position:relative;
   padding:88px 0 96px;
   border-top:1px solid var(--border);
@@ -613,10 +614,7 @@ section.team::after{
 }
 .team-intro h2{
   font-family:"Marcellus", Georgia, serif;
-  font-size:38px;font-weight:400;letter-spacing:-0.5px;margin:0 0 14px;color:var(--text);
-}
-.team-intro .team-lede{
-  color:var(--text-muted);opacity:0.9;line-height:1.7;font-size:15.5px;margin:0;
+  font-size:38px;font-weight:400;letter-spacing:-0.5px;margin:0;color:var(--text);
 }
 
 .team-tier{margin-top:56px;}
@@ -641,11 +639,11 @@ section.team::after{
 }
 .team-row-2{max-width:680px;}
 .team-row-3{max-width:920px;}
-.team-row-4{max-width:1120px;}
+.team-row-4{max-width:1120px;column-gap:28px;} /* 4 x pill width + 3 gaps must fit the 992px wrap */
 
 .team-card{
   margin:0;
-  flex:0 0 200px;
+  flex:0 0 var(--team-pill-w);
   display:flex;flex-direction:column;align-items:center;text-align:center;
   gap:16px;
   transition:transform 0.35s ease;
@@ -704,9 +702,11 @@ section.team::after{
   font-size:19px;font-weight:400;letter-spacing:0.2px;margin:0;color:var(--text);
 }
 .team-role{
-  display:inline-block;position:relative;
-  padding:5px 12px;border-radius:999px;
-  font-size:11px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;
+  display:inline-flex;align-items:center;justify-content:center;position:relative;
+  box-sizing:border-box;width:var(--team-pill-w);
+  text-align:center;white-space:nowrap;
+  padding:5px 10px;border-radius:999px;
+  font-size:11px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;
   /* Black text on a solid pearl pill: readable in every theme (a translucent
      fill would make black vanish on the dark theme). */
   color:#000;
@@ -725,7 +725,8 @@ section.team::after{
   .team-intro h2{font-size:30px;}
   .team-tier{margin-top:44px;}
   .team-row{gap:28px 24px;}
-  .team-card{flex:0 0 160px;}
+  section.team{--team-pill-w:160px;}
+  .team-role{white-space:normal;min-height:38px;}
   .team-photo{width:132px;height:132px;}
   .team-name{font-size:17px;}
 }
@@ -734,7 +735,9 @@ section.team::after{
   .team-intro{margin-bottom:40px;}
   .team-intro h2{font-size:26px;}
   .team-row{gap:24px 20px;}
-  .team-card{flex:0 0 140px;gap:12px;}
+  section.team{--team-pill-w:140px;}
+  .team-role{padding:5px 8px;letter-spacing:0.3px;} /* keeps the longest role to 2 lines so all pills match */
+  .team-card{gap:12px;}
   .team-photo{width:120px;height:120px;}
   .team-tier-label::before,.team-tier-label::after{flex-basis:36px;}
 }
