@@ -596,13 +596,12 @@ section.team::before{
     radial-gradient(ellipse 40% 30% at 50% 100%, rgba(255,178,69,0.05), transparent 70%);
 }
 section.team::after{
-  /* Fine dotted grid — evokes PCB pads without shipping another 800-node SVG. */
-  content:"";
-  position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:0.35;
+  /* Fine dotted grid, evokes PCB pads without shipping another 800-node SVG.
+     No mask-image on purpose: a full-section mask forces an offscreen render
+     pass while scrolling, which was the suspect for scroll judder here. */
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:0.22;
   background-image:radial-gradient(circle at 1px 1px, var(--border-strong) 1px, transparent 0);
   background-size:32px 32px;
-  mask-image:radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 90%);
-  -webkit-mask-image:radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 90%);
 }
 
 .team-intro{text-align:center;max-width:640px;margin:0 auto 56px;}
