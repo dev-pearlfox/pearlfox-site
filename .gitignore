@@ -4,3 +4,6 @@
 # local-only: scratch pages and private working files, never published
 .artifact-scratch/
 Docs/
+
+# local-only tool page, not part of the site
+team-avatar-picker.html
