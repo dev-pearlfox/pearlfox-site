@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8710A">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/x-icon" href="../favicon.ico?v=2">
+<link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png?v=2">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png?v=2">
+<link rel="manifest" href="../site.webmanifest">
+<link rel="stylesheet" href="l4u.css">
+<title>Home - Learn4U</title>
+</head>
+<body>
+<header id="topbar"></header>
+<section class="welcome"><div class="wrap">
+  <div><h1 id="greeting"></h1><p id="subline"></p></div>
+  <form class="search" id="searchForm" role="search" action="catalog.html" method="get"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><label class="sr" for="q">Search courses</label><input id="q" name="q" type="search" placeholder="Search the course catalog" autocomplete="off"></form>
+</div></section>
+<main class="wrap page">
+  <div class="cards" id="cards" role="group" aria-label="Summary"></div>
+  <div class="cols">
+    <div style="display:grid;gap:20px;min-width:0">
+      <section class="panel" id="continueBox" aria-label="Continue learning"></section>
+      <section class="panel" aria-labelledby="attH"><div class="panel-head"><h2 id="attH">Needs your attention</h2><a class="btn-ghost btn-sm" href="learning.html">See all</a></div><ul class="attention" id="attention"></ul></section>
+    </div>
+    <div style="display:grid;gap:20px;min-width:0">
+      <section class="panel" aria-labelledby="goalH"><div class="panel-head"><h2 id="goalH">Your year so far</h2></div><div class="panel-body goal" id="goal"></div></section>
+      <section class="panel" aria-labelledby="recH"><div class="panel-head"><h2 id="recH">Recommended for you</h2><a class="btn-ghost btn-sm" href="catalog.html">Catalog</a></div><ul class="attention" id="recs"></ul></section>
+    </div>
+  </div>
+</main>
+<footer id="sitefoot"></footer>
+
+<script src="data.js"></script>
+<script src="common.js"></script>
+<script src="home.js"></script>
+</body>
+</html>

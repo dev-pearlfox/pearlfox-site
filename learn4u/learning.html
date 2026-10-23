@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8710A">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/x-icon" href="../favicon.ico?v=2">
+<link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png?v=2">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png?v=2">
+<link rel="manifest" href="../site.webmanifest">
+<link rel="stylesheet" href="l4u.css">
+<title>My learning - Learn4U</title>
+</head>
+<body>
+<header id="topbar"></header>
+<div class="wrap pagehead"><h1>My learning</h1><p>Everything assigned to you, and what you chose to take.</p></div>
+<main class="wrap page">
+  <section class="panel" aria-label="My trainings">
+    <div class="panel-head">
+      <div class="tabs" role="tablist" id="tabs" aria-label="Filter trainings"></div>
+      <div class="head-actions">
+        <div class="search" style="flex:0 1 200px;min-width:160px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><label class="sr" for="q">Search my learning</label><input id="q" type="search" placeholder="Search my learning" autocomplete="off" style="height:38px"></div>
+        <button type="button" class="btn-primary" id="assignBtn" aria-haspopup="dialog">+ Assign training</button>
+      </div>
+    </div>
+    <div class="tablewrap"><table class="list"><thead><tr><th scope="col">Training</th><th scope="col">Status</th><th scope="col">Progress</th><th scope="col">Due</th><th scope="col"><span class="sr">Actions</span></th></tr></thead><tbody id="rows"></tbody></table></div>
+    <div id="none" class="empty" hidden><strong>Nothing here</strong><span id="noneText"></span></div>
+  </section>
+  <p class="hint">Assign training is a test tool for this preview: it adds a course to your list so you can try the mails and the Eagle View app.</p>
+</main>
+
+<div class="overlay" id="assignOverlay" hidden>
+  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="assignTitle">
+    <div class="dialog-head"><h2 id="assignTitle">Assign a training</h2><button type="button" class="x" id="assignClose" aria-label="Close">&times;</button></div>
+    <form id="assignForm" novalidate><div class="dialog-body">
+      <div class="field"><label for="aCourse">Course</label><select id="aCourse"></select><span class="note" id="aNote"></span></div>
+      <div class="field"><label for="aType">Type</label><select id="aType"><option value="mandatory">Mandatory</option><option value="optional">Optional</option></select></div>
+      <div class="field"><label for="aDue">Due date</label><input id="aDue" type="date"></div>
+    </div>
+    <div class="dialog-foot"><button type="button" class="btn-secondary" id="aRandom">Random</button><button type="button" class="btn-secondary" id="aCancel">Cancel</button><button type="submit" class="btn-primary">Assign</button></div></form>
+  </div>
+</div>
+<footer id="sitefoot"></footer>
+
+<script src="data.js"></script>
+<script src="common.js"></script>
+<script src="clipboard.js"></script>
+<script src="mail-copy.js"></script>
+<script src="learning.js"></script>
+</body>
+</html>

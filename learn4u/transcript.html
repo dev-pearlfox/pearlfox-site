@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#E8710A">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/x-icon" href="../favicon.ico?v=2">
+<link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png?v=2">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png?v=2">
+<link rel="manifest" href="../site.webmanifest">
+<link rel="stylesheet" href="l4u.css">
+<title>Transcript - Learn4U</title>
+</head>
+<body>
+<header id="topbar"></header>
+<div class="wrap pagehead"><h1>My transcript</h1><p>Your completed trainings, with certificates.</p></div>
+<main class="wrap page">
+  <div class="cards" id="cards" role="group" aria-label="Transcript summary" style="grid-template-columns:repeat(3,1fr)"></div>
+  <section class="panel" aria-label="Completed trainings">
+    <div class="tablewrap"><table class="list"><thead><tr><th scope="col">Training</th><th scope="col">Completed</th><th scope="col">Duration</th><th scope="col">Certificate</th><th scope="col"><span class="sr">Actions</span></th></tr></thead><tbody id="rows"></tbody></table></div>
+    <div id="none" class="empty" hidden><strong>No completed trainings yet</strong>Finish a course and it will appear here. <a href="learning.html">Go to My learning</a>.</div>
+  </section>
+</main>
+<footer id="sitefoot"></footer>
+
+<script src="data.js"></script>
+<script src="common.js"></script>
+<script src="transcript.js"></script>
+</body>
+</html>
