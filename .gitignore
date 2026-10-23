@@ -1,0 +1,6 @@
+# macOS junk, in any folder
+.DS_Store
+
+# local-only: scratch pages and private working files, never published
+.artifact-scratch/
+Docs/
