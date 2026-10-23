@@ -3,7 +3,7 @@
   var L = window.L4U, esc = L.esc, DAY = L.D.day;
   L.shell('learning.html');
 
-  var TABS = [['all', 'All'], ['open', 'To do'], ['soon', 'Due soon'], ['overdue', 'Overdue'], ['mandatory', 'Mandatory'], ['done', 'Completed']];
+  var TABS = [['all', 'All'], ['open', 'To do'], ['soon', 'Due soon'], ['overdue', 'Overdue'], ['mandatory', 'Mandatory'], ['done', 'Completed']];   // same tabs and rules as before
   var FILTERS = {
     all: function (e) { return e.status !== 'Cancelled'; },
     open: function (e) { return e.due !== 'done'; },
@@ -27,9 +27,10 @@
     var list = L.entries().filter(FILTERS[tab]).filter(matches).sort(L.byUrgency);
     document.getElementById('rows').innerHTML = list.map(function (e) {
       var c = e.course, open = e.status !== 'Completed' && e.status !== 'Cancelled';
-      return '<tr data-id="' + esc(c.id) + '"><td class="name"><a href="course.html?id=' + esc(c.id) + '">' + esc(c.title) + '</a><div class="sub">' + esc(c.id) + ' &middot; ' + esc(c.category) + ' ' + L.typeBadge(e.item) + '</div></td>' +
-        '<td>' + L.statusBadge(e.status) + '</td><td><div class="prog">' + L.bar(e.pct, 'Progress in ' + c.title) + '<span>' + e.pct + '%</span></div></td><td>' + L.dueBadge(e) + '</td>' +
-        '<td class="go"><button type="button" class="btn-ghost btn-sm" data-copy="' + esc(c.id) + '" title="Copy this training as a mail">Copy mail</button> <a class="btn-secondary btn-sm" href="course.html?id=' + esc(c.id) + '">' + (open ? (e.status === 'In progress' ? 'Resume' : 'Start') : 'View') + '</a></td></tr>';
+      return '<li class="lcard" data-id="' + esc(c.id) + '"><div>' + L.ring(e.pct, 64, 'Progress in ' + c.title) + '</div>' +
+        '<div><h3><a href="course.html?id=' + esc(c.id) + '">' + esc(c.title) + '</a></h3><div class="lc-sub"><span>' + esc(c.id) + '</span><span>&middot;</span><span>' + esc(c.category) + '</span>' + L.typeBadge(e.item) + L.statusBadge(e.status) + '</div></div>' +
+        '<div class="lc-right">' + L.dueBadge(e) + '<div class="lc-actions"><button type="button" class="btn-ghost btn-sm" data-copy="' + esc(c.id) + '" title="Copy this training as a mail">Copy mail</button> ' +
+        '<a class="' + (open ? 'btn-primary' : 'btn-secondary') + ' btn-sm" href="course.html?id=' + esc(c.id) + '">' + (open ? (e.status === 'In progress' ? 'Resume' : 'Start') : 'View') + '</a></div></div></li>';
     }).join('');
     var none = document.getElementById('none');
     none.hidden = list.length > 0;

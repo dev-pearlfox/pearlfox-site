@@ -131,28 +131,67 @@
     '<rect x="1" y="1" width="22" height="22" rx="5" fill="url(#lg-bg)"/>' +
     '<text x="10" y="18" text-anchor="middle" font-size="18" font-weight="900" fill="#fff" font-family="Segoe UI,Arial,sans-serif">L</text>' +
     '<text x="16" y="14" text-anchor="middle" font-size="8.5" font-weight="800" fill="url(#lg-4u)" stroke="#000" stroke-width=".5" paint-order="stroke fill" font-family="Segoe UI,Arial,sans-serif">4U</text></svg>';
-  var NAV = [['index.html', 'Home'], ['learning.html', 'My learning'], ['catalog.html', 'Catalog'], ['transcript.html', 'Transcript']];
+  // ---------- icons, cover art and the progress ring (pure strings, no images to load) ----------
+  var ICONS = {
+    home: '<path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h13V10"/>',
+    learning: '<path d="M12 6c-2-1.5-5-2-8-2v14c3 0 6 .5 8 2 2-1.5 5-2 8-2V4c-3 0-6 .5-8 2z"/><path d="M12 6v14"/>',
+    catalog: '<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>',
+    transcript: '<circle cx="12" cy="9" r="5"/><path d="m8.5 13.5-1.5 7 5-3 5 3-1.5-7"/>',
+    'compliance-ethics': '<path d="M12 3v18M6 21h12M5 7h14"/><path d="M5 7 2 14a3 3 0 0 0 6 0L5 7zM19 7l-3 7a3 3 0 0 0 6 0l-3-7z"/>',
+    'information-security': '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="m9 12 2 2 4-4"/>',
+    'data-privacy': '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+    'health-safety': '<path d="M12 21s-8-5-8-11a4.5 4.5 0 0 1 8-2.5A4.5 4.5 0 0 1 20 10c0 6-8 11-8 11z"/>',
+    technology: '<path d="m9 8-4 4 4 4M15 8l4 4-4 4M13 6l-2 12"/>',
+    'leadership-skills': '<path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7L12 3z"/>'
+  };
+  function icon(name, size) {
+    return '<svg viewBox="0 0 24 24" width="' + (size || 20) + '" height="' + (size || 20) + '" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONS[name] || '') + '</svg>';
+  }
+  // The colour family and symbol of a course come from its category (class cv-<category>).
+  function coverClass(c) { return 'cv-' + slug(c.category); }
+  function coverIcon(c, size) { return icon(slug(c.category), size); }
+  function ring(pct, size, label) {
+    var r = 26, C = 2 * Math.PI * r, off = (C * (1 - Math.max(0, Math.min(100, pct)) / 100)).toFixed(1);
+    return '<svg class="ring" width="' + size + '" height="' + size + '" viewBox="0 0 64 64" role="img" aria-label="' + esc(label || 'Progress') + ': ' + pct + '%">' +
+      '<circle class="ring-bg" cx="32" cy="32" r="' + r + '"/><circle class="ring-fg" cx="32" cy="32" r="' + r + '" stroke-dasharray="' + C.toFixed(1) + '" stroke-dashoffset="' + off + '" transform="rotate(-90 32 32)"/>' +
+      '<text class="ring-t" x="32" y="37" text-anchor="middle">' + pct + '%</text></svg>';
+  }
+
+  // The logo is on the page twice on a phone (side bar + top strip). Each copy needs its own gradient names: a gradient inside a hidden
+  // element cannot be used by the visible copy, which then paints nothing.
+  var logoCount = 0;
+  function logo() { var n = ++logoCount; return n === 1 ? LOGO : LOGO.replace(/lg-bg/g, 'lg-bg-' + n).replace(/lg-4u/g, 'lg-4u-' + n); }
+
+  var NAV = [['index.html', 'Home', 'home'], ['learning.html', 'My learning', 'learning'], ['catalog.html', 'Catalog', 'catalog'], ['transcript.html', 'Transcript', 'transcript']];
 
   function initials(name) { return String(name).split(/\s+/).map(function (w) { return w.charAt(0); }).join('').slice(0, 2).toUpperCase(); }
 
+  // The left side bar (a bottom tab bar on a phone), the phone's top strip, and the footer note.
   function shell(activePage) {
-    var top = document.getElementById('topbar'), foot = document.getElementById('sitefoot');
-    if (top) {
-      top.className = 'topbar';
-      top.innerHTML = '<div class="wrap bar"><a class="brand" href="index.html" aria-label="Learn4U home">' + LOGO + '<span class="brand-name">Learn4U</span><span class="brand-sub">by PearlFox</span></a>' +
-        '<nav class="nav" aria-label="Main">' + NAV.map(function (n) { return '<a href="' + n[0] + '"' + (n[0] === activePage ? ' class="on" aria-current="page"' : '') + '>' + n[1] + '</a>'; }).join('') + '</nav>' +
-        '<div class="usermenu"><button type="button" class="user" id="userBtn" aria-haspopup="true" aria-expanded="false"><span class="avatar" aria-hidden="true">' + esc(initials(D.me.name)) + '</span><span class="uname">' + esc(D.me.name) + '</span></button>' +
+    var side = document.getElementById('topbar'), foot = document.getElementById('sitefoot'), main = document.querySelector('.main');
+    if (side) {
+      side.className = 'side';
+      side.innerHTML = '<a class="brand" href="index.html" aria-label="Learn4U home">' + logo() + '<span><strong>Learn4U</strong><small>by PearlFox</small></span></a>' +
+        '<nav class="nav" aria-label="Main">' + NAV.map(function (n) { return '<a href="' + n[0] + '"' + (n[0] === activePage ? ' class="on" aria-current="page"' : '') + '>' + icon(n[2], 22) + '<span>' + n[1] + '</span></a>'; }).join('') + '</nav>' +
+        '<div class="usermenu"><button type="button" class="user" id="userBtn" aria-haspopup="true" aria-expanded="false"><span class="avatar" aria-hidden="true">' + esc(initials(D.me.name)) + '</span>' +
+        '<span class="who"><strong>' + esc(D.me.name) + '</strong><small>' + esc(D.me.title) + '</small></span></button>' +
         '<div class="menu" id="userMenu" hidden><div class="menu-who"><strong>' + esc(D.me.name) + '</strong><span>' + esc(D.me.title) + ', ' + esc(D.me.dept) + '</span></div>' +
-        '<button type="button" id="resetBtn">Reset sample data</button></div></div></div>';
+        '<button type="button" id="resetBtn">Reset sample data</button></div></div>';
       var btn = document.getElementById('userBtn'), menu = document.getElementById('userMenu');
       btn.addEventListener('click', function (e) { e.stopPropagation(); var open = menu.hidden; menu.hidden = !open; btn.setAttribute('aria-expanded', String(open)); });
       document.addEventListener('click', function () { menu.hidden = true; btn.setAttribute('aria-expanded', 'false'); });
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { menu.hidden = true; btn.setAttribute('aria-expanded', 'false'); } });
       document.getElementById('resetBtn').addEventListener('click', function () { reset(); window.location.reload(); });
     }
+    if (main) {
+      var strip = document.createElement('div');
+      strip.className = 'mtop';
+      strip.innerHTML = '<a class="brand" href="index.html" aria-label="Learn4U home">' + logo() + '<span><strong>Learn4U</strong><small>by PearlFox</small></span></a>';
+      main.insertBefore(strip, main.firstChild);
+    }
     if (foot) {
       foot.className = 'sitefoot';
-      foot.innerHTML = '<div class="wrap"><span>Learn4U by PearlFox. A preview with <strong>sample data only</strong>: every course and person is made up, and progress stays in this browser.</span><span><a href="../incidents/index.html">PearlFox Service Desk</a></span></div>';
+      foot.innerHTML = '<span>Learn4U by PearlFox. A preview with <strong>sample data only</strong>: every course and person is made up, and progress stays in this browser.</span><a href="../incidents/index.html">PearlFox Service Desk</a>';
     }
   }
 
@@ -174,6 +213,6 @@
     course: course, courseMinutes: courseMinutes, load: load, save: save, reset: reset, startState: startState,
     status: status, percent: percent, isOpen: isOpen, daysUntil: daysUntil, dueState: dueState, dueText: dueText,
     entries: entries, active: active, byUrgency: byUrgency, totals: totals, toggleModule: toggleModule, enrol: enrol, withdraw: withdraw, certNumber: certNumber,
-    shell: shell, toast: toast, bar: bar, statusBadge: statusBadge, dueBadge: dueBadge, typeBadge: typeBadge, urlParam: urlParam, initials: initials
+    icon: icon, coverClass: coverClass, coverIcon: coverIcon, ring: ring, shell: shell, toast: toast, bar: bar, statusBadge: statusBadge, dueBadge: dueBadge, typeBadge: typeBadge, urlParam: urlParam, initials: initials
   };
 })();

@@ -25,8 +25,8 @@
     document.getElementById('grid').innerHTML = list.map(function (c) {
       var e = mine[c.id], on = e && e.status !== 'Cancelled';
       var action = on ? L.statusBadge(e.status) : '<button type="button" class="btn-secondary btn-sm" data-add="' + esc(c.id) + '">Add to my learning</button>';
-      return '<article class="cc" data-cat="' + esc(L.slug(c.category)) + '"><div class="cc-top"></div><div class="cc-body"><span class="cat">' + esc(c.category) + '</span>' +
-        '<h3><a href="course.html?id=' + esc(c.id) + '">' + esc(c.title) + '</a></h3><p>' + esc(c.summary) + '</p>' +
+      return '<article class="cc"><div class="cc-cover ' + L.coverClass(c) + '"><span class="cat">' + esc(c.category) + '</span><span class="wm">' + L.coverIcon(c, 150) + '</span></div>' +
+        '<div class="cc-body"><h3><a href="course.html?id=' + esc(c.id) + '">' + esc(c.title) + '</a></h3><p>' + esc(c.summary) + '</p>' +
         '<div class="facts"><span>' + esc(L.fmtMinutes(L.courseMinutes(c))) + '</span><span>' + esc(L.plural(c.modules.length, 'module', 'modules')) + '</span><span>' + esc(c.level) + '</span></div></div>' +
         '<div class="cc-foot">' + action + '<a class="btn-ghost btn-sm" href="course.html?id=' + esc(c.id) + '">Details</a></div></article>';
     }).join('');

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#E8710A">
+<meta name="theme-color" content="#17382C">
 <meta name="robots" content="noindex">
 <link rel="icon" type="image/x-icon" href="../favicon.ico?v=2">
 <link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png?v=2">
@@ -13,22 +13,27 @@
 <title>Catalog - Learn4U</title>
 </head>
 <body>
-<header id="topbar"></header>
-<div class="wrap pagehead"><h1>Course catalog</h1><p>Browse every course. Add the ones you want to your learning.</p></div>
-<main class="wrap page">
-  <section class="panel"><div class="panel-body" style="display:grid;gap:14px">
-    <div class="filters">
-      <div class="field" style="flex:1 1 260px"><label for="q">Search</label><div class="search" style="flex:none;width:100%"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Search by title or topic" autocomplete="off"></div></div>
+<div class="app">
+<aside id="topbar"></aside>
+<main class="main" id="main">
+  <div class="head"><div><span class="eyebrow">Catalog</span><h1>Find your next course</h1><p>Browse every course and add the ones you want to your learning.</p></div></div>
+  <div class="catwrap">
+    <aside class="rail" aria-label="Filters">
+      <div class="field"><label for="q">Search</label><div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Title or topic" autocomplete="off"></div></div>
       <div class="field"><label for="lvl">Level</label><select id="lvl"></select></div>
       <div class="field"><label for="sort">Sort by</label><select id="sort"><option value="pop">Most popular</option><option value="az">Title A to Z</option><option value="short">Shortest first</option></select></div>
+      <h2>Topics</h2>
+      <div class="chips" id="cats" role="group" aria-label="Category"></div>
+    </aside>
+    <div>
+      <p class="hint" id="count" aria-live="polite" style="margin-bottom:14px"></p>
+      <div class="grid" id="grid"></div>
+      <div class="empty" id="none" hidden><strong>No course found</strong>Try another word, or clear the filters.</div>
     </div>
-    <div class="chips" id="cats" role="group" aria-label="Category"></div>
-  </div></section>
-  <p class="hint" id="count" aria-live="polite"></p>
-  <div class="grid" id="grid"></div>
-  <div class="empty panel" id="none" hidden><strong>No course found</strong>Try another word, or clear the filters.</div>
+  </div>
+  <footer id="sitefoot"></footer>
 </main>
-<footer id="sitefoot"></footer>
+</div>
 
 <script src="data.js"></script>
 <script src="common.js"></script>
