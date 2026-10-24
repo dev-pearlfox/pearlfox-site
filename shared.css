@@ -472,8 +472,8 @@ section.app-preview::before{
 }
 @media (min-width:721px) and (max-width:900px){
   /* Links stay exactly centred (their normal position); text + gap shrink
-     so the row clears the smaller logo from 780px up (see next block for
-     721-779px). */
+     so the row clears the smaller logo from 780px up (slightly smaller still
+     at 721-779px, see next block). */
   .navlinks{gap:10px;}
   .navlinks a{font-size:13px;}
 
@@ -486,11 +486,11 @@ section.app-preview::before{
   .nav-logo-target-icon{width:33px;height:33px;}
   .nav-logo-target-word{width:132px;height:22px;margin-left:-24px;}
 }
-/* 721-779px: the link row is wider than the space left either side of a true
-   centre, so centre it in the free space between the logo and the right edge
-   instead. True centre resumes at 780px, where it clears the logo by ~12px. */
+/* 721-779px: still exactly centred, with a bit smaller link text and gap so
+   the row clears the visible logo (ends ~165px from the left) by ~19px. */
 @media (min-width:721px) and (max-width:779px){
-  .navlinks{position:static;transform:none;flex:1;justify-content:center;}
+  .navlinks{gap:8px;}
+  .navlinks a{font-size:12.5px;}
 }
 /* Hero tagline vs. nav links, 721-1100px. The hero stops shrinking at 420px
    tall but the tagline is lifted a fixed 150px from its centre, which puts the
