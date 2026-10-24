@@ -12,12 +12,12 @@ Root cause: before a real `/favicon.ico` was deployed, requests to `pearlfox.io/
 
 What was done:
 - Removed the 816 KB PNG-in-SVG `favicon.svg` (RealFaviconGenerator output — not a real vector, was a Google fetch-timeout risk) and the `<link rel="icon" type="image/svg+xml">` tags pointing at it.
-- Added `robots.txt` (allows all, points at sitemap) and `sitemap.xml` (5 public pages: index, company, products, security, faq).
-- Cache-busted the favicon `<link>` tags across all 5 pages with `?v=2` to force Google's favicon indexer to re-fetch.
+- Added `robots.txt` (allows all, points at sitemap) and `sitemap.xml` (originally 5 public pages: index, company, products, security, faq; `products.html` has since been deleted and `team.html` added, so the sitemap now lists index, company, team, security, faq).
+- Cache-busted the favicon `<link>` tags across all pages that existed then with `?v=2` to force Google's favicon indexer to re-fetch.
 - Left `/favicon.ico` reachable at the canonical path (browsers auto-request it regardless of `<link>` tags).
 
 Rules going forward:
-- If the favicon design ever changes, **bump the query-string version** on all `<link rel="icon">` / `<link rel="apple-touch-icon">` tags across all 6 HTML pages (index, company, products, security, faq, team) (`?v=3`, then `?v=4`, etc.) — not doing this leaves users and Google seeing the old cached icon for months.
+- If the favicon design ever changes, **bump the query-string version** on all `<link rel="icon">` / `<link rel="apple-touch-icon">` tags in **every** HTML file that has them (public pages plus the noindex preview folders `learn4u/`, `timesheet/`, `peakon/`, `incidents/`; find them all with `grep -rl 'rel="icon"' --include=*.html .` rather than trusting a hand-kept list, and note preview pages use `../` paths) (`?v=3`, then `?v=4`, etc.) — not doing this leaves users and Google seeing the old cached icon for months.
 - Never let `/favicon.ico` 404 on GitHub Pages, even temporarily, or the octocat-cache trap re-arms itself.
 - Any newly-created HTML page in this site must copy the full favicon block from `index.html` — do not omit it "because browsers auto-request `/favicon.ico`"; Google's favicon indexer explicitly looks at the `<link>` tags.
 

@@ -1,5 +1,5 @@
 :root{
-  /* brand swatches — constant across all themes, used for the Fox gradient/wordmark */
+  /* brand swatches — used for the Fox gradient/wordmark */
   --pearl-light:#FBF6EF;
   --pearl-cream:#F5DFC9;
   --pearl-warm:#EDC9A9;
@@ -10,7 +10,7 @@
   --fox-deep:#D92802;
   --fox-dark:#8A1204;
 
-  /* semantic tokens — these are what actually change per theme below */
+  /* semantic tokens (dark theme is the only theme) */
   --bg:#0B0B0B;
   --text:#FBF6EF;
   --text-muted:#F5DFC9;
@@ -19,30 +19,6 @@
   --border:rgba(255,255,255,0.08);
   --border-strong:rgba(255,255,255,0.25);
   --nav-bg:rgba(11,11,11,0.85);
-}
-
-/* ---- Bright theme ---- */
-:root[data-theme="bright"]{
-  --bg:#FFFFFF;
-  --text:#1A1310;
-  --text-muted:#5A4E44;
-  --surface-a:rgba(20,10,0,0.035);
-  --surface-b:rgba(20,10,0,0.012);
-  --border:rgba(20,10,0,0.10);
-  --border-strong:rgba(20,10,0,0.22);
-  --nav-bg:rgba(255,255,255,0.85);
-}
-
-/* ---- Grey theme ---- */
-:root[data-theme="grey"]{
-  --bg:#E7E3DD;
-  --text:#221E1A;
-  --text-muted:#5C5750;
-  --surface-a:rgba(20,15,5,0.05);
-  --surface-b:rgba(20,15,5,0.02);
-  --border:rgba(20,15,5,0.12);
-  --border-strong:rgba(20,15,5,0.28);
-  --nav-bg:rgba(231,227,221,0.85);
 }
 
 *{box-sizing:border-box;}
@@ -72,15 +48,6 @@ body{
   transition:background 0.2s ease,color 0.2s ease;
 }
 .wrap{max-width:1040px;margin:0 auto;padding:0 24px;}
-
-/* ---- theme switcher ---- */
-.theme-switch{display:inline-flex;align-items:center;gap:2px;background:var(--surface-a);border:1px solid var(--border);border-radius:999px;padding:3px;}
-.theme-switch button{
-  border:none;background:none;cursor:pointer;
-  font-size:12px;font-weight:700;letter-spacing:0.2px;
-  color:var(--text-muted);padding:6px 12px;border-radius:999px;
-}
-.theme-switch button.active{background:linear-gradient(135deg,var(--fox-bright),var(--fox-orange));color:#1a0e04;}
 
 /* ---- nav ---- */
 nav{
@@ -337,17 +304,6 @@ section.contact{padding:64px 0;text-align:center;}
 }
 .contact-email .fox{background:linear-gradient(135deg,var(--fox-bright),var(--fox-deep));-webkit-background-clip:text;background-clip:text;color:transparent;}
 
-/* ---- feature grid (4-up value prop cards) ---- */
-section.feature-grid{padding:64px 0;border-top:1px solid var(--border);}
-.fg-head{text-align:center;max-width:600px;margin:0 auto 44px;}
-.fg-head h2{font-size:30px;margin:0 0 12px;letter-spacing:-0.3px;}
-.fg-head p{color:var(--text-muted);opacity:0.9;font-size:15.5px;margin:0;}
-.fg-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
-.fg-card{background:linear-gradient(160deg,var(--surface-a),var(--surface-b));border:1px solid var(--border);border-radius:16px;padding:26px 22px;}
-.fg-card .fg-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--fox-bright),var(--fox-orange));display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:16px;}
-.fg-card h3{font-size:15.5px;margin:0 0 8px;color:var(--text);}
-.fg-card p{font-size:13.5px;color:var(--text-muted);opacity:0.9;line-height:1.55;margin:0;}
-
 /* ---- app preview (left: feature text, right: animated app mock-up) ---- */
 section.app-preview{
   padding:88px 0;border-top:1px solid var(--border);overflow:hidden;position:relative;
@@ -495,27 +451,35 @@ section.app-preview::before{
   .ap-panel{width:220px;}
 }
 
-/* ---- alternating showcase blocks ---- */
-section.showcase{padding:72px 0;border-top:1px solid var(--border);}
-.showcase-row{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;}
-.showcase-row.reverse .showcase-text{order:2;}
-.showcase-row.reverse .showcase-visual{order:1;}
-.showcase-text h2{font-size:26px;margin:0 0 14px;letter-spacing:-0.3px;}
-.showcase-text p{color:var(--text-muted);opacity:0.9;line-height:1.65;font-size:15px;margin:0 0 18px;}
-.visual-placeholder{
-  aspect-ratio:16/10;border-radius:18px;
-  border:1.5px dashed rgba(252,130,21,0.4);
-  background:linear-gradient(160deg,var(--surface-a),var(--surface-b));
-  display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;
+/* ---- static nav logo (company / team / security / faq) ----
+   Same icon + wordmark and same sizes as the home page's .nav-logo-target,
+   but a plain, always-visible home link: no flight, no opacity games.
+   Deliberately SEPARATE classes from .nav-logo-target* (Heart code, see
+   CLAUDE.md) so nothing here can disturb the flying-logo handoff, which
+   only exists on index.html. If the home-page logo size ever changes,
+   mirror it here. */
+.nav-logo-static{display:flex;align-items:center;width:244px;height:50px;text-decoration:none;}
+.nav-logo-static-icon{width:47px;height:47px;flex-shrink:0;}
+.nav-logo-static-word{width:188px;height:31px;margin-left:-34px;}
+.nav-logo-static img{display:block;width:100%;height:100%;object-fit:contain;}
+/* At <=900px the full-size logo would collide with the centered link row
+   (the home page has the same collision at ~720-860px; that one is Heart
+   code and is left alone). So here: smaller logo, and on pages that have the
+   static logo only (sibling selector) the links flow to the right instead
+   of being pinned to the exact centre. <=720px is the hamburger layout. */
+@media (max-width:900px){
+  .nav-logo-static{width:165px;height:36px;}
+  .nav-logo-static-icon{width:33px;height:33px;}
+  .nav-logo-static-word{width:132px;height:22px;margin-left:-24px;}
 }
-.visual-placeholder span{font-size:13px;font-weight:700;color:var(--fox-orange);opacity:0.85;letter-spacing:0.3px;}
-
-/* ---- stat strip ---- */
-section.stats{padding:56px 0;border-top:1px solid var(--border);}
-.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center;}
-.stat-grid .num{font-size:32px;font-weight:800;letter-spacing:-0.5px;background:linear-gradient(135deg,var(--fox-bright),var(--fox-deep));-webkit-background-clip:text;background-clip:text;color:transparent;}
-.stat-grid .lbl{font-size:13px;color:var(--text-muted);opacity:0.85;margin-top:6px;}
-.stat-grid .placeholder-tag{display:block;font-size:10px;font-weight:800;letter-spacing:0.6px;text-transform:uppercase;color:var(--fox-orange);opacity:0.7;margin-top:4px;}
+@media (min-width:721px) and (max-width:900px){
+  .nav-logo-static ~ .navlinks{position:static;transform:none;margin-left:auto;gap:14px;}
+}
+@media (max-width:360px){
+  .nav-logo-static{width:148px;height:32px;}
+  .nav-logo-static-icon{width:30px;height:30px;}
+  .nav-logo-static-word{width:118px;height:20px;margin-left:-22px;}
+}
 
 /* ---- multi-column footer ---- */
 footer{padding:40px 0;border-top:1px solid var(--border);}
@@ -539,7 +503,6 @@ footer.footer-big{padding:56px 0 32px;}
 .footer-big .fbottom{border-top:1px solid var(--border);padding-top:24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;}
 
 @media (max-width:900px){
-  .fg-grid{grid-template-columns:1fr 1fr;}
   .footer-big .fcols{grid-template-columns:1fr 1fr;}
 }
 @media (max-width:720px){
@@ -554,11 +517,6 @@ footer.footer-big{padding:56px 0 32px;}
   .nav-logo-target-word{width:132px;height:22px;margin-left:-24px;}
   header.hero.hero-scenic{margin-top:-56px;}
   header.pagehead h1{font-size:28px;}
-  .fg-grid{grid-template-columns:1fr;}
-  .showcase-row{grid-template-columns:1fr;gap:28px;}
-  .showcase-row.reverse .showcase-text{order:1;}
-  .showcase-row.reverse .showcase-visual{order:2;}
-  .stat-grid{grid-template-columns:1fr 1fr;gap:28px 16px;}
   .footer-big .fcols{grid-template-columns:1fr;gap:28px;}
 }
 
@@ -643,7 +601,6 @@ section.app-preview{
   .btn-primary,.btn-secondary{font-size:14px;padding:12px 22px;}
   header.pagehead{padding:40px 0 28px;}
   header.pagehead h1{font-size:24px;}
-  .fg-head h2{font-size:24px;}
 }
 @media (max-width:360px){
   .nav-logo-target{width:148px;height:32px;}
