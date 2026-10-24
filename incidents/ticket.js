@@ -131,6 +131,8 @@
     if (text) { var old = text.getAttribute('data-label'); text.textContent = label; clearTimeout(noteTimer); noteTimer = setTimeout(function () { text.textContent = old; if (note) note.textContent = ''; }, 3500); }
   }
   function wireMailButtons() {
+    // A real link whose href already holds the whole mail (like the Peakon page), refilled on every redraw so it follows the status.
+    document.getElementById('mailOpen').href = window.SD_MAIL.mailtoUrl(window.SD_MAIL.build(mailView()));
     var mailBtn = document.getElementById('copyMail'), subjectBtn = document.getElementById('copySubject');
     mailBtn.addEventListener('click', function () {
       var mail = window.SD_MAIL.build(mailView());           // built first, inside the click, so the browser allows the copy
@@ -155,6 +157,7 @@
       '<div class="mail-actions"><button type="button" class="btn-primary" id="copyMail" title="Copy this incident as a mail, then paste it into a new mail">' + ENVELOPE +
       '<span class="lbl" data-label="Copy as mail">Copy as mail</span></button>' +
       '<button type="button" class="btn" id="copySubject" title="Copy the subject line"><span class="lbl" data-label="Copy subject">Copy subject</span></button>' +
+      '<a class="btn" id="mailOpen" href="mailto:" title="Open a new mail with this incident, subject and body filled in">' + ENVELOPE + '<span>New mail</span></a>' +
       '<span class="copy-note" id="copyNote" role="status" aria-live="polite"></span></div></div>' +
       '<div class="chips"><span class="chip ' + S.priorityClass(inc.priority) + '">' + esc(inc.priority) + '</span>' +
       '<span class="chip ' + S.statusClass(current) + '">' + esc(current) + '</span>' +

@@ -95,5 +95,13 @@
     return { subject: subject, html: html, text: lines.join('\n') };
   }
 
-  window.SD_MAIL = { build: build, ticketUrl: ticketUrl, endDateText: endDateText };
+  // The address a "mailto:" link needs: subject and plain-text body, "To" left empty. Zoho Mail (tested) refuses a whole mailto link
+  // when the body holds a literal percent sign, and opens no compose window at all; a typed comment can hold one, so the sign is
+  // written as a word here ("50 percent"). Only this link changes: Copy as mail keeps the text as it is.
+  function mailtoUrl(mail) {
+    var body = mail.text.replace(/%/g, ' percent').replace(/\n/g, '\r\n');
+    return 'mailto:?subject=' + encodeURIComponent(mail.subject) + '&body=' + encodeURIComponent(body);
+  }
+
+  window.SD_MAIL = { build: build, ticketUrl: ticketUrl, endDateText: endDateText, mailtoUrl: mailtoUrl };
 })();

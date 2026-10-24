@@ -10,10 +10,6 @@
   if (!btn || !window.SD_MAIL || !window.SD_RANDOM || !window.SD_DATA) return;
   var D = window.SD_DATA;
 
-  function mailtoUrl(mail) {
-    return 'mailto:?subject=' + encodeURIComponent(mail.subject) + '&body=' + encodeURIComponent(mail.text.replace(/\n/g, '\r\n'));
-  }
-
   function refill() {
     var inc = window.SD_RANDOM.make({ assignee: D.me.name, existingIds: D.incidents.map(function (i) { return i.id; }), now: Date.now(), rng: Math.random });
     var opened = inc.events[0];                          // the "New" event: "Incident opened."
@@ -21,7 +17,7 @@
       inc: inc, status: 'New', comments: [], url: window.location.href,
       history: [{ status: 'New', at: opened.at, by: opened.by, note: opened.note }]
     });
-    btn.href = mailtoUrl(mail);
+    btn.href = window.SD_MAIL.mailtoUrl(mail);
   }
 
   refill();

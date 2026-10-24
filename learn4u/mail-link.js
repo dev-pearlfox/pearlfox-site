@@ -11,8 +11,12 @@
   var course = L.course(L.urlParam('id'));
   if (!course) { bar.hidden = true; return; }                      // "Course not found": nothing to mail
 
+  // Zoho Mail (tested) refuses a whole mailto link when the body holds a literal percent sign ("Progress: 0%"), and opens no
+  // compose window at all. So the percent sign is written as a word, in this link only: "Progress: 0 percent". Eagle View does not
+  // read that line, and "Copy as mail" still uses the shared builder, so it keeps "0%".
   function mailtoUrl(mail) {
-    return 'mailto:?subject=' + encodeURIComponent(mail.subject) + '&body=' + encodeURIComponent(mail.text.replace(/\n/g, '\r\n'));
+    var body = mail.text.replace(/%/g, ' percent').replace(/\n/g, '\r\n');
+    return 'mailto:?subject=' + encodeURIComponent(mail.subject) + '&body=' + encodeURIComponent(body);
   }
 
   function viewFor(status, now) {
