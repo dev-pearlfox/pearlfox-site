@@ -80,7 +80,19 @@
     course('4500115', 'Introduction to Generative AI at Work', 'Technology', 'Beginner', 'Engineering Academy',
       'What generative AI tools can and cannot do, and what company data must never be pasted into them.',
       ['Explain how generative AI works in plain words', 'Choose good uses and avoid risky ones', 'Protect company and personal data'],
-      [m('How generative AI works', 'Video', 14), m('Good and risky uses', 'Reading', 10), m('Protecting data', 'Video', 9), m('Knowledge check', 'Quiz', 8)], { popular: true })
+      [m('How generative AI works', 'Video', 14), m('Good and risky uses', 'Reading', 10), m('Protecting data', 'Video', 9), m('Knowledge check', 'Quiz', 8)], { popular: true }),
+    course('4500116', 'Anti-Money Laundering Basics', 'Compliance & Ethics', 'Intermediate', 'Compliance Office',
+      'How money laundering works in payments, the warning signs to watch for and how to raise a suspicious activity report.',
+      ['Explain the three stages of money laundering', 'Recognise red flags in customer and transaction behaviour', 'Raise a suspicious activity report without tipping anyone off'],
+      [m('How money gets laundered', 'Video', 13), m('Red flags in payments', 'Reading', 12), m('Know your customer checks', 'Reading', 10), m('Raising a suspicious activity report', 'Video', 9), m('Case studies', 'Workshop', 20), m('Knowledge check', 'Quiz', 10)], { valid: 12 }),
+    course('4500117', 'Managing Stress and Wellbeing', 'Health & Safety', 'Beginner', 'Human Resources',
+      'Notice the early signs of stress in yourself and your team, build small daily habits and know where to find support.',
+      ['Recognise early signs of stress and burnout', 'Build simple routines for sleep, breaks and movement', 'Find confidential support when you need it'],
+      [m('Understanding stress', 'Video', 9), m('Small habits that help', 'Reading', 8), m('Supporting a colleague', 'Video', 8), m('Where to get help', 'Reading', 5)], { valid: 24 }),
+    course('4500118', 'Open Source and Software Supply Chain Risk', 'Technology', 'Advanced', 'Engineering Academy',
+      'Choose, review and track third-party code: licences, vulnerable dependencies and what a software bill of materials is for.',
+      ['Check an open-source licence before you use a library', 'Find and fix vulnerable dependencies', 'Read and keep a software bill of materials'],
+      [m('Open-source licences in practice', 'Video', 16), m('Vulnerable dependencies', 'Video', 15), m('Software bill of materials', 'Reading', 12), m('Pinning, signing and updating', 'Reading', 14), m('Audit a sample project', 'Workshop', 35), m('Knowledge check', 'Quiz', 12)])
   ];
 
   // The learner's starting list. due = days from today (negative = already late). done = modules finished so far.
@@ -91,6 +103,9 @@
     { id: 'TRN4500103', mandatory: true,  assigned: 5,   due: 21,  done: 0, by: 'Learning & Development' },
     { id: 'TRN4500105', mandatory: true,  assigned: 20,  due: 45,  done: 1, by: 'Compliance Office' },
     { id: 'TRN4500110', mandatory: false, assigned: 9,   due: 60,  done: 0, by: 'Nandha Kumar' },
+    { id: 'TRN4500116', mandatory: true,  assigned: 8,   due: 14,  done: 0, by: 'Compliance Office' },
+    { id: 'TRN4500117', mandatory: false, assigned: 3,   due: 90,  done: 1, by: 'Human Resources' },
+    { id: 'TRN4500118', mandatory: false, assigned: 10,  due: 6,   done: 2, by: 'Engineering Academy' },
     { id: 'TRN4500104', mandatory: true,  assigned: 95,  due: -30, done: 5, completed: 40,  by: 'Learning & Development' },
     { id: 'TRN4500107', mandatory: false, assigned: 140, due: -60, done: 5, completed: 90,  by: 'Nandha Kumar' },
     { id: 'TRN4500114', mandatory: true,  assigned: 230, due: -170, done: 3, completed: 200, by: 'Facilities and Safety' }
