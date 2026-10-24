@@ -95,57 +95,14 @@
 
   function detail(label, value) { return '<div><dt>' + label + '</dt><dd>' + value + '</dd></div>'; }
 
-  // ---- Copy as mail. The mail is built by mail-copy.js; this part only talks to the clipboard.
+  // ---- One mail button. The mail is built by mail-copy.js. The button is a real link whose href already holds the whole mail
+  // (like the Peakon page), refilled on every redraw so it follows the current status. The browser opens the mail app.
   var ENVELOPE = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>';
-  function legacyCopy(node) {
-    // Older route: put the content on the page (off screen, not display:none, which cannot be selected), select it, copy.
-    document.body.appendChild(node);
-    var range = document.createRange(); range.selectNodeContents(node);
-    var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
-    var done = false; try { done = document.execCommand('copy'); } catch (e) { done = false; }
-    sel.removeAllRanges(); document.body.removeChild(node);
-    return done;
-  }
-  function offscreen(tag) { var n = document.createElement(tag); n.setAttribute('aria-hidden', 'true'); n.style.cssText = 'position:fixed;left:-9999px;top:0;'; return n; }
-  // Resolves true or false. Rich (html plus text) when the browser allows it, otherwise the older route.
-  function copyRich(html, text) {
-    var viaOldRoute = function () { var n = offscreen('div'); n.innerHTML = html; return legacyCopy(n); };
-    if (navigator.clipboard && navigator.clipboard.write && window.ClipboardItem) {
-      var item = new window.ClipboardItem({ 'text/html': new Blob([html], { type: 'text/html' }), 'text/plain': new Blob([text], { type: 'text/plain' }) });
-      return navigator.clipboard.write([item]).then(function () { return true; }, function () { return viaOldRoute(); });
-    }
-    return Promise.resolve(viaOldRoute());
-  }
-  function copyPlain(text) {
-    var viaOldRoute = function () { var n = offscreen('textarea'); n.value = text; document.body.appendChild(n); n.select(); var d = false; try { d = document.execCommand('copy'); } catch (e) { d = false; } document.body.removeChild(n); return d; };
-    if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text).then(function () { return true; }, function () { return viaOldRoute(); });
-    return Promise.resolve(viaOldRoute());
-  }
   function mailView() {
     return { inc: inc, status: S.currentStatus(inc), history: S.statusHistory(inc), comments: S.comments(inc).reverse(), url: window.location.href };
   }
-  var noteTimer;
-  function say(button, label, message) {
-    var note = document.getElementById('copyNote'), text = button.querySelector('.lbl');
-    if (note) note.textContent = message;
-    if (text) { var old = text.getAttribute('data-label'); text.textContent = label; clearTimeout(noteTimer); noteTimer = setTimeout(function () { text.textContent = old; if (note) note.textContent = ''; }, 3500); }
-  }
   function wireMailButtons() {
-    // A real link whose href already holds the whole mail (like the Peakon page), refilled on every redraw so it follows the status.
     document.getElementById('mailOpen').href = window.SD_MAIL.mailtoUrl(window.SD_MAIL.build(mailView()));
-    var mailBtn = document.getElementById('copyMail'), subjectBtn = document.getElementById('copySubject');
-    mailBtn.addEventListener('click', function () {
-      var mail = window.SD_MAIL.build(mailView());           // built first, inside the click, so the browser allows the copy
-      copyRich(mail.html, mail.text).then(function (done) {
-        say(mailBtn, done ? 'Copied' : 'Not copied', done ? 'Copied. Paste it into a new mail. Use Copy subject for the subject line.' : 'The browser blocked copying. Allow clipboard access for this page and try again.');
-      });
-    });
-    subjectBtn.addEventListener('click', function () {
-      var mail = window.SD_MAIL.build(mailView());
-      copyPlain(mail.subject).then(function (done) {
-        say(subjectBtn, done ? 'Copied' : 'Not copied', done ? 'Subject copied: ' + mail.subject : 'The browser blocked copying. Allow clipboard access for this page and try again.');
-      });
-    });
   }
 
   function render(flash) {
@@ -154,11 +111,7 @@
     main.innerHTML =
       '<div class="crumbs"><a href="index.html">My incidents</a> / ' + esc(inc.id) + '</div>' +
       '<div class="ticket-head"><div class="head-row"><div><div class="id">' + esc(inc.id) + '</div><h1>' + esc(inc.short) + '</h1></div>' +
-      '<div class="mail-actions"><button type="button" class="btn-primary" id="copyMail" title="Copy this incident as a mail, then paste it into a new mail">' + ENVELOPE +
-      '<span class="lbl" data-label="Copy as mail">Copy as mail</span></button>' +
-      '<button type="button" class="btn" id="copySubject" title="Copy the subject line"><span class="lbl" data-label="Copy subject">Copy subject</span></button>' +
-      '<a class="btn" id="mailOpen" href="mailto:" title="Open a new mail with this incident, subject and body filled in">' + ENVELOPE + '<span>New mail</span></a>' +
-      '<span class="copy-note" id="copyNote" role="status" aria-live="polite"></span></div></div>' +
+      '<div class="mail-actions"><a class="btn-primary" id="mailOpen" href="mailto:" title="Open a new mail with this incident, subject and body filled in">' + ENVELOPE + '<span>Send mail</span></a></div></div>' +
       '<div class="chips"><span class="chip ' + S.priorityClass(inc.priority) + '">' + esc(inc.priority) + '</span>' +
       '<span class="chip ' + S.statusClass(current) + '">' + esc(current) + '</span>' +
       '<span class="muted">Opened ' + S.fmtDateTime(inc.openedAt) + ' by ' + esc(inc.openedBy) + '</span></div></div>' +

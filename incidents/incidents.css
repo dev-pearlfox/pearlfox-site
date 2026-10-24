@@ -97,8 +97,7 @@ select {
 
 /* New incident button and form */
 [hidden] { display: none !important; }
-.mailbar { display: flex; gap: 10px; padding-top: 14px; padding-bottom: 2px; }
-.mailbar a, .mail-actions a { text-decoration: none; }
+.mail-actions a { text-decoration: none; }
 .head-actions { display: flex; align-items: center; gap: 14px; padding-bottom: 8px; flex-wrap: wrap; }
 .head-actions .hint { padding-bottom: 0; }
 .btn-primary, .btn {
@@ -176,8 +175,6 @@ table.list { width: 100%; border-collapse: collapse; min-width: 880px; }
 
 .head-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
 .mail-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding-top: 4px; }
-.copy-note { flex-basis: 100%; text-align: right; font-size: 12.5px; color: var(--ink-soft); min-height: 18px; overflow-wrap: anywhere; }
-@media (max-width: 560px) { .copy-note { text-align: left; } }
 
 /* Progress stepper */
 .stepper { list-style: none; margin: 0; padding: 20px 20px 22px; display: flex; gap: 0; counter-reset: s; }
