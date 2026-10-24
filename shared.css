@@ -463,17 +463,19 @@ section.app-preview::before{
 .nav-logo-static-word{width:188px;height:31px;margin-left:-34px;}
 .nav-logo-static img{display:block;width:100%;height:100%;object-fit:contain;}
 /* At <=900px the full-size logo would collide with the centered link row
-   (the home page has the same collision at ~720-860px; that one is Heart
-   code and is left alone). So here: smaller logo, and on pages that have the
-   static logo only (sibling selector) the links flow to the right instead
-   of being pinned to the exact centre. <=720px is the hamburger layout. */
+   (the home page had the same collision). So here: smaller logo and slightly
+   smaller link text so the links can stay centred. <=720px is the hamburger layout. */
 @media (max-width:900px){
   .nav-logo-static{width:165px;height:36px;}
   .nav-logo-static-icon{width:33px;height:33px;}
   .nav-logo-static-word{width:132px;height:22px;margin-left:-24px;}
 }
 @media (min-width:721px) and (max-width:900px){
-  .nav-logo-static ~ .navlinks{position:static;transform:none;margin-left:auto;gap:14px;}
+  /* Links stay exactly centred (their normal position); text + gap shrink
+     so the row clears the smaller logo from 780px up (see next block for
+     721-779px). */
+  .navlinks{gap:10px;}
+  .navlinks a{font-size:13px;}
 
   /* Home page, same range, same collision (logo ran into "Home"). These are
      OVERRIDES ONLY: the Heart rules for .nav-logo-target* above are not
@@ -483,7 +485,12 @@ section.app-preview::before{
   .nav-logo-target{width:165px;height:36px;}
   .nav-logo-target-icon{width:33px;height:33px;}
   .nav-logo-target-word{width:132px;height:22px;margin-left:-24px;}
-  .nav-logo-target ~ .navlinks{position:static;transform:none;margin-left:auto;gap:14px;}
+}
+/* 721-779px: the link row is wider than the space left either side of a true
+   centre, so centre it in the free space between the logo and the right edge
+   instead. True centre resumes at 780px, where it clears the logo by ~12px. */
+@media (min-width:721px) and (max-width:779px){
+  .navlinks{position:static;transform:none;flex:1;justify-content:center;}
 }
 /* Hero tagline vs. nav links, 721-1100px. The hero stops shrinking at 420px
    tall but the tagline is lifted a fixed 150px from its centre, which puts the
