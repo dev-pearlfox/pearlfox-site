@@ -97,6 +97,8 @@ select {
 
 /* New incident button and form */
 [hidden] { display: none !important; }
+.mailbar { display: flex; gap: 10px; padding-top: 14px; padding-bottom: 2px; }
+.mailbar a { text-decoration: none; }
 .head-actions { display: flex; align-items: center; gap: 14px; padding-bottom: 8px; flex-wrap: wrap; }
 .head-actions .hint { padding-bottom: 0; }
 .btn-primary, .btn {

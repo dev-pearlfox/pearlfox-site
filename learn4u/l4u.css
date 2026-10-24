@@ -68,6 +68,8 @@ button, input, select { font: inherit; color: inherit; }
 .btn-ghost { background: transparent; color: var(--green-d); } .btn-ghost:hover { background: var(--sand); }
 .btn-danger { background: var(--paper); border-color: var(--red); color: var(--red); } .btn-danger:hover { background: #FCE5E3; }
 .btn-white { background: #fff; color: var(--ink); } .btn-white:hover { background: var(--sand); }
+.mailbar { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 18px; }
+.mailbar[hidden] { display: none; }
 .btn-sm { padding: 7px 15px; font-size: 13px; } .btn-block { width: 100%; }
 button:disabled { opacity: .5; cursor: not-allowed; }
 .btn-primary, .btn-secondary, .btn-ghost, .btn-danger, .btn-white, .testbtn { white-space: nowrap; }
