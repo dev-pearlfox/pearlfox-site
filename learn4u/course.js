@@ -1,4 +1,4 @@
-/* Learn4U - one course: modules with Mark complete, progress, certificate, Remove, Copy as mail. */
+/* Learn4U - one course: modules with Mark complete, progress, certificate, Remove. (The mail buttons are links on the page bar: see mail-link.js.) */
 (function () {
   var L = window.L4U, esc = L.esc, D = L.D;
   L.shell('');
@@ -26,9 +26,8 @@
     html += '<dl class="kv">' + rows.map(function (r) { return '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>'; }).join('') + '</dl><div class="sidebtns">';
     if (!e || e.status === 'Cancelled') html += '<button type="button" class="btn-primary btn-block" id="addBtn">Add to my learning</button>';
     if (e && e.status === 'Completed') html += '<button type="button" class="btn-primary btn-block" id="certBtn">View certificate</button>';
-    if (e && e.status !== 'Cancelled') html += '<button type="button" class="btn-secondary btn-block" id="copyMail" title="Copy this training as a mail, then paste it into a new mail">Copy as mail</button><button type="button" class="btn-ghost btn-block" id="copySubject">Copy subject only</button>';
     if (e && e.status !== 'Cancelled' && e.status !== 'Completed') html += e.item.mandatory ? '<p class="hint">Mandatory trainings cannot be removed.</p>' : '<button type="button" class="btn-danger btn-block" id="removeBtn">Remove from my learning</button>';
-    return html + '</div><p class="copynote" id="copyNote" role="status"></p></div></section>';
+    return html + '</div></div></section>';
   }
 
   // "Up next": the first module not done yet, with one big button. Shown only while the course is open.
@@ -57,15 +56,11 @@
     wire(e);
   }
 
-  var noteTimer;
-  function say(message) { var n = document.getElementById('copyNote'); if (n) { n.textContent = message; clearTimeout(noteTimer); noteTimer = setTimeout(function () { n.textContent = ''; }, 6000); } }
   function wire(e) {
     var on = function (idv, fn) { var n = document.getElementById(idv); if (n) n.addEventListener('click', fn); };
     on('addBtn', function () { L.enrol(id, { mandatory: false }); L.toast('Added to your learning'); draw(); });
     on('removeBtn', function () { if (L.withdraw(id)) { L.toast('Removed from your learning'); draw(); } });
     on('certBtn', openCert);
-    on('copyMail', function () { window.L4U_MAIL.copyFor(entry(), 'mail').then(function (r) { say(r.ok ? 'Copied. Paste it into a new mail. Use "Copy subject only" for the subject line.' : 'The browser blocked copying. Allow clipboard access for this page.'); }); });
-    on('copySubject', function () { window.L4U_MAIL.copyFor(entry(), 'subject').then(function (r) { say(r.ok ? 'Subject copied: ' + r.subject : 'The browser blocked copying. Allow clipboard access for this page.'); }); });
     function toggle(mid, focusNext) {
       var before = entry().status;
       L.toggleModule(id, mid); draw();
