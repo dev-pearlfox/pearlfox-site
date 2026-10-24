@@ -1,4 +1,4 @@
-/* Learn4U - My learning: list with tabs, search, Copy mail and the Assign training test tool. */
+/* Learn4U - My learning: list with tabs, search and the Assign training test tool. */
 (function () {
   var L = window.L4U, esc = L.esc, DAY = L.D.day;
   L.shell('learning.html');
@@ -29,7 +29,7 @@
       var c = e.course, open = e.status !== 'Completed' && e.status !== 'Cancelled';
       return '<li class="lcard" data-id="' + esc(c.id) + '"><div>' + L.ring(e.pct, 64, 'Progress in ' + c.title) + '</div>' +
         '<div><h3><a href="course.html?id=' + esc(c.id) + '">' + esc(c.title) + '</a></h3><div class="lc-sub"><span>' + esc(c.id) + '</span><span>&middot;</span><span>' + esc(c.category) + '</span>' + L.typeBadge(e.item) + L.statusBadge(e.status) + '</div></div>' +
-        '<div class="lc-right">' + L.dueBadge(e) + '<div class="lc-actions"><button type="button" class="btn-ghost btn-sm" data-copy="' + esc(c.id) + '" title="Copy this training as a mail">Copy mail</button> ' +
+        '<div class="lc-right">' + L.dueBadge(e) + '<div class="lc-actions">' +
         '<a class="' + (open ? 'btn-primary' : 'btn-secondary') + ' btn-sm" href="course.html?id=' + esc(c.id) + '">' + (open ? (e.status === 'In progress' ? 'Resume' : 'Start') : 'View') + '</a></div></div></li>';
     }).join('');
     var none = document.getElementById('none');
@@ -39,12 +39,6 @@
 
   document.getElementById('tabs').addEventListener('click', function (ev) { var b = ev.target.closest('[data-tab]'); if (b) { tab = b.getAttribute('data-tab'); draw(); } });
   document.getElementById('q').addEventListener('input', function (ev) { query = ev.target.value; draw(); });
-  document.getElementById('rows').addEventListener('click', function (ev) {
-    var b = ev.target.closest('[data-copy]'); if (!b) return;
-    var entry = L.entries().filter(function (e) { return e.course.id === b.getAttribute('data-copy'); })[0];
-    window.L4U_MAIL.copyFor(entry, 'mail').then(function (r) { L.toast(r.ok ? 'Mail copied. Paste it into a new mail. Subject: ' + r.subject : 'The browser blocked copying. Allow clipboard access for this page.'); });
-  });
-
   // ---- Assign training (test tool) ----
   var overlay = document.getElementById('assignOverlay'), sel = document.getElementById('aCourse'), due = document.getElementById('aDue'), note = document.getElementById('aNote'), opener = null;
   function iso(ms) { var d = new Date(ms); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
@@ -76,7 +70,7 @@
     if (isNaN(ms)) { note.textContent = 'Choose a due date.'; return; }
     var item = L.enrol(sel.value, { mandatory: document.getElementById('aType').value === 'mandatory', due: ms, by: 'Learning & Development' });
     closeDialog();
-    if (item) { L.toast('Assigned: ' + L.course(item.id).title + '. Use Copy mail to try the mail.'); draw(); }
+    if (item) { L.toast('Assigned: ' + L.course(item.id).title + '. Open the course to send its mail.'); draw(); }
   });
 
   draw();
