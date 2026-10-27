@@ -79,14 +79,14 @@
         <ul>
           <li>Subject line, sender, and date/time of each message</li>
           <li>Read / flagged / starred status</li>
-          <li>The text of a single message, only when you open it to read it inside Eagle View. It is fetched at that moment, kept in memory while the app is open, and never saved to disk</li>
+          <li>The text of a single message when you open it to read it inside Eagle View. For the Incidents and Learn4U rows, also the newest mail of each incident or training number from the sender you save in Settings. It is kept in memory while the app is open, and never saved to disk</li>
           <li>Calendar meeting details needed to show your day and join a call (including extracting a Teams join link when present)</li>
         </ul>
       </div>
       <div class="sec-card">
         <span class="tag no">What Eagle View never touches</span>
         <ul>
-          <li>The body of any email you do not open — it is never requested, stored, or sent anywhere</li>
+          <li>The body of any other email you do not open, apart from the Incidents and Learn4U mails above. Mail bodies are kept in memory only and never stored on disk</li>
           <li>Attachments</li>
           <li>Anything beyond what is listed above, by design — not a setting you have to turn off</li>
         </ul>
@@ -105,7 +105,7 @@
 <section class="sec-block">
   <div class="wrap">
     <h2>License &amp; trial data</h2>
-    <p>To run your trial and validate a license key, Eagle View sends your email address, a device identifier, and (for license checks) a locally-computed key — nothing about your mail account itself. This is handled over HTTPS by our backend infrastructure.</p>
+    <p>To run your trial and validate a license key, Eagle View sends your email address, a device identifier and a locally-computed key. Our licensing records on Supabase (Tokyo) hold your email, device identifier, country, payments, and student and company records — nothing about your mail account itself. This is handled over HTTPS. See the privacy policy for the full list.</p>
   </div>
 </section>
 
