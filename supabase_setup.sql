@@ -72,6 +72,47 @@ create policy "authed_delete" on public.expenses
     for delete to authenticated using (true);
 
 -- --------------------------------------------------------------
+-- 3b. Table: investments  (Investments tab: date, person, amount)
+--     Same single-shared-login model as expenses. Safe to re-run.
+-- --------------------------------------------------------------
+create table if not exists public.investments (
+    id              uuid primary key default gen_random_uuid(),
+    invest_date     date,
+    person_name     text not null default '',
+    amount          numeric(12,2),
+    created_at      timestamptz not null default now(),
+    updated_at      timestamptz not null default now(),
+    created_by      uuid references auth.users(id) on delete set null
+);
+
+create index if not exists investments_invest_date_idx
+    on public.investments (invest_date);
+
+drop trigger if exists set_updated_at on public.investments;
+create trigger set_updated_at
+    before update on public.investments
+    for each row execute procedure extensions.moddatetime (updated_at);
+
+alter table public.investments enable row level security;
+
+drop policy if exists "authed_select" on public.investments;
+drop policy if exists "authed_insert" on public.investments;
+drop policy if exists "authed_update" on public.investments;
+drop policy if exists "authed_delete" on public.investments;
+
+create policy "authed_select" on public.investments
+    for select to authenticated using (true);
+
+create policy "authed_insert" on public.investments
+    for insert to authenticated with check (true);
+
+create policy "authed_update" on public.investments
+    for update to authenticated using (true) with check (true);
+
+create policy "authed_delete" on public.investments
+    for delete to authenticated using (true);
+
+-- --------------------------------------------------------------
 -- 4. Storage bucket for receipts
 --    Do this via SQL so it's reproducible.
 -- --------------------------------------------------------------

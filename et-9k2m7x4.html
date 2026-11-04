@@ -6,7 +6,7 @@
 <!-- Do NOT index this page. Private internal tool, unlisted URL. -->
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <meta name="googlebot" content="noindex, nofollow">
-<title>PearlFox Expenses Tracker</title>
+<title>PearlFox Partners Expenses Tracker</title>
 <!--
     PearlFox Expenses Tracker (Supabase-backed)
     ============================================
@@ -46,6 +46,8 @@
         --success:     #1f7a3a;
         --success-dark:#145c2a;
         --danger:      var(--fox-dark);
+        --lock-red:      #C62828;
+        --lock-red-dark: #A31F1F;
 
         --shadow-sm: 0 1px 2px rgba(20,10,0,0.06);
         --shadow-md: 0 4px 12px rgba(20,10,0,0.08);
@@ -72,9 +74,13 @@
     }
     body { overflow: hidden; }
 
+    :root {
+        --util-w: 360px;                                   /* Utilization box */
+        --page-w: calc(1082px + var(--util-w) + 12px);    /* table (1080) + borders + box + gap */
+    }
     .container {
         width: 100%;
-        max-width: 1082px;      /* table (1080) + .table-wrap 1px borders x2 */
+        max-width: var(--page-w);
         margin: 0 auto;
         height: 100vh;
         display: flex;
@@ -113,7 +119,7 @@
         justify-content: center;
         flex-shrink: 0;
         width: 100%;
-        max-width: 1080px;
+        max-width: calc(var(--page-w) - 2px);
         margin: 0 auto;
     }
     .toolbar button {
@@ -139,6 +145,45 @@
         font-style: italic;
     }
 
+    /* Tabs (Expenses / Investments) */
+    .tabs {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        flex-shrink: 0;
+    }
+    .tab-btn {
+        font: inherit;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        padding: 8px 24px;
+        border: 1px solid var(--border-strong);
+        background: var(--surface);
+        color: var(--text-muted);
+        cursor: pointer;
+        border-radius: var(--radius-md);
+        transition: background 0.15s ease, color 0.15s ease, transform 0.05s ease;
+    }
+    .tab-btn:hover { background: var(--pearl-cream); color: var(--text); }
+    .tab-btn:active { transform: translateY(1px); }
+    .tab-btn.active {
+        background: var(--fox-gradient);
+        border-color: transparent;
+        color: #1A0E04;
+        box-shadow: var(--shadow-sm);
+    }
+
+    /* One .view per tab; the hidden one takes no space */
+    .view {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .view[hidden] { display: none; }
+
     /* Table container */
     .table-wrap {
         flex: 1 1 auto;
@@ -150,6 +195,42 @@
         background: var(--surface);
         box-shadow: var(--shadow-sm);
     }
+
+    /* Utilization box on the left, main table next to it */
+    .view-main {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        gap: 12px;
+        align-items: stretch;
+    }
+    .view-main.centered { justify-content: center; }
+    .view-main .table-wrap { min-width: 0; }
+
+    /* Investments table: compact. Width = sum of its columns
+       (46 + 120 + 180 + 120 + 64). */
+    .table-wrap.narrow { flex: 0 1 auto; max-width: 100%; }
+    .table-wrap.narrow table { width: 530px; min-width: 530px; }
+
+    /* Utilization summary (same box on both tabs, cloned from #util-template) */
+    .util-box {
+        flex: 0 0 auto;
+        align-self: flex-start;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        background: var(--surface);
+        box-shadow: var(--shadow-sm);
+        overflow: hidden;
+    }
+    .util-box { width: var(--util-w); }
+    .util-table { width: 100%; min-width: 0; margin: 0; }
+    .util-table th, .util-table td { height: 32px; white-space: nowrap; }
+    .util-table thead th { position: static; }
+    .util-table th.util-title { font-size: 13px; letter-spacing: 1px; }
+    .util-table td.util-label { text-align: left; font-weight: 600; padding: 10px 18px 10px 12px; }
+    .util-table td.util-num   { text-align: right; padding-right: 12px; }
+    .util-table td.negative   { color: var(--lock-red); font-weight: 700; }
+    .util-table tbody tr:last-child td { background: var(--pearl-cream); font-weight: 700; border-top: 2px solid var(--pearl-deep); }
 
     table {
         width: 1080px;
@@ -195,9 +276,22 @@
         font-weight: bold;
     }
 
-    /* Zebra striping */
-    tbody tr:nth-child(even) td { background: var(--surface-alt); }
+    /* Zebra striping (class set by JS, because month header rows sit between data rows) */
+    tbody tr.alt td { background: var(--surface-alt); }
     tbody tr:hover td { background: #FFF6E9; }
+
+    /* Month section header: label on the left, month subtotals under their columns */
+    tbody tr.month-row td,
+    tbody tr.month-row:hover td {
+        background: var(--pearl-warm);
+        color: var(--text);
+        font-weight: 700;
+        font-size: 13px;
+        border-top: 2px solid var(--pearl-deep);
+        border-bottom: 1px solid var(--pearl-deep);
+    }
+    tbody tr.month-row td.month-label { text-align: left; padding-left: 14px; letter-spacing: 0.3px; }
+    tbody tr.month-row td.month-sum   { text-align: right; }   /* default cell padding = same right edge as the rows */
 
     tfoot td {
         background: var(--pearl-cream);
@@ -240,6 +334,8 @@
     .person      { width: 130px; }
     .remark      { width: 150px; }
     .receipt     { width: 64px;  }
+    .row-actions { width: 64px;  }
+    .inv-name    { width: 180px; }
 
     thead th   { text-align: center; }
     td.sno     { text-align: center; color: var(--text-muted); font-weight: 600; }
@@ -248,19 +344,22 @@
     td.share   { text-align: center; }
     td.person  { text-align: center; font-variant-numeric: tabular-nums; }
     td.receipt { text-align: center; }
+    td.row-actions { text-align: center; }
 
     .person-cell {
         display: flex;
         align-items: center;
-        justify-content: center;
         gap: 8px;
         min-height: 28px;
     }
-    .person-amount { min-width: 55px; text-align: right; }
+    /* Checkbox at the left, amount flush right: every amount, month subtotal
+       and grand total in a person column ends on the same right edge. */
+    .person-amount { flex: 1; min-width: 55px; text-align: right; }
     .paid-check    { width: 16px; height: 16px; cursor: pointer; accent-color: var(--success); }
     .person-cell.checked { color: var(--success-dark); font-weight: 700; }
     .person-cell.checked .person-amount { color: var(--success-dark); }
 
+    .inv-name .share-select { text-align: left; }
     .share-select {
         width: 100%;
         border: none;
@@ -303,7 +402,8 @@
         box-shadow: var(--shadow-sm);
     }
     .receipt-btn.has-file:hover { filter: brightness(1.05); }
-    .receipt-remove {
+    .receipt-remove,
+    .row-delete {
         color: var(--danger);
         background: transparent;
         border: none;
@@ -312,10 +412,17 @@
         cursor: pointer;
         border-radius: 3px;
     }
-    .receipt-remove:hover { background: rgba(217,40,2,0.1); }
+    .receipt-remove:hover,
+    .row-delete:hover { background: rgba(217,40,2,0.1); }
+
+    .empty-row td {
+        text-align: center;
+        color: var(--text-muted);
+        font-style: italic;
+    }
 
     .footer-label { text-align: right; padding-right: 12px; }
-    .footer-total { text-align: right; }
+    .footer-total, td.person.footer-total { text-align: right; }
 
     /* ---- Login screen ---- */
     .login {
@@ -435,18 +542,25 @@
 
     /* Lock button unlocked-state accent (in toolbar).
        Base .toolbar button styles cover everything else. */
-    .lock-btn.unlocked {
-        background: var(--fox-gradient);
+    /* Lock status: green = locked (safe), red = unlocked (editable).
+       Prefixed with .toolbar so these beat the generic toolbar-button
+       hover; the .unlocked rules come last so they win over locked. */
+    .toolbar .lock-btn {
+        background: var(--success);
         border-color: transparent;
-        color: #1A0E04;
+        color: #fff;
+        font-weight: 700;
     }
-    .lock-btn.unlocked:hover {
-        filter: brightness(1.05);
-        background: var(--fox-gradient);
+    .toolbar .lock-btn:hover {
+        background: var(--success-dark);
+        border-color: transparent;
     }
+    .toolbar .lock-btn.unlocked { background: var(--lock-red); }
+    .toolbar .lock-btn.unlocked:hover { background: var(--lock-red-dark); }
 
     /* Locked-state: only change cursor, keep text/colors fully readable */
     body.table-locked #btn-add,
+    body.table-locked #btn-add-invest,
     body.table-locked .paid-check,
     body.table-locked .share-select,
     body.table-locked input[type="date"] {
@@ -458,7 +572,8 @@
        (.has-file) stays visible and clickable so attachments remain
        downloadable in locked mode. */
     body.table-locked .receipt-btn:not(.has-file),
-    body.table-locked .receipt-remove {
+    body.table-locked .receipt-remove,
+    body.table-locked .row-delete {
         display: none;
     }
     body.table-locked .receipt-btn.has-file {
@@ -469,13 +584,47 @@
        controls so cell values (dates, share choices, etc.) stay crisp
        and legible while the tracker is locked. */
     #expenseBody select:disabled,
-    #expenseBody input:disabled {
+    #expenseBody input:disabled,
+    #investBody select:disabled,
+    #investBody input:disabled {
         opacity: 1;
         color: var(--text);
         -webkit-text-fill-color: var(--text);
         background: transparent;
     }
-    #expenseBody input[type="checkbox"]:disabled { opacity: 1; }
+    /* Paid tick: drawn by hand so it is green whether the table is locked
+       (disabled) or unlocked. Browsers grey out disabled native checkboxes
+       and ignore accent-color there. */
+    #expenseBody input.paid-check,
+    #expenseBody input.paid-check:disabled {
+        -webkit-appearance: none;
+        appearance: none;
+        opacity: 1;
+        width: 16px;
+        height: 16px;
+        flex: none;
+        margin: 0;
+        border: 1.5px solid #bdbdbd;
+        border-radius: 4px;
+        background: #fff;
+        position: relative;
+    }
+    #expenseBody input.paid-check:checked,
+    #expenseBody input.paid-check:checked:disabled {
+        background: var(--success);
+        border-color: var(--success);
+    }
+    #expenseBody input.paid-check:checked::after {
+        content: "";
+        position: absolute;
+        left: 4px;
+        top: 0.5px;
+        width: 4px;
+        height: 9px;
+        border: solid #fff;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
 
     /* Toast */
     .toast {
@@ -582,6 +731,10 @@
             letter-spacing: 0.3px;
         }
 
+        /* Utilization stacks above the table */
+        .view-main { flex-direction: column; gap: 8px; }
+        .view-main .util-box { align-self: stretch; width: auto; }
+
         /* Add-row: full-width easy tap target */
         .add-row-bar { padding: 6px 0 4px; }
         .add-row-bar button { width: 100%; max-width: 320px; padding: 11px 20px; }
@@ -595,14 +748,16 @@
         body, html { overflow: visible; background: white; }
         .container { padding: 0; height: auto; display: block; }
         .table-wrap { overflow: visible; border: none; box-shadow: none; border-radius: 0; }
-        .login, .toolbar, .add-row-bar, .paid-check,
-        .receipt-btn, .receipt-remove, .toast, .loading { display: none !important; }
+        .view-main { display: block; }
+        .login, .toolbar, .tabs, .add-row-bar, .paid-check,
+        .receipt-btn, .receipt-remove, .row-delete, .toast, .loading { display: none !important; }
         h1 { position: static; }
         h1::after { display: none; }
         table { width: 100%; min-width: 0; }
         thead th, tfoot td { position: static; background: #eee !important; color: black !important; border: 1px solid #999 !important; }
         thead th.sortable { cursor: default; }
-        tbody tr:nth-child(even) td { background: white !important; }
+        tbody tr.alt td { background: white !important; }
+        tbody tr.month-row td { background: #ddd !important; }
         #app { display: block !important; height: auto; }
     }
 </style>
@@ -612,17 +767,51 @@
 <!-- Login screen -->
 <div id="login" class="login">
     <div class="login-box">
-        <h2>PearlFox Expenses Tracker</h2>
+        <h2>PearlFox Partners Expenses Tracker</h2>
         <input type="password" id="login-password" placeholder="Password" autocomplete="current-password" autofocus>
         <button type="button"  id="btn-login">Unlock</button>
         <div id="login-error" class="error" role="alert"></div>
     </div>
 </div>
 
+<!-- Utilization box: cloned into the left of each tab's table (see mountUtilization) -->
+<template id="util-template">
+    <aside class="util-box" aria-label="Utilization">
+        <table class="util-table">
+            <thead>
+                <tr><th class="util-title" colspan="3">Utilization</th></tr>
+                <tr><th></th><th>Manoj</th><th>Praveen</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="util-label">Investment collected</td>
+                    <td class="util-num" data-util="invested" data-person="Manoj"></td>
+                    <td class="util-num" data-util="invested" data-person="Praveen"></td>
+                </tr>
+                <tr>
+                    <td class="util-label">Utilized</td>
+                    <td class="util-num" data-util="utilized" data-person="Manoj"></td>
+                    <td class="util-num" data-util="utilized" data-person="Praveen"></td>
+                </tr>
+                <tr>
+                    <td class="util-label">Balance to utilize</td>
+                    <td class="util-num" data-util="balance" data-person="Manoj"></td>
+                    <td class="util-num" data-util="balance" data-person="Praveen"></td>
+                </tr>
+            </tbody>
+        </table>
+    </aside>
+</template>
+
 <!-- App shell -->
 <div id="app">
     <div class="container">
-        <h1>PearlFox Expenses Tracker</h1>
+        <h1>PearlFox Partners Expenses Tracker</h1>
+
+        <div class="tabs" role="tablist">
+            <button type="button" class="tab-btn active" role="tab" data-tab="expenses"    aria-selected="true">Expenses</button>
+            <button type="button" class="tab-btn"        role="tab" data-tab="investments" aria-selected="false">Investments</button>
+        </div>
 
         <div class="toolbar">
             <button type="button" id="btn-export">Export CSV</button>
@@ -630,45 +819,83 @@
             <span class="spacer"></span>
             <span class="status" id="status"></span>
             <button type="button" id="btn-lock" class="lock-btn" title="Click to unlock for editing" aria-pressed="true">
-                <span id="lock-label">Locked</span>
+                Status: <span id="lock-label">Locked</span>
             </button>
             <button type="button" id="btn-logout" title="Sign out">Sign out</button>
         </div>
 
-        <div class="table-wrap">
-        <table>
-            <thead>
-                <tr>
-                    <th class="sno">#</th>
-                    <th class="date sortable"    data-sort="date">Date <span class="sort-arrow" data-for="date"></span></th>
-                    <th class="description">Description</th>
-                    <th class="expense">Expense</th>
-                    <th class="share">Share</th>
-                    <th class="person sortable" data-sort="manoj">Manoj <span class="sort-arrow" data-for="manoj"></span></th>
-                    <th class="person sortable" data-sort="praveen">Praveen <span class="sort-arrow" data-for="praveen"></span></th>
-                    <th class="remark">Remark</th>
-                    <th class="receipt">Receipt</th>
-                </tr>
-            </thead>
-            <tbody id="expenseBody"></tbody>
-            <tfoot>
-                <tr>
-                    <td class="sno"></td>
-                    <td class="date"></td>
-                    <td class="description footer-label">GRAND TOTAL</td>
-                    <td class="expense footer-total" id="totalExpense" data-label="Total">₹0</td>
-                    <td class="share"></td>
-                    <td class="person footer-total" id="totalManoj"   data-label="Manoj">₹0</td>
-                    <td class="person footer-total" id="totalPraveen" data-label="Praveen">₹0</td>
-                    <td class="remark"></td>
-                    <td class="receipt"></td>
-                </tr>
-            </tfoot>
-        </table>
+        <div class="view" id="view-expenses">
+            <div class="view-main">
+            <div class="util-slot"></div>
+            <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="sno">#</th>
+                        <th class="date sortable"    data-sort="date">Date <span class="sort-arrow" data-for="date"></span></th>
+                        <th class="description">Description</th>
+                        <th class="expense">Expense</th>
+                        <th class="share">Share</th>
+                        <th class="person sortable" data-sort="manoj">Manoj <span class="sort-arrow" data-for="manoj"></span></th>
+                        <th class="person sortable" data-sort="praveen">Praveen <span class="sort-arrow" data-for="praveen"></span></th>
+                        <th class="remark">Remark</th>
+                        <th class="receipt">Receipt</th>
+                    </tr>
+                </thead>
+                <tbody id="expenseBody"></tbody>
+                <tfoot>
+                    <tr>
+                        <td class="sno"></td>
+                        <td class="date"></td>
+                        <td class="description footer-label">GRAND TOTAL</td>
+                        <td class="expense footer-total" id="totalExpense" data-label="Total">₹0</td>
+                        <td class="share"></td>
+                        <td class="person footer-total" id="totalManoj"   data-label="Manoj">₹0</td>
+                        <td class="person footer-total" id="totalPraveen" data-label="Praveen">₹0</td>
+                        <td class="remark"></td>
+                        <td class="receipt"></td>
+                    </tr>
+                </tfoot>
+            </table>
+            </div>
+            </div>
+
+            <div class="add-row-bar">
+                <button type="button" id="btn-add">+ Add Row</button>
+            </div>
         </div>
 
-        <div class="add-row-bar">
-            <button type="button" id="btn-add">+ Add Row</button>
+        <div class="view" id="view-investments" hidden>
+            <div class="view-main centered">
+            <div class="util-slot"></div>
+            <div class="table-wrap narrow">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="sno">#</th>
+                            <th class="date">Date</th>
+                            <th class="inv-name">Person Name</th>
+                            <th class="expense">Amount</th>
+                            <th class="row-actions"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="investBody"></tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="sno"></td>
+                            <td class="date"></td>
+                            <td class="inv-name footer-label">TOTAL INVESTED</td>
+                            <td class="expense footer-total" id="totalInvested" data-label="Total">&#8377;0</td>
+                            <td class="row-actions"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            </div>
+
+            <div class="add-row-bar">
+                <button type="button" id="btn-add-invest">+ Add Investment</button>
+            </div>
         </div>
     </div>
 </div>
@@ -700,6 +927,7 @@ const LOGIN_EMAIL       = "pearlfox@local.app";
 // ============================================================
 const CURRENCY      = "₹";
 const SHARE_OPTIONS = ["", "All", "Manoj", "Praveen"];
+const INVEST_PEOPLE = ["Manoj", "Praveen"];   // choices in the Investments "Person Name" dropdown
 const BUCKET        = "expense-receipts";
 const SAVE_DEBOUNCE_MS = 500;
 const DEFAULT_ROWS  = 30;   // auto-seeded on first load when DB is empty
@@ -730,6 +958,8 @@ const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
 // State (in-memory mirror of DB rows for rendering)
 // ============================================================
 let rows = [];             // array of row objects (camelCase, id from DB)
+let investments = [];      // Investments tab: { id, date, person, amount }
+let activeTab = "expenses";
 let sort = { key: null, dir: 1 };
 let locked = true;
 
@@ -792,6 +1022,23 @@ const FIELD_TO_COL = {
     sortOrder:   "sort_order"
 };
 
+// Each tab persists to its own table. A "store" tells the shared save
+// helpers which table to hit and how client fields map to its columns.
+const EXPENSE_STORE = { table: "expenses",    cols: FIELD_TO_COL };
+const INVEST_STORE  = { table: "investments", cols: {
+    date:   "invest_date",
+    person: "person_name",
+    amount: "amount"
+}};
+
+function toDbPatch(patch, cols) {
+    const dbPatch = {};
+    for (const [k, v] of Object.entries(patch)) {
+        if (cols[k]) dbPatch[cols[k]] = v;
+    }
+    return dbPatch;
+}
+
 // ============================================================
 // Toast + status
 // ============================================================
@@ -850,10 +1097,7 @@ async function seedDefaultRows(n) {
 }
 
 async function insertRow(patch) {
-    const dbPatch = {};
-    for (const [k, v] of Object.entries(patch)) {
-        if (FIELD_TO_COL[k]) dbPatch[FIELD_TO_COL[k]] = v;
-    }
+    const dbPatch = toDbPatch(patch, FIELD_TO_COL);
     // Set sort_order = max + 1
     const maxOrder = rows.reduce((m, r) => Math.max(m, r.sortOrder || 0), 0);
     dbPatch.sort_order = maxOrder + 1;
@@ -867,24 +1111,21 @@ async function insertRow(patch) {
     return fromDb(data);
 }
 
-async function updateRowInDb(id, patch) {
-    const dbPatch = {};
-    for (const [k, v] of Object.entries(patch)) {
-        if (FIELD_TO_COL[k]) dbPatch[FIELD_TO_COL[k]] = v;
-    }
+async function updateRowInDb(id, patch, store = EXPENSE_STORE) {
+    const dbPatch = toDbPatch(patch, store.cols);
     if (Object.keys(dbPatch).length === 0) return;
-    const { error } = await sb.from("expenses").update(dbPatch).eq("id", id);
+    const { error } = await sb.from(store.table).update(dbPatch).eq("id", id);
     if (error) throw error;
 }
 
 // Debounced update — text fields fire many events per keystroke
-function scheduleSave(id, field, value) {
+function scheduleSave(id, field, value, store = EXPENSE_STORE) {
     const key = `${id}:${field}`;
     clearTimeout(pendingSaves.get(key));
     const t = setTimeout(async () => {
         pendingSaves.delete(key);
         try {
-            await updateRowInDb(id, { [field]: value });
+            await updateRowInDb(id, { [field]: value }, store);
             setStatus("Saved");
         } catch (e) {
             toast("Save failed: " + e.message, "error");
@@ -894,9 +1135,9 @@ function scheduleSave(id, field, value) {
 }
 
 // Immediate save (checkboxes, selects)
-async function saveNow(id, field, value) {
+async function saveNow(id, field, value, store = EXPENSE_STORE) {
     try {
-        await updateRowInDb(id, { [field]: value });
+        await updateRowInDb(id, { [field]: value }, store);
         setStatus("Saved");
     } catch (e) {
         toast("Save failed: " + e.message, "error");
@@ -904,6 +1145,124 @@ async function saveNow(id, field, value) {
 }
 
 function getRow(id) { return rows.find(r => r.id === id); }
+
+// ============================================================
+// Utilization box (same numbers on both tabs)
+//   Investment collected = Investments tab total per person
+//   Utilized             = that person's share of expenses, ONLY where their
+//                          own checkbox is ticked (unticked = not utilized yet)
+//   Balance to utilize   = collected - utilized (negative shown red)
+// ============================================================
+function mountUtilization() {
+    const tpl = document.getElementById("util-template");
+    document.querySelectorAll(".util-slot").forEach(slot => {
+        slot.replaceWith(tpl.content.cloneNode(true));
+    });
+}
+
+function updateUtilization() {
+    const invested = { Manoj: 0, Praveen: 0 };
+    const utilized = { Manoj: 0, Praveen: 0 };
+    investments.forEach(i => {
+        if (Object.hasOwn(invested, i.person)) invested[i.person] += i.amount || 0;
+    });
+    rows.forEach(r => {
+        const a = computeAmounts(r);
+        if (r.manojPaid)   utilized.Manoj   += a.manoj;
+        if (r.praveenPaid) utilized.Praveen += a.praveen;
+    });
+    document.querySelectorAll(".util-box [data-util]").forEach(td => {
+        const p = td.dataset.person;
+        const value = { invested: invested[p], utilized: utilized[p], balance: invested[p] - utilized[p] }[td.dataset.util];
+        const rounded = Math.round(value);
+        td.textContent = (rounded < 0 ? "-" : "") + formatMoney(Math.abs(rounded));
+        td.classList.toggle("negative", rounded < 0);
+    });
+}
+
+// ============================================================
+// Month sections (shared by Expenses and Investments)
+// ============================================================
+const NO_DATE = "none";
+const MONTH_FMT = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" });
+
+function monthKey(iso) { return /^\d{4}-\d{2}/.test(iso || "") ? iso.slice(0, 7) : NO_DATE; }
+
+function monthLabel(key) {
+    if (key === NO_DATE) return "No date";
+    const [y, m] = key.split("-").map(Number);
+    return MONTH_FMT.format(new Date(y, m - 1, 1));
+}
+
+// Oldest month first, undated rows last. Order inside a month is kept as given.
+function groupByMonth(items) {
+    const groups = new Map();
+    items.forEach(it => {
+        const k = monthKey(it.date);
+        if (!groups.has(k)) groups.set(k, []);
+        groups.get(k).push(it);
+    });
+    return [...groups.keys()]
+        .sort((a, b) => (a === NO_DATE) - (b === NO_DATE) || a.localeCompare(b))
+        .map(key => ({ key, items: groups.get(key) }));
+}
+
+// spec = [[labelColspan], [colspan, sumName?], ...]; the first entry is the month label.
+function monthHeaderRow(label, spec) {
+    const tr = document.createElement("tr");
+    tr.className = "month-row";
+    spec.forEach(([span, sumName], i) => {
+        const td = document.createElement("td");
+        td.colSpan = span;
+        if (i === 0) { td.className = "month-label"; td.textContent = label; }
+        else if (sumName) { td.className = "month-sum"; td.dataset.sum = sumName; }
+        tr.appendChild(td);
+    });
+    return tr;
+}
+
+function renderByMonth(tbody, items, makeRow, headerSpec) {
+    tbody.innerHTML = "";
+    let n = 0;
+    groupByMonth(items).forEach(({ key, items: group }) => {
+        const head = monthHeaderRow(monthLabel(key), headerSpec);
+        head.dataset.month = key;
+        tbody.appendChild(head);
+        group.forEach(item => {
+            const tr = makeRow(item, n);
+            tr.dataset.month = key;
+            tr.classList.toggle("alt", n % 2 === 1);
+            tbody.appendChild(tr);
+            n++;
+        });
+    });
+}
+
+// sums = { sumName: (itemsInThatMonth) => number }
+function refreshMonthSums(tbody, items, sums) {
+    tbody.querySelectorAll("tr.month-row").forEach(tr => {
+        const inMonth = items.filter(it => monthKey(it.date) === tr.dataset.month);
+        tr.querySelectorAll("[data-sum]").forEach(td => {
+            td.textContent = formatMoney(sums[td.dataset.sum](inMonth)) || (CURRENCY + "0");
+        });
+    });
+}
+
+// A date edited into another month moves the row to that month's section.
+// Done on blur, never while typing (the date picker fires input on every digit).
+function bindMonthRegroup(tbody, lookup, rerender) {
+    tbody.addEventListener("focusout", (e) => {
+        if (!e.target.matches('input[type="date"]')) return;
+        const tr = e.target.closest("tr");
+        const item = tr && lookup(tr.dataset.id);
+        if (item && monthKey(item.date) !== tr.dataset.month) rerender();
+    });
+}
+
+function revealRow(tbody, id) {
+    const tr = tbody.querySelector(`tr[data-id="${id}"]`);
+    if (tr) tr.scrollIntoView({ block: "nearest" });
+}
 
 // ============================================================
 // Rendering
@@ -958,20 +1317,25 @@ function rowTemplate(row, index) {
     return tr;
 }
 
+// # | Date | Description (month label) | Expense | Share | Manoj | Praveen | Remark + Receipt
+const EXPENSE_MONTH_HEADER = [[3], [1, "expense"], [1], [1, "manoj"], [1, "praveen"], [2]];
+const EXPENSE_MONTH_SUMS = {
+    expense: items => items.reduce((s, r) => s + (r.expense || 0), 0),
+    manoj:   items => items.reduce((s, r) => s + computeAmounts(r).manoj, 0),
+    praveen: items => items.reduce((s, r) => s + computeAmounts(r).praveen, 0)
+};
+
 function render() {
     const tbody = document.getElementById("expenseBody");
-    tbody.innerHTML = "";
-    const view = getSortedRows();
-    view.forEach((row, i) => tbody.appendChild(rowTemplate(row, i)));
+    renderByMonth(tbody, getSortedRows(), rowTemplate, EXPENSE_MONTH_HEADER);
     updateTotals();
     updateSortIndicators();
     applyLockToDom();
 }
 
+// Within each month rows follow the header sort; the default is oldest date first.
 function getSortedRows() {
-    if (!sort.key) return rows;
-    const dir = sort.dir;
-    const key = sort.key;
+    const { key, dir } = sort.key ? sort : { key: "date", dir: 1 };
     const copy = rows.slice();
     copy.sort((a, b) => {
         if (key === "date") {
@@ -1003,6 +1367,8 @@ function updateTotals() {
     document.getElementById("totalExpense").textContent = formatMoney(te) || (CURRENCY + "0");
     document.getElementById("totalManoj").textContent   = formatMoney(tm) || (CURRENCY + "0");
     document.getElementById("totalPraveen").textContent = formatMoney(tp) || (CURRENCY + "0");
+    refreshMonthSums(document.getElementById("expenseBody"), rows, EXPENSE_MONTH_SUMS);
+    updateUtilization();
 }
 
 function updateRowAmountsDom(tr, row) {
@@ -1017,21 +1383,23 @@ function updateRowAmountsDom(tr, row) {
 // ============================================================
 function applyLockToDom() {
     document.body.classList.toggle("table-locked", locked);
-    document.querySelectorAll('#expenseBody td[contenteditable]').forEach(el => {
+    document.querySelectorAll('#expenseBody td[contenteditable], #investBody td[contenteditable]').forEach(el => {
         el.setAttribute("contenteditable", locked ? "false" : "true");
     });
-    document.querySelectorAll('#expenseBody input, #expenseBody select').forEach(el => {
+    document.querySelectorAll('#expenseBody input, #expenseBody select, #investBody input, #investBody select').forEach(el => {
         el.disabled = locked;
     });
     // Receipt "view/add" button stays enabled even when locked so users
     // can still view/download attachments. The click handler refuses to
     // fire the upload path when locked; CSS hides the "add" (no-file)
     // variant so no dead buttons are visible.
-    document.querySelectorAll('#expenseBody .receipt-remove').forEach(el => {
+    document.querySelectorAll('#expenseBody .receipt-remove, #investBody .row-delete').forEach(el => {
         el.disabled = locked;
     });
-    const addBtn = document.getElementById("btn-add");
-    if (addBtn) addBtn.disabled = locked;
+    ["btn-add", "btn-add-invest"].forEach(id => {
+        const addBtn = document.getElementById(id);
+        if (addBtn) addBtn.disabled = locked;
+    });
 
     const btn = document.getElementById("btn-lock");
     if (btn) {
@@ -1060,11 +1428,12 @@ async function addRow() {
     try {
         showLoading(true);
         const newRow = await insertRow({
-            date: "", description: "", expense: null, share: "",
+            date: todayIso(), description: "", expense: null, share: "",
             manojPaid: false, praveenPaid: false, remark: ""
         });
         rows.push(newRow);
         render();
+        revealRow(document.getElementById("expenseBody"), newRow.id);
         toast("Row added", "success");
     } catch (e) {
         toast("Add row failed: " + e.message, "error");
@@ -1094,6 +1463,174 @@ function handleCellEdit(tr, field, value) {
 
     if (field === "expense" || field === "share") {
         updateRowAmountsDom(tr, row);
+    }
+}
+
+// ============================================================
+// Tabs
+// ============================================================
+function switchTab(name) {
+    activeTab = name;
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+        const on = btn.dataset.tab === name;
+        btn.classList.toggle("active", on);
+        btn.setAttribute("aria-selected", String(on));
+    });
+    document.getElementById("view-expenses").hidden    = name !== "expenses";
+    document.getElementById("view-investments").hidden = name !== "investments";
+}
+
+// ============================================================
+// Investments tab (date, person name, amount)
+// ============================================================
+function investmentFromDb(r) {
+    return {
+        id:     r.id,
+        date:   r.invest_date || "",
+        person: r.person_name || "",
+        amount: r.amount === null ? null : Number(r.amount)
+    };
+}
+
+function getInvestment(id) { return investments.find(r => r.id === id); }
+
+function todayIso() { return new Date().toLocaleDateString("en-CA"); }  // YYYY-MM-DD, local tz
+
+async function fetchInvestments() {
+    const { data, error } = await sb
+        .from(INVEST_STORE.table)
+        .select("*")
+        .order("invest_date", { ascending: true })
+        .order("created_at", { ascending: true });
+    if (error) throw error;
+    return (data || []).map(investmentFromDb);
+}
+
+async function insertInvestment(patch) {
+    const { data, error } = await sb
+        .from(INVEST_STORE.table)
+        .insert(toDbPatch(patch, INVEST_STORE.cols))
+        .select()
+        .single();
+    if (error) throw error;
+    return investmentFromDb(data);
+}
+
+function investmentRowTemplate(inv, index) {
+    const tr = document.createElement("tr");
+    tr.dataset.id = inv.id;
+    tr.innerHTML = `
+        <td class="sno" data-label="#">${index + 1}</td>
+        <td class="date" data-label="Date"><input type="date" data-field="date" value="${inv.date || ""}"></td>
+        <td class="inv-name" data-label="Person">
+            <select class="share-select" data-field="person"></select>
+        </td>
+        <td class="expense" data-label="Amount" contenteditable="true" data-field="amount" inputmode="decimal"></td>
+        <td class="row-actions" data-label="Delete">
+            <button type="button" class="row-delete" data-action="delete-investment" title="Delete this investment">×</button>
+        </td>
+    `;
+    fillPersonSelect(tr.querySelector('[data-field="person"]'), inv.person);
+    tr.querySelector('[data-field="amount"]').textContent =
+        inv.amount === null ? "" : formatMoney(inv.amount);
+    return tr;
+}
+
+// Options are built via the DOM (never HTML strings) so a stored name
+// can't inject markup. A saved name outside INVEST_PEOPLE (e.g. typed
+// before this was a dropdown) is kept as an extra option, not hidden.
+function fillPersonSelect(select, current) {
+    const names = [...INVEST_PEOPLE];
+    if (current && !names.includes(current)) names.push(current);
+    select.add(new Option("Select", ""));
+    names.forEach(n => select.add(new Option(n, n)));
+    select.value = current || "";
+}
+
+// # | Date | Person Name (month label) | Amount | delete
+const INVEST_MONTH_HEADER = [[3], [1, "amount"], [1]];
+const INVEST_MONTH_SUMS = { amount: items => items.reduce((s, r) => s + (r.amount || 0), 0) };
+
+function sortedInvestments() {
+    return investments.slice().sort((a, b) => (a.date || "").localeCompare(b.date || ""));
+}
+
+function updateInvestmentTotal() {
+    const total = investments.reduce((sum, r) => sum + (r.amount || 0), 0);
+    document.getElementById("totalInvested").textContent = formatMoney(total);
+    refreshMonthSums(document.getElementById("investBody"), investments, INVEST_MONTH_SUMS);
+    updateUtilization();
+}
+
+function renderInvestments() {
+    const tbody = document.getElementById("investBody");
+    if (investments.length === 0) {
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="5">No investments yet. Unlock and click "+ Add Investment".</td></tr>';
+    } else {
+        renderByMonth(tbody, sortedInvestments(), investmentRowTemplate, INVEST_MONTH_HEADER);
+    }
+    updateInvestmentTotal();
+    applyLockToDom();
+}
+
+// Never throws: a missing investments table must not take down Expenses.
+async function loadInvestments() {
+    try {
+        investments = await fetchInvestments();
+    } catch (e) {
+        toast("Investments unavailable (has supabase_setup.sql been run?): " + e.message, "error");
+    }
+    renderInvestments();
+}
+
+async function addInvestment() {
+    if (locked) return;
+    try {
+        showLoading(true);
+        const inv = await insertInvestment({ date: todayIso(), person: "", amount: null });
+        investments.push(inv);
+        renderInvestments();
+        revealRow(document.getElementById("investBody"), inv.id);
+        toast("Investment added", "success");
+    } catch (e) {
+        toast("Add investment failed: " + e.message, "error");
+    } finally {
+        showLoading(false);
+    }
+}
+
+function handleInvestmentEdit(tr, field, value) {
+    if (locked) return;
+    const inv = getInvestment(tr.dataset.id);
+    if (!inv) return;
+
+    if (field === "amount") {
+        inv.amount = parseExpense(value);
+        scheduleSave(inv.id, field, inv.amount, INVEST_STORE);
+        updateInvestmentTotal();
+    } else if (field === "date") {
+        inv.date = value || "";
+        scheduleSave(inv.id, field, inv.date || null, INVEST_STORE);
+    } else if (field === "person") {
+        inv.person = value;
+        saveNow(inv.id, field, value, INVEST_STORE);
+    }
+}
+
+async function deleteInvestment(id) {
+    if (locked) return;
+    if (!confirm("Delete this investment?")) return;
+    try {
+        showLoading(true);
+        const { error } = await sb.from(INVEST_STORE.table).delete().eq("id", id);
+        if (error) throw error;
+        investments = investments.filter(r => r.id !== id);
+        renderInvestments();
+        toast("Investment deleted", "success");
+    } catch (e) {
+        toast("Delete failed: " + e.message, "error");
+    } finally {
+        showLoading(false);
     }
 }
 
@@ -1173,8 +1710,12 @@ async function removeReceipt(rowId) {
 // Events
 // ============================================================
 function bindEvents() {
+    mountUtilization();
+    updateUtilization();
     document.getElementById("btn-add").addEventListener("click", addRow);
-    document.getElementById("btn-export").addEventListener("click", exportCSV);
+    document.getElementById("btn-export").addEventListener("click", () => {
+        if (activeTab === "investments") exportInvestmentsCSV(); else exportCSV();
+    });
     document.getElementById("btn-print").addEventListener("click", () => window.print());
     document.getElementById("btn-lock").addEventListener("click", toggleLock);
     document.getElementById("btn-logout").addEventListener("click", handleLogout);
@@ -1204,22 +1745,8 @@ function bindEvents() {
         }
     });
 
-    // Expense cell: format on blur, unformat on focus
-    tbody.addEventListener("blur", (e) => {
-        const t = e.target;
-        if (t.matches && t.matches('[data-field="expense"][contenteditable="true"]')) {
-            const row = getRow(t.closest("tr").dataset.id);
-            if (row) t.textContent = row.expense === null ? "" : formatMoney(row.expense);
-        }
-    }, true);
-
-    tbody.addEventListener("focus", (e) => {
-        const t = e.target;
-        if (t.matches && t.matches('[data-field="expense"][contenteditable="true"]')) {
-            const row = getRow(t.closest("tr").dataset.id);
-            if (row && row.expense !== null) t.textContent = String(row.expense);
-        }
-    }, true);
+    bindMoneyCells(tbody, "expense", getRow);
+    bindMonthRegroup(tbody, getRow, render);
 
     tbody.addEventListener("change", (e) => {
         const t = e.target;
@@ -1235,6 +1762,7 @@ function bindEvents() {
             if (!row) return;
             row[field] = t.checked;
             t.closest(".person-cell").classList.toggle("checked", t.checked);
+            updateUtilization();   // a tick moves that share into "Utilized"
             saveNow(row.id, field, t.checked);
         } else if (t.matches('input[type="date"]')) {
             handleCellEdit(tr, field, t.value);
@@ -1274,7 +1802,17 @@ function bindEvents() {
         uploadReceipt(id, file);
     });
 
-    // Paste sanitizer
+    bindPasteSanitizer(tbody);
+
+    // Tabs
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+    });
+    bindInvestmentEvents();
+}
+
+// Paste plain text only into editable cells (no rich-text junk)
+function bindPasteSanitizer(tbody) {
     tbody.addEventListener("paste", (e) => {
         const t = e.target;
         if (!t.matches || !t.matches('[contenteditable="true"]')) return;
@@ -1282,11 +1820,34 @@ function bindEvents() {
         const text = (e.clipboardData || window.clipboardData).getData("text/plain");
         document.execCommand("insertText", false, text);
     });
+}
 
-    // Expense keystroke filter
+// Money cells: bare number while editing, ₹-formatted otherwise, and
+// only digits / one decimal point may be typed. `field` is both the
+// data-field name and the record property holding the number.
+function bindMoneyCells(tbody, field, lookup) {
+    const selector = `[data-field="${field}"][contenteditable="true"]`;
+    const recordFor = (cell) => lookup(cell.closest("tr").dataset.id);
+
+    tbody.addEventListener("blur", (e) => {
+        const t = e.target;
+        if (t.matches && t.matches(selector)) {
+            const rec = recordFor(t);
+            if (rec) t.textContent = rec[field] === null ? "" : formatMoney(rec[field]);
+        }
+    }, true);
+
+    tbody.addEventListener("focus", (e) => {
+        const t = e.target;
+        if (t.matches && t.matches(selector)) {
+            const rec = recordFor(t);
+            if (rec && rec[field] !== null) t.textContent = String(rec[field]);
+        }
+    }, true);
+
     tbody.addEventListener("keydown", (e) => {
         const t = e.target;
-        if (!t.matches || !t.matches('[data-field="expense"][contenteditable="true"]')) return;
+        if (!t.matches || !t.matches(selector)) return;
         const allowed = ["Backspace","Delete","ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Tab","Home","End","Enter"];
         if (allowed.includes(e.key)) return;
         if (e.ctrlKey || e.metaKey) return;
@@ -1294,6 +1855,34 @@ function bindEvents() {
         if (e.key === "." && !t.textContent.includes(".")) return;
         e.preventDefault();
     });
+}
+
+function bindInvestmentEvents() {
+    document.getElementById("btn-add-invest").addEventListener("click", addInvestment);
+    const tbody = document.getElementById("investBody");
+
+    const onEdit = (e) => {
+        const t = e.target;
+        const tr = t.closest("tr");
+        const field = t.dataset.field;
+        if (!tr || !field) return;
+        if (t.matches('input[type="date"], select')) {
+            handleInvestmentEdit(tr, field, t.value);
+        } else if (t.matches('[contenteditable="true"]') && e.type === "input") {
+            handleInvestmentEdit(tr, field, t.textContent);
+        }
+    };
+    tbody.addEventListener("input", onEdit);
+    tbody.addEventListener("change", onEdit);   // some browsers only fire change for date pickers
+
+    tbody.addEventListener("click", (e) => {
+        const btn = e.target.closest('button[data-action="delete-investment"]');
+        if (btn) deleteInvestment(btn.closest("tr").dataset.id);
+    });
+
+    bindMoneyCells(tbody, "amount", getInvestment);
+    bindMonthRegroup(tbody, getInvestment, renderInvestments);
+    bindPasteSanitizer(tbody);
 }
 
 // ============================================================
@@ -1308,7 +1897,7 @@ function csvEscape(s) {
 function exportCSV() {
     const header = ["S.No.","Date","Description","Expense","Share","Manoj","Manoj Paid","Praveen","Praveen Paid","Remark","Receipt"];
     const lines = [header.map(csvEscape).join(",")];
-    rows.forEach((r, i) => {
+    getSortedRows().forEach((r, i) => {   // same order as on screen
         const a = computeAmounts(r);
         lines.push([
             i + 1,
@@ -1332,12 +1921,28 @@ function exportCSV() {
     });
     lines.push(["","","GRAND TOTAL", Math.round(te), "", Math.round(tm), "", Math.round(tp), "", "", ""].map(csvEscape).join(","));
 
+    downloadCsv(lines, "PearlFox_Expenses");
+}
+
+function exportInvestmentsCSV() {
+    const lines = [["S.No.","Date","Person Name","Amount"].map(csvEscape).join(",")];
+    let total = 0;
+    sortedInvestments().forEach((r, i) => {
+        total += r.amount || 0;
+        lines.push([i + 1, r.date || "", r.person || "", r.amount === null ? "" : r.amount]
+            .map(csvEscape).join(","));
+    });
+    lines.push(["", "", "TOTAL INVESTED", Math.round(total * 100) / 100].map(csvEscape).join(","));
+    downloadCsv(lines, "PearlFox_Investments");
+}
+
+function downloadCsv(lines, baseName) {
     const blob = new Blob(["\ufeff" + lines.join("\n")], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     const stamp = new Date().toISOString().slice(0, 10);
     a.href = url;
-    a.download = `PearlFox_Expenses_${stamp}.csv`;
+    a.download = `${baseName}_${stamp}.csv`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -1397,6 +2002,7 @@ async function enterApp() {
             rows = await fetchRows();
         }
         render();
+        await loadInvestments();
     } catch (e) {
         toast("Failed to load data: " + e.message, "error");
     } finally {
