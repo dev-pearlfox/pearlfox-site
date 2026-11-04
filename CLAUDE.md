@@ -2,7 +2,7 @@
 
 ## Environment notes (Manvi's setup)
 
-- **Screenshots always live at `/Users/manojpro/Documents/Screenshots/`.** When Manvi says "check the latest screenshot," look there first (sorted by mtime), not on the Desktop.
+- **Screenshots always live at `~/Documents/Screenshots/`.** When Manvi says "check the latest screenshot," look there first (sorted by mtime), not on the Desktop.
 
 ## Favicon / GitHub Pages Octocat cache (SEO gotcha, fixed 2026-09-17)
 
