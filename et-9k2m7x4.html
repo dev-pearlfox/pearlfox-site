@@ -848,10 +848,10 @@
                         <td class="sno"></td>
                         <td class="date"></td>
                         <td class="description footer-label">GRAND TOTAL</td>
-                        <td class="expense footer-total" id="totalExpense" data-label="Total">₹0</td>
+                        <td class="expense footer-total" id="totalExpense" data-label="Total">₹0.00</td>
                         <td class="share"></td>
-                        <td class="person footer-total" id="totalManoj"   data-label="Manoj">₹0</td>
-                        <td class="person footer-total" id="totalPraveen" data-label="Praveen">₹0</td>
+                        <td class="person footer-total" id="totalManoj"   data-label="Manoj">₹0.00</td>
+                        <td class="person footer-total" id="totalPraveen" data-label="Praveen">₹0.00</td>
                         <td class="remark"></td>
                         <td class="receipt"></td>
                     </tr>
@@ -885,7 +885,7 @@
                             <td class="sno"></td>
                             <td class="date"></td>
                             <td class="inv-name footer-label">TOTAL INVESTED</td>
-                            <td class="expense footer-total" id="totalInvested" data-label="Total">&#8377;0</td>
+                            <td class="expense footer-total" id="totalInvested" data-label="Total">&#8377;0.00</td>
                             <td class="row-actions"></td>
                         </tr>
                     </tfoot>
@@ -978,10 +978,14 @@ function parseExpense(raw) {
     return isNaN(n) ? null : n;
 }
 
+// Money is always shown with two decimals (paise): 2362 -> "₹2,362.00"
+const roundCents = (n) => Math.round(n * 100) / 100;
+
 function formatMoney(n) {
     if (n === null || n === undefined || isNaN(n)) return "";
-    return CURRENCY + Math.round(n).toLocaleString("en-IN");
+    return CURRENCY + n.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
+const ZERO_MONEY = formatMoney(0);   // "₹0.00" fallback for empty totals
 
 function computeAmounts(row) {
     const exp = row.expense;
@@ -1175,9 +1179,9 @@ function updateUtilization() {
     document.querySelectorAll(".util-box [data-util]").forEach(td => {
         const p = td.dataset.person;
         const value = { invested: invested[p], utilized: utilized[p], balance: invested[p] - utilized[p] }[td.dataset.util];
-        const rounded = Math.round(value);
-        td.textContent = (rounded < 0 ? "-" : "") + formatMoney(Math.abs(rounded));
-        td.classList.toggle("negative", rounded < 0);
+        const cents = roundCents(value);
+        td.textContent = (cents < 0 ? "-" : "") + formatMoney(Math.abs(cents));
+        td.classList.toggle("negative", cents < 0);
     });
 }
 
@@ -1244,7 +1248,7 @@ function refreshMonthSums(tbody, items, sums) {
     tbody.querySelectorAll("tr.month-row").forEach(tr => {
         const inMonth = items.filter(it => monthKey(it.date) === tr.dataset.month);
         tr.querySelectorAll("[data-sum]").forEach(td => {
-            td.textContent = formatMoney(sums[td.dataset.sum](inMonth)) || (CURRENCY + "0");
+            td.textContent = formatMoney(sums[td.dataset.sum](inMonth)) || ZERO_MONEY;
         });
     });
 }
@@ -1365,9 +1369,9 @@ function updateTotals() {
         tm += a.manoj;
         tp += a.praveen;
     });
-    document.getElementById("totalExpense").textContent = formatMoney(te) || (CURRENCY + "0");
-    document.getElementById("totalManoj").textContent   = formatMoney(tm) || (CURRENCY + "0");
-    document.getElementById("totalPraveen").textContent = formatMoney(tp) || (CURRENCY + "0");
+    document.getElementById("totalExpense").textContent = formatMoney(te) || ZERO_MONEY;
+    document.getElementById("totalManoj").textContent   = formatMoney(tm) || ZERO_MONEY;
+    document.getElementById("totalPraveen").textContent = formatMoney(tp) || ZERO_MONEY;
     refreshMonthSums(document.getElementById("expenseBody"), rows, EXPENSE_MONTH_SUMS);
     updateUtilization();
 }
@@ -1906,9 +1910,9 @@ function exportCSV() {
             r.description || "",
             r.expense === null ? "" : r.expense,
             r.share || "",
-            Math.round(a.manoj) || "",
+            roundCents(a.manoj) || "",
             r.manojPaid ? "Yes" : "",
-            Math.round(a.praveen) || "",
+            roundCents(a.praveen) || "",
             r.praveenPaid ? "Yes" : "",
             r.remark || "",
             r.receiptName || ""
@@ -1920,7 +1924,7 @@ function exportCSV() {
         const a = computeAmounts(r);
         tm += a.manoj; tp += a.praveen;
     });
-    lines.push(["","","GRAND TOTAL", Math.round(te), "", Math.round(tm), "", Math.round(tp), "", "", ""].map(csvEscape).join(","));
+    lines.push(["","","GRAND TOTAL", roundCents(te), "", roundCents(tm), "", roundCents(tp), "", "", ""].map(csvEscape).join(","));
 
     downloadCsv(lines, "PearlFox_Expenses");
 }
@@ -1933,7 +1937,7 @@ function exportInvestmentsCSV() {
         lines.push([i + 1, r.date || "", r.person || "", r.amount === null ? "" : r.amount]
             .map(csvEscape).join(","));
     });
-    lines.push(["", "", "TOTAL INVESTED", Math.round(total * 100) / 100].map(csvEscape).join(","));
+    lines.push(["", "", "TOTAL INVESTED", roundCents(total)].map(csvEscape).join(","));
     downloadCsv(lines, "PearlFox_Investments");
 }
 
