@@ -20,6 +20,7 @@
 
     var STORAGE_KEY = "ceoSidebarCollapsed";
     var HOME = "https://pearlfox.io/ceo-x7k3m9.html";
+    var HOME_ICON = "https://pearlfox.io/favicon-96x96.png";   // the PearlFox icon
     var ITEMS = [
         {
             label: "PearlFox Partners Expenses Tracker",
@@ -55,10 +56,12 @@
         "  font:600 14px/1.3 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;",
         "  color:#1A1310;transition:width .25s ease,padding .25s ease}",
         "#ceo-sidebar a{color:inherit;text-decoration:none}",
-        "#ceo-sidebar .ceo-brand{display:block;font-size:20px;font-weight:800;letter-spacing:-.3px;",
-        "  padding:0 12px 18px;margin-bottom:8px;border-bottom:1px solid rgba(20,10,0,.10)}",
-        "#ceo-sidebar .ceo-brand span{display:block;margin-top:2px;font-size:12px;font-weight:600;",
+        "#ceo-sidebar .ceo-home-icon{width:36px;height:36px;border-radius:8px;flex-shrink:0;display:block;",
+        "  box-shadow:0 2px 8px rgba(20,10,0,.25)}",
+        "#ceo-sidebar .ceo-home .ceo-label{display:block;font-size:17px;font-weight:800;letter-spacing:-.3px}",
+        "#ceo-sidebar .ceo-home .ceo-label small{display:block;margin-top:2px;font-size:11px;font-weight:600;",
         "  letter-spacing:.6px;text-transform:uppercase;color:#5A4E44}",
+        "#ceo-sidebar .ceo-sep{height:1px;flex-shrink:0;background:rgba(20,10,0,.10);margin:6px 4px 8px}",
         "#ceo-sidebar .ceo-item{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:8px;",
         "  border:1px solid transparent;transition:background .15s,border-color .15s}",
         "#ceo-sidebar .ceo-item:hover,#ceo-sidebar .ceo-item:focus-visible,",
@@ -71,10 +74,9 @@
 
         /* collapsed = icon rail */
         "html.ceo-sb-collapsed #ceo-sidebar{width:var(--ceo-rail-w);padding:60px 10px 28px}",
-        "html.ceo-sb-collapsed #ceo-sidebar .ceo-brand{display:none}",
         "html.ceo-sb-collapsed #ceo-sidebar .ceo-item{justify-content:center;padding:8px 0}",
-        "html.ceo-sb-collapsed #ceo-sidebar .ceo-label{position:absolute;width:1px;height:1px;overflow:hidden;",
-        "  clip-path:inset(50%);white-space:nowrap}",
+        "html.ceo-sb-collapsed #ceo-sidebar .ceo-label,html.ceo-sb-collapsed #ceo-sidebar .ceo-label small{position:absolute;",
+        "  width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;margin:0}",
 
         /* arrow, riding the sidebar edge */
         "#ceo-sidebar-toggle{position:fixed;top:18px;left:calc(var(--ceo-side-w) - 14px);z-index:101;",
@@ -93,6 +95,7 @@
         "  #ceo-sidebar,html.ceo-sb-collapsed #ceo-sidebar{position:absolute;right:0;bottom:auto;width:auto;height:64px;",
         "    flex-direction:row;justify-content:center;align-items:center;gap:14px;padding:0 12px;",
         "    border-right:none;border-bottom:1px solid rgba(20,10,0,.10);overflow:hidden}",
+        "  #ceo-sidebar .ceo-sep{width:1px;height:28px;margin:0}",
         "  #ceo-sidebar-toggle{display:none}",
         "}",
 
@@ -112,11 +115,21 @@
         return String(text).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
     }
 
+    function isCurrent(href) {
+        return pageKey(href) === pageKey(location.href) ? ' aria-current="page"' : "";
+    }
+
+    // Home button: the PearlFox icon. Full brand text when open, icon only in the rail.
+    function buildHome() {
+        return '<a class="ceo-item ceo-home" href="' + esc(HOME) + '" title="CEO Home"' + isCurrent(HOME) + '>' +
+               '<img class="ceo-home-icon" src="' + esc(HOME_ICON) + '" alt="" width="36" height="36">' +
+               '<span class="ceo-label">PearlFox<small>CEO Dashboard</small></span></a>' +
+               '<div class="ceo-sep" role="separator"></div>';
+    }
+
     function buildItems() {
-        var here = pageKey(location.href);
         return ITEMS.map(function (item) {
-            var current = pageKey(item.href) === here ? ' aria-current="page"' : "";
-            return '<a class="ceo-item" href="' + esc(item.href) + '" title="' + esc(item.label) + '"' + current + '>' +
+            return '<a class="ceo-item" href="' + esc(item.href) + '" title="' + esc(item.label) + '"' + isCurrent(item.href) + '>' +
                    '<span class="ceo-icon" aria-hidden="true">' + item.icon + '</span>' +
                    '<span class="ceo-label">' + esc(item.label) + '</span></a>';
         }).join("");
@@ -134,7 +147,7 @@
         var nav = document.createElement("nav");
         nav.id = "ceo-sidebar";
         nav.setAttribute("aria-label", "PearlFox tools");
-        nav.innerHTML = '<a class="ceo-brand" href="' + esc(HOME) + '">PearlFox<span>CEO Dashboard</span></a>' + buildItems();
+        nav.innerHTML = buildHome() + buildItems();
 
         var toggle = document.createElement("button");
         toggle.id = "ceo-sidebar-toggle";
